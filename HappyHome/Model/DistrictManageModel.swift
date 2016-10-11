@@ -9,5 +9,9 @@
 import UIKit
 
 class DistrictManageModel: NSObject {
-
+    static let sharedManager = DistrictManageModel()
+    
+    func getDistrictData() {
+        
+    }
 }

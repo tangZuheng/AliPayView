@@ -55,6 +55,13 @@ class NetWorkingManager: NSObject {
         }
     }
     
+    //获取分类列表
+    func getIficationList(completion:(retObject: JSON, error: NSError?)->()) {
+        self.HTTPWithUrl(HTTP_METHOD_GET, url: ification_List_url, parameters: nil, background: false) { (retObject, error) in
+            completion(retObject: retObject,error: error)
+        }
+    }
+    
     //获取景点列表
     func getScenceList(id:Int,completion:(retObject: JSON, error: NSError?)->()) {
         let parameters = [
@@ -63,18 +70,6 @@ class NetWorkingManager: NSObject {
         self.HTTPWithUrl(HTTP_METHOD_GET, url: scence_List_url, parameters: parameters, background: false) { (retObject, error) in
             completion(retObject: retObject,error: error)
         }
-        
-//        Alamofire.request(.GET, scence_List_url, parameters: parameters).responseData
-//            {
-//                response in
-//                //                self.stopMBProgressHUD()
-//                print(response.result.error) // HTTP URL response
-//                print(response.data)     // server data
-//                print(response.result)   // result of response serialization
-//                
-//                let json = JSON(data: response.data!)
-//                print("JSON: \(json)")
-//        }
     }
     
     func upload() {
@@ -131,43 +126,6 @@ class NetWorkingManager: NSObject {
 //                debugPrint(response)
 //        }
     }
-    
-
-//    func loginWithUsername(name:NSString,pass:NSString) -> Void {
-//
-//        
-//        let parameters = [
-//            "appkey": "123456",
-//            "userName": name,
-//            "password": pass,
-//            "loginCheck": "1",
-//            "mobileos": "ios",
-//            "clientid": "268cc09c400a15da1dd461554c26c40c"
-//        ]
-//        
-//        let sss = SignalProducer<Request, NoError> { observer, _ in
-//            observer.sendNext(
-//                Alamofire.request(.POST, loginUrl, parameters: parameters, encoding: .JSON, headers: nil).responseData
-//                    {
-//                        response in
-//                        //                self.stopMBProgressHUD()
-//                        print(response.result.error) // HTTP URL response
-//                        print(response.data)     // server data
-//                        print(response.result)   // result of response serialization
-//                        
-//                        let json : AnyObject! = try? NSJSONSerialization
-//                            .JSONObjectWithData(response.data!, options:NSJSONReadingOptions.MutableContainers)
-//                        
-//                        print("JSON: \(json)")
-//                }
-//            )
-//            }
-//            .responseProducer()  // Make the Request SignalProducer to be a Response SignalProducer
-//            .parseResponse(Request.JSONResponseSerializer()) // Parse response with JSONResponseSerializer
-//            .startWithNext { resp in
-//                print(resp.result.value)
-//        }
-//    }
     
 }
 

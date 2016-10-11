@@ -13,6 +13,12 @@ typedef void (^completionBlock)(void);
 @interface ZCMBProgressHUD : MBProgressHUD
 
 //开始加载MBProgressHUD
++ (void)startMBProgressHUD;
+
+//结束加载MBProgressHUD
++ (void)stopMBProgressHUD;
+
+//开始加载MBProgressHUD
 + (void)startMBProgressHUD:(UIView *)view;
 
 //结束加载MBProgressHUD

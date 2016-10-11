@@ -1,6 +1,6 @@
 PODS:
   - Alamofire (3.5.1)
-  - HandyJSON (1.1.0)
+  - HandyJSON (0.4.0)
   - LTMorphingLabel (0.3.0)
   - Masonry (1.0.2)
   - MBProgressHUD (1.0.0)
@@ -14,7 +14,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
-  - HandyJSON (~> 1.1.0)
+  - HandyJSON (= 0.4.0)
   - LTMorphingLabel
   - Masonry (~> 1.0.2)
   - MBProgressHUD (~> 1.0.0)
@@ -36,7 +36,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Alamofire: 0dfba1184a543e2aa160f4e39cac4e8aba48d223
-  HandyJSON: c19dba750f1a8c238c4f47f40b1b5e3efaef7e34
+  HandyJSON: 92708e8790347978ac6568c25e316d5be6256d8b
   LTMorphingLabel: 2777d8d9cb699125f48dfcd95d78bd3d77c87ade
   Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
@@ -47,6 +47,6 @@ SPEC CHECKSUMS:
   SQLite.swift: 6a6e4b034efc317ce4e203b6af2d3024fee2b570
   SwiftyJSON: 96918c1bf505efa50c4f72957018dd3452090c9c
 
-PODFILE CHECKSUM: 010e432544d19d955f03227d6be20e18c61c21de
+PODFILE CHECKSUM: 77a95eb93c5fd4332f54defa54f097e02ab78bbc
 
 COCOAPODS: 1.0.1

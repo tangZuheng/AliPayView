@@ -16,7 +16,7 @@ pod 'SQLite.swift', '~> 0.10.1'
 #pod 'CircleProgressView', '~> 1.0'
 #pod 'SwiftyJSON' '2.4.0'
 pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git', :branch => 'swift2'
-pod 'HandyJSON', '~> 1.1.0'
+pod 'HandyJSON', '0.4.0'
 
 end
 

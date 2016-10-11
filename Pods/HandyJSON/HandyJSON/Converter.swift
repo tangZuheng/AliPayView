@@ -26,7 +26,7 @@ extension NSObject {
             return Int8((self as! NSString) as String)
         }
         if self is NSNumber {
-            return (self as! NSNumber).int8Value
+            return (self as! NSNumber).charValue
         }
         return nil
     }
@@ -36,7 +36,7 @@ extension NSObject {
             return UInt8((self as! NSString) as String)
         }
         if self is NSNumber {
-            return (self as! NSNumber).uint8Value
+            return (self as! NSNumber).unsignedCharValue
         }
         return nil
     }
@@ -46,7 +46,7 @@ extension NSObject {
             return Int16((self as! NSString) as String)
         }
         if self is NSNumber {
-            return (self as! NSNumber).int16Value
+            return (self as! NSNumber).shortValue
         }
         return nil
     }
@@ -56,7 +56,7 @@ extension NSObject {
             return UInt16((self as! NSString) as String)
         }
         if self is NSNumber {
-            return (self as! NSNumber).uint16Value
+            return (self as! NSNumber).unsignedShortValue
         }
         return nil
     }
@@ -66,7 +66,7 @@ extension NSObject {
             return Int32((self as! NSString) as String)
         }
         if self is NSNumber {
-            return (self as! NSNumber).int32Value
+            return (self as! NSNumber).intValue
         }
         return nil
     }
@@ -76,7 +76,7 @@ extension NSObject {
             return UInt32((self as! NSString) as String)
         }
         if self is NSNumber {
-            return (self as! NSNumber).uint32Value
+            return (self as! NSNumber).unsignedIntValue
         }
         return nil
     }
@@ -86,7 +86,7 @@ extension NSObject {
             return Int64((self as! NSString) as String)
         }
         if self is NSNumber {
-            return (self as! NSNumber).int64Value
+            return (self as! NSNumber).longLongValue
         }
         return nil
     }
@@ -96,14 +96,14 @@ extension NSObject {
             return UInt64((self as! NSString) as String)
         }
         if self is NSNumber {
-            return (self as! NSNumber).uint64Value
+            return (self as! NSNumber).unsignedLongLongValue
         }
         return nil
     }
 
     func toBool() -> Bool? {
         if self is NSString {
-            let lowerCase = ((self as! NSString) as String).lowercased()
+            let lowerCase = ((self as! NSString) as String).lowercaseString
             if ["0", "false"].contains(lowerCase) {
                 return false
             }
@@ -122,7 +122,7 @@ extension NSObject {
             return Int((self as! NSString) as String)
         }
         if self is NSNumber {
-            return (self as! NSNumber).intValue
+            return (self as! NSNumber).integerValue
         }
         return nil
     }
@@ -132,7 +132,7 @@ extension NSObject {
             return UInt((self as! NSString) as String)
         }
         if self is NSNumber {
-            return (self as! NSNumber).uintValue
+            return (self as! NSNumber).unsignedIntegerValue
         }
         return nil
     }
@@ -179,9 +179,9 @@ extension NSObject {
             return self as? NSNumber
         }
         if self is NSString {
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .decimal
-            return formatter.number(from: (self as? NSString)! as String)
+            let formatter = NSNumberFormatter()
+            formatter.numberStyle = .DecimalStyle
+            return formatter.numberFromString((self as? NSString)! as String)
         }
         return nil
     }

@@ -12,6 +12,24 @@ static MBProgressHUD *mbProgressHUD;
 @implementation ZCMBProgressHUD
 
 //开始加载MBProgressHUD
++ (void)startMBProgressHUD
+{
+    if (mbProgressHUD == nil) {
+        mbProgressHUD = [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].delegate.window animated:YES];
+    }
+    else {
+        mbProgressHUD.hidden = NO;
+    }
+}
+
+//结束加载MBProgressHUD
++ (void)stopMBProgressHUD
+{
+    [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].delegate.window animated:YES];
+    mbProgressHUD = nil;
+}
+
+//开始加载MBProgressHUD
 + (void)startMBProgressHUD:(UIView *)view
 {
     if (mbProgressHUD == nil) {

@@ -11,6 +11,8 @@ import Foundation
 
 let baseUrl = "http://192.168.1.6:8080/TravelApp/"
 
+//分类列表接口
+let ification_List_url = baseUrl + "classification/list"
+
 //景点列表接口
 let scence_List_url = baseUrl + "scence/list"
-
