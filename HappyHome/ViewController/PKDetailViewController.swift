@@ -96,7 +96,8 @@ class PKDetailViewController: BaseViewController {
         name?.textColor = UIColor.whiteColor()
         self.view.addSubview(name!)
         name!.snp_makeConstraints { (make) -> Void in
-            make.width.equalTo(img!)
+            make.left.equalTo(10)
+            make.right.equalTo(10)
             make.height.equalTo(nameBack)
             make.bottom.equalTo(img!).offset(0)
         }
@@ -155,7 +156,7 @@ class PKDetailViewController: BaseViewController {
         startButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
             if 1 == self.state {
                 NetWorkingManager.sharedManager.checkPK(self.model.sid!, completion: { (retObject, error) in
-                    if retObject != nil {
+                    if error == nil {
                         self.pointModel = JSONDeserializer<ScencePointModel>.deserializeFrom(retObject?.objectForKey("data")?.objectForKey("pointBean") as! NSDictionary)
                         self.presentTime = retObject?.objectForKey("data")?.objectForKey("presentTime") as! NSTimeInterval
                         if UserModel.sharedUserModel.selectLanguage == 1 {
@@ -184,16 +185,21 @@ class PKDetailViewController: BaseViewController {
                 
             }
             else {
-                self.state = 3
                 self.maxTime = self.audioRecorderManage.audioRecorder.currentTime
-                self.updateView()
                 self.audioRecorderManage.stopRecord()
+                let model = PKRecordModel()
+                model.uid = UserModel.sharedUserModel.uid
+                model.sid = self.pointModel.sid
+                model.pid = self.pointModel.pid
+                model.language = UserModel.sharedUserModel.selectLanguage
+                model.presentTime = self.presentTime
+                model.soundtime = self.maxTime
+                model.fileURL = self.audioRecorderManage.recordingName
                 
-                NetWorkingManager.sharedManager.uploadPK(self.model.sid!, pid: self.pointModel.pid!, presentTime: self.presentTime, fileURL: self.audioRecorderManage.audioRecorder.url, completion: { (retObject, error) in
-                    
+                PKRecordManage.sharedManager.insertDataSql(model)
+                ZCMBProgressHUD.showResultHUDWithResult(true, andText: "", toView: self.navigationController?.view, andSecond: 2, completionBlock: {
+                    self.navigationController?.popViewControllerAnimated(true)
                 })
-                
-                
             }
         }
 

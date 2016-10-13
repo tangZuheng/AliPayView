@@ -58,7 +58,7 @@ class TrainingDetailViewController: BaseViewController,UICollectionViewDelegate,
     func initDataSouce(){
         NetWorkingManager.sharedManager.getScencePointList(model.sid!) { (retObject, error) in
             self.collectionView.mj_header.endRefreshing()
-            if retObject != nil {
+            if error == nil {
                 self.collectionView.mj_header.endRefreshing()
                 let arr = retObject?.objectForKey("data")!.objectForKey("beans") as! NSArray
                 self.dataArr.removeAllObjects()

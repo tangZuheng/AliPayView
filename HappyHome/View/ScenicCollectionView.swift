@@ -51,7 +51,7 @@ class ScenicCollectionView: UIView,UICollectionViewDataSource {
     func initDataSouce(){
         NetWorkingManager.sharedManager.getScenceList((DistrictManageModel.sharedManager.selectDistrict?.id)!) { (retObject, error) in
             self.collectionView.mj_header.endRefreshing()
-            if retObject != nil {
+            if error == nil {
                 self.collectionView.mj_header.endRefreshing()
                 let arr = retObject?.objectForKey("data")!.objectForKey("beans") as! NSArray
                 self.dataArr.removeAllObjects()

@@ -56,7 +56,7 @@ class SelectKindViewController: BaseViewController,UITableViewDataSource,UITable
     func initDataSouce(){
         NetWorkingManager.sharedManager.getIficationList { (retObject, error) in
             self.tableView.mj_header.endRefreshing()
-            if retObject != nil {
+            if error == nil {
                 let arr = retObject?.objectForKey("data") as! NSArray
                 let districtModelArr = NSMutableArray()
                 for item in arr {

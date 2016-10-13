@@ -234,11 +234,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "HappyHome/ViewController/TrainingRecordViewController.swift"
-            timestampString = "497528871.221171"
+            timestampString = "498033323.013669"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "161"
-            endingLineNumber = "161"
+            startingLineNumber = "162"
+            endingLineNumber = "162"
             landmarkName = "initfaceView()"
             landmarkType = "7">
          </BreakpointContent>
@@ -250,11 +250,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "HappyHome/ViewController/TrainingRecordViewController.swift"
-            timestampString = "497528871.221171"
+            timestampString = "498033323.013669"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "297"
-            endingLineNumber = "297"
+            startingLineNumber = "298"
+            endingLineNumber = "298"
             landmarkName = "updateTime()"
             landmarkType = "7">
          </BreakpointContent>
@@ -266,11 +266,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "HappyHome/ViewController/TrainingRecordViewController.swift"
-            timestampString = "497528871.221171"
+            timestampString = "498033323.013669"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "323"
-            endingLineNumber = "323"
+            startingLineNumber = "324"
+            endingLineNumber = "324"
             landmarkName = "updateTime()"
             landmarkType = "7">
          </BreakpointContent>
@@ -378,11 +378,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "HappyHome/ViewController/TrainingRecordViewController.swift"
-            timestampString = "497528871.221171"
+            timestampString = "498033323.013669"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "278"
-            endingLineNumber = "278"
+            startingLineNumber = "279"
+            endingLineNumber = "279"
             landmarkName = "updateView()"
             landmarkType = "7">
          </BreakpointContent>
@@ -410,11 +410,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "HappyHome/ViewController/TrainingRecordViewController.swift"
-            timestampString = "497528871.221171"
+            timestampString = "498033323.013669"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "212"
-            endingLineNumber = "212"
+            startingLineNumber = "213"
+            endingLineNumber = "213"
             landmarkName = "initfaceView()"
             landmarkType = "7">
          </BreakpointContent>
@@ -442,11 +442,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "HappyHome/BaseFile/swift/SQLiteManage.swift"
-            timestampString = "497523943.507481"
+            timestampString = "498034651.548645"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "81"
-            endingLineNumber = "81"
+            startingLineNumber = "113"
+            endingLineNumber = "113"
             landmarkName = "insertRecord(recordUrlVal:imgVal:spotsNameVal:explainNameVal:recordLengthVal:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -689,118 +689,6 @@
             endingLineNumber = "125"
             landmarkName = "getIficationList(completion:)"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "HappyHome/BaseFile/NetWorkingManager.swift"
-            timestampString = "498020994.240839"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "52"
-            endingLineNumber = "52"
-            landmarkName = "HTTPWithUrl(method:url:parameters:background:completion:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "HappyHome/ViewController/PKDetailViewController.swift"
-            timestampString = "497976938.001769"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "193"
-            endingLineNumber = "193"
-            landmarkName = "initControlEvent()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "HappyHome.PKDetailViewController.(initControlEvent () -&gt; ()).(closure #1)"
-                  moduleName = "HappyHome"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/fizzy/Desktop/HappyHome/HappyHome/ViewController/PKDetailViewController.swift"
-                  timestampString = "498023217.840327"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "194"
-                  endingLineNumber = "194"
-                  offsetFromSymbolStart = "1801">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "HappyHome.PKDetailViewController.(initControlEvent () -&gt; ()).(closure #1).(closure #2)"
-                  moduleName = "HappyHome"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/fizzy/Desktop/HappyHome/HappyHome/ViewController/PKDetailViewController.swift"
-                  timestampString = "498023217.844086"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "194"
-                  endingLineNumber = "194"
-                  offsetFromSymbolStart = "16">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "HappyHome/ViewController/PKDetailViewController.swift"
-            timestampString = "497977644.090769"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "192"
-            endingLineNumber = "192"
-            landmarkName = "initControlEvent()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "HappyHome.PKDetailViewController.(initControlEvent () -&gt; ()).(closure #1)"
-                  moduleName = "HappyHome"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/fizzy/Desktop/HappyHome/HappyHome/ViewController/PKDetailViewController.swift"
-                  timestampString = "498023217.853683"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "192"
-                  endingLineNumber = "192"
-                  offsetFromSymbolStart = "940">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "HappyHome.PKDetailViewController.(initControlEvent () -&gt; ()).(closure #1).(closure #2)"
-                  moduleName = "HappyHome"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/fizzy/Desktop/HappyHome/HappyHome/ViewController/PKDetailViewController.swift"
-                  timestampString = "498023217.857688"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "194"
-                  endingLineNumber = "194"
-                  offsetFromSymbolStart = "16">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

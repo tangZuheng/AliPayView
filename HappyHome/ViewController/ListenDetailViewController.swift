@@ -67,7 +67,8 @@ class ListenDetailViewController: BaseViewController,UITableViewDataSource,UITab
         name?.textColor = UIColor.whiteColor()
         self.view.addSubview(name!)
         name!.snp_makeConstraints { (make) -> Void in
-            make.width.equalTo(img!)
+            make.left.equalTo(10)
+            make.right.equalTo(10)
             make.height.equalTo(nameBack)
             make.bottom.equalTo(img!).offset(0)
         }

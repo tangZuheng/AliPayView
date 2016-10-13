@@ -87,7 +87,8 @@ class TrainingRecordViewController: BaseViewController {
         nameBack.alpha = 0.3
         img?.addSubview(nameBack)
         nameBack.snp_makeConstraints { (make) in
-            make.width.equalTo(img!)
+            make.left.equalTo(10)
+            make.right.equalTo(10)
             make.height.equalTo(35)
             make.bottom.equalTo(img!).offset(0)
         }

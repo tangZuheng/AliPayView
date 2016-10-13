@@ -46,6 +46,8 @@ class SQLiteManage: NSObject {
         print("\(path)")
         
         createTable_Record()
+        
+        createTable_PKRecord()
     }
     
     // 创建 练习录音表
@@ -76,7 +78,37 @@ class SQLiteManage: NSObject {
         }
     }
     
+    // 创建PK记录表
+    private func createTable_PKRecord(){
+        getConnection();
+        let pk_record = Table("pk_record")
+        let id = Expression<Int64>("id")
+        let uid = Expression<Int?>("uid")
+        let sid = Expression<Int?>("sid")
+        let pid = Expression<Int?>("pid")
+        let language = Expression<Int?>("language")
+        let presentTime = Expression<NSTimeInterval?>("presentTime")
+        let soundtime = Expression<NSTimeInterval?>("soundtime")
+        let fileURL = Expression<String?>("fileURL")
+        do
+        {
+            try db!.run(pk_record.create(ifNotExists: true) { t in     // CREATE TABLE "record" (
+                t.column(id, primaryKey: true) //     "id" INTEGER PRIMARY KEY NOT NULL,
+                t.column(uid, unique: false)
+                t.column(sid, unique: false)
+                t.column(pid, unique: false)
+                t.column(language, unique: false)
+                t.column(presentTime, unique: false)
+                t.column(soundtime, unique: false)
+                t.column(fileURL, unique: false)
+                })
+            
+        }catch _{
+            
+        }
+    }
     
+    //新增练习录音
     func insertRecord(recordUrlVal:String,imgVal:String,spotsNameVal:String,explainNameVal:String,recordLengthVal:NSTimeInterval) -> Bool {
         let record = Table("record")
         let recordUrl = Expression<String?>("recordUrl")
@@ -90,15 +122,41 @@ class SQLiteManage: NSObject {
         let insert = record.insert( recordUrl <- recordUrlVal, img <- imgVal, spotsName <- spotsNameVal,explainName <- explainNameVal, recordLength <- recordLengthVal,updateTime <- now)
         do
         {
-            let id = try db!.run(insert)
+            _ = try db!.run(insert)
 //            print(id)
             return true
         }
-        catch let error as NSError{
+        catch _ as NSError{
 //            print(error)
             return false
         }
     }
+    
+    //新增PK记录
+    func insertPKRecord(model:PKRecordModel) ->PKRecordModel {
+        let pk_record = Table("pk_record")
+//        let id = Expression<Int64>("id")
+        let uid = Expression<Int?>("uid")
+        let sid = Expression<Int?>("sid")
+        let pid = Expression<Int?>("pid")
+        let language = Expression<Int?>("language")
+        let presentTime = Expression<NSTimeInterval?>("presentTime")
+        let soundtime = Expression<NSTimeInterval?>("soundtime")
+        let fileURL = Expression<String?>("fileURL")
+        
+        let insert = pk_record.insert( uid <- model.uid, sid <- model.sid, pid <- model.pid,language <- model.language, presentTime <- model.presentTime,soundtime <- model.soundtime,fileURL <- model.fileURL)
+        do
+        {
+            let id = try db!.run(insert)
+            model.id = id
+            return model
+        }
+        catch _ as NSError{
+            return model
+        }
+    }
+    
+    //查询练习记录
     func searchRecord() -> NSArray{
         let record = Table("record")
         let recordUrl = Expression<String?>("recordUrl")
@@ -126,31 +184,81 @@ class SQLiteManage: NSObject {
         }
     }
     
+    //查询PK记录
+    func searchFirstRecord()
+    {
+        
+    }
+    
+    //查询PK记录
+    func searchPKRecord() -> NSMutableArray{
+        let pk_record = Table("pk_record")
+        let id = Expression<Int64>("id")
+        let uid = Expression<Int?>("uid")
+        let sid = Expression<Int?>("sid")
+        let pid = Expression<Int?>("pid")
+        let language = Expression<Int?>("language")
+        let presentTime = Expression<NSTimeInterval?>("presentTime")
+        let soundtime = Expression<NSTimeInterval?>("soundtime")
+        let fileURL = Expression<String?>("fileURL")
+        
+        let arr = NSMutableArray()
+        do {
+            for recordValue in try db!.prepare(pk_record) {
+                let model = PKRecordModel()
+                model.id = recordValue.get(id)
+                model.uid = recordValue.get(uid)
+                model.sid = recordValue.get(sid)
+                model.pid = recordValue.get(pid)
+                model.language = recordValue.get(language)
+                model.presentTime = recordValue.get(presentTime)
+                model.soundtime = recordValue.get(soundtime)
+                model.fileURL = recordValue.get(fileURL)
+                arr.addObject(model)
+            }
+            return arr
+        }
+        catch _{
+            return arr
+        }
+    }
+
+    
     func searchRecord(page:Int,pageSize:Int) {
         do {
             let sqlStr = "SELECT * FROM record limit " + String(pageSize) + " offset " + String(pageSize*(page-1))
             for _ in try db!.prepare(sqlStr) {
 //                print(row)
-
             }
         }
         catch _{
             
         }
-        
     }
     func deleteALLRecord() {
         let record = Table("record")
         let delete = record.delete()
         do
         {
-            let id = try db!.run(delete)
+            _ = try db!.run(delete)
 //            print(id)
 //            return true
         }
-        catch let error as NSError{
+        catch _ as NSError{
 //            print(error)
 //            return false
+        }
+    }
+    
+    func deletePKRecord(rowid:Int64) {
+        let pk_record = Table("pk_record")
+        let id = Expression<Int64>("id")
+        let alice = pk_record.filter(id == rowid)
+        do
+        {
+            _ = try db!.run(alice.delete())
+        }
+        catch _ as NSError{
         }
     }
 }

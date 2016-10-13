@@ -44,12 +44,12 @@ class NetWorkingManager: NSObject {
                     else {
                         do {
                             let dic = try NSJSONSerialization.JSONObjectWithData(response.data!, options: .MutableLeaves) as? NSDictionary
-                            if dic?.objectForKey("code") as! Int != 1 {
-                                let error = NSError.init(domain: NSURLErrorDomain, code: NSURLErrorNetworkConnectionLost, userInfo: [NSLocalizedDescriptionKey:dic!.objectForKey("message")!])
-                                completion(retObject: nil ,error: error)
+                            if dic?.objectForKey("code") as! Int != 0 {
+                                completion(retObject: dic ,error: nil)
                             }
                             else {
-                                completion(retObject: dic ,error: nil)
+                                let error = NSError.init(domain: NSURLErrorDomain, code: NSURLErrorNetworkConnectionLost, userInfo: [NSLocalizedDescriptionKey:dic!.objectForKey("message")!])
+                                completion(retObject: nil ,error: error)
                             }
                             print("--------------------------------------------------\n返回结果%@\n%@\n--------------------------------------------------",url,dic)
 
@@ -89,12 +89,12 @@ class NetWorkingManager: NSObject {
                         else {
                             do {
                                 let dic = try NSJSONSerialization.JSONObjectWithData(response.data!, options: .MutableLeaves) as? NSDictionary
-                                if dic?.objectForKey("code") as! Int != 1 {
-                                    let error = NSError.init(domain: NSURLErrorDomain, code: NSURLErrorNetworkConnectionLost, userInfo: [NSLocalizedDescriptionKey:dic!.objectForKey("message")!])
-                                    completion(retObject: nil ,error: error)
+                                if dic?.objectForKey("code") as! Int != 0 {
+                                    completion(retObject: dic ,error: nil)
                                 }
                                 else {
-                                    completion(retObject: dic ,error: nil)
+                                    let error = NSError.init(domain: NSURLErrorDomain, code: NSURLErrorNetworkConnectionLost, userInfo: [NSLocalizedDescriptionKey:dic!.objectForKey("message")!])
+                                    completion(retObject: nil ,error: error)
                                 }
                                 print("--------------------------------------------------\n返回结果%@\n%@\n--------------------------------------------------",pk_upload_List_url,dic)
                                 
@@ -168,6 +168,42 @@ class NetWorkingManager: NSObject {
             "presentTime":String(presentTime)
         ]
         self .UploadWithUrl(pk_upload_List_url, parameters: parameters, fileURL: fileURL, background: false) { (retObject, error) in
+            completion(retObject: retObject,error: error)
+        }
+    }
+    
+    //上传录音
+    func uploadPK(uid:Int,sid:Int,pid:Int,language:Int,presentTime:NSTimeInterval,soundtime:NSTimeInterval,fileURL:NSURL,completion:(retObject: NSDictionary?, error: NSError?)->()) {
+        let parameters:[String: AnyObject] = [
+            "sid":String(sid),
+            "pid":String(pid),
+            "language":String(language),
+            "uid":String(uid),
+            "presentTime":String(presentTime),
+            "soundtime":String(soundtime)
+        ]
+        self .UploadWithUrl(pk_upload_List_url, parameters: parameters, fileURL: fileURL, background: false) { (retObject, error) in
+            completion(retObject: retObject,error: error)
+        }
+    }
+    
+    //上传录音
+    func uploadPK(model:PKRecordModel,completion:(retObject: NSDictionary?, error: NSError?)->()) {
+        let parameters:[String: AnyObject] = [
+            "sid":String(model.sid),
+            "pid":String(model.pid),
+            "language":String(model.language),
+            "uid":String(model.uid),
+            "presentTime":String(model.presentTime),
+            "soundtime":String(model.soundtime)
+        ]
+        let fileManager = NSFileManager.defaultManager()
+        let urls = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+        let documentDirectory = urls[0] as NSURL
+        
+        let fileURL = documentDirectory.URLByAppendingPathComponent(model.fileURL!)
+        
+        self .UploadWithUrl(pk_upload_List_url, parameters: parameters, fileURL: fileURL!, background: false) { (retObject, error) in
             completion(retObject: retObject,error: error)
         }
     }
