@@ -122,11 +122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "HappyHome/ViewModel/MainViewController.swift"
-            timestampString = "497455638.322771"
+            timestampString = "497972399.622666"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "52"
-            endingLineNumber = "52"
+            startingLineNumber = "53"
+            endingLineNumber = "53"
             landmarkName = "initfaceView()"
             landmarkType = "7">
             <Locations>
@@ -208,38 +208,6 @@
             startingLineNumber = "35"
             endingLineNumber = "35"
             landmarkName = "sharedManager()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "HappyHome/ViewController/TrainingViewController.swift"
-            timestampString = "497515369.873528"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
-            landmarkName = "collectionView(collectionView:cellForItemAtIndexPath:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "HappyHome/ViewController/TrainingViewController.swift"
-            timestampString = "497515369.873528"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "47"
-            endingLineNumber = "47"
-            landmarkName = "collectionView(collectionView:numberOfItemsInSection:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -666,13 +634,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "HappyHome/BaseFile/NetWorkingManager.swift"
-            timestampString = "497870047.249879"
+            timestampString = "498020994.240839"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "64"
-            endingLineNumber = "64"
-            landmarkName = "getScenceList(id:completion:)"
-            landmarkType = "7">
+            startingLineNumber = "126"
+            endingLineNumber = "126"
+            landmarkName = "NetWorkingManager"
+            landmarkType = "3">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
@@ -714,12 +682,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "HappyHome/BaseFile/NetWorkingManager.swift"
-            timestampString = "497870047.249879"
+            timestampString = "498020994.240839"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "63"
-            endingLineNumber = "63"
-            landmarkName = "getScenceList(id:completion:)"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
+            landmarkName = "getIficationList(completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "HappyHome/BaseFile/NetWorkingManager.swift"
+            timestampString = "498020994.240839"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "52"
+            endingLineNumber = "52"
+            landmarkName = "HTTPWithUrl(method:url:parameters:background:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -729,44 +713,44 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "HappyHome/BaseFile/NetWorkingManager.swift"
-            timestampString = "497870047.249879"
+            filePath = "HappyHome/ViewController/PKDetailViewController.swift"
+            timestampString = "497976938.001769"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "83"
-            endingLineNumber = "83"
-            landmarkName = "upload()"
+            startingLineNumber = "193"
+            endingLineNumber = "193"
+            landmarkName = "initControlEvent()"
             landmarkType = "7">
             <Locations>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "HappyHome.NetWorkingManager.upload () -&gt; ()"
+                  symbolName = "HappyHome.PKDetailViewController.(initControlEvent () -&gt; ()).(closure #1)"
                   moduleName = "HappyHome"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/fizzy/Desktop/%E7%A5%A8%E7%A5%A8%E6%9D%A5/HappyHome/HappyHome/BaseFile/NetWorkingManager.swift"
-                  timestampString = "497870050.421592"
+                  urlString = "file:///Users/fizzy/Desktop/HappyHome/HappyHome/ViewController/PKDetailViewController.swift"
+                  timestampString = "498023217.840327"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "83"
-                  endingLineNumber = "83"
-                  offsetFromSymbolStart = "649">
+                  startingLineNumber = "194"
+                  endingLineNumber = "194"
+                  offsetFromSymbolStart = "1801">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "HappyHome.NetWorkingManager.(upload () -&gt; ()).(closure #1)"
+                  symbolName = "HappyHome.PKDetailViewController.(initControlEvent () -&gt; ()).(closure #1).(closure #2)"
                   moduleName = "HappyHome"
                   usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/fizzy/Desktop/%E7%A5%A8%E7%A5%A8%E6%9D%A5/HappyHome/HappyHome/BaseFile/NetWorkingManager.swift"
-                  timestampString = "497870050.423008"
+                  urlString = "file:///Users/fizzy/Desktop/HappyHome/HappyHome/ViewController/PKDetailViewController.swift"
+                  timestampString = "498023217.844086"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "84"
-                  endingLineNumber = "84"
-                  offsetFromSymbolStart = "27">
+                  startingLineNumber = "194"
+                  endingLineNumber = "194"
+                  offsetFromSymbolStart = "16">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -777,30 +761,46 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "HappyHome/BaseFile/NetWorkingManager.swift"
-            timestampString = "497870047.249879"
+            filePath = "HappyHome/ViewController/PKDetailViewController.swift"
+            timestampString = "497977644.090769"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "89"
-            endingLineNumber = "89"
-            landmarkName = "upload()"
+            startingLineNumber = "192"
+            endingLineNumber = "192"
+            landmarkName = "initControlEvent()"
             landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "HappyHome/BaseFile/NetWorkingManager.swift"
-            timestampString = "497870047.249879"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "43"
-            endingLineNumber = "43"
-            landmarkName = "HTTPWithUrl(method:url:parameters:background:completion:)"
-            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "HappyHome.PKDetailViewController.(initControlEvent () -&gt; ()).(closure #1)"
+                  moduleName = "HappyHome"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/fizzy/Desktop/HappyHome/HappyHome/ViewController/PKDetailViewController.swift"
+                  timestampString = "498023217.853683"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "192"
+                  endingLineNumber = "192"
+                  offsetFromSymbolStart = "940">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "HappyHome.PKDetailViewController.(initControlEvent () -&gt; ()).(closure #1).(closure #2)"
+                  moduleName = "HappyHome"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/fizzy/Desktop/HappyHome/HappyHome/ViewController/PKDetailViewController.swift"
+                  timestampString = "498023217.857688"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "194"
+                  endingLineNumber = "194"
+                  offsetFromSymbolStart = "16">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

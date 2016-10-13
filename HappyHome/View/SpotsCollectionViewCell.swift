@@ -12,6 +12,21 @@ class SpotsCollectionViewCell: UICollectionViewCell {
     var img:UIImageView?
     var name:UILabel?
     
+//    var model:AnyObject?
+//    {
+//        set {
+//            self.model = newValue
+//            if ((self.model?.isKindOfClass(ScenceModel)) != nil) {
+//                let smodel = self.model as! ScenceModel
+//                name?.text = smodel.pname
+//            }
+//        }
+//        get {
+//            return self.model
+//        }
+//    }
+    
+    
     override init(frame: CGRect)  {
         super.init(frame: frame)
         self .initfaceView()
@@ -19,6 +34,10 @@ class SpotsCollectionViewCell: UICollectionViewCell {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        BeanUtils.setPropertysToNil(self)
     }
     
     func initfaceView()
@@ -33,7 +52,7 @@ class SpotsCollectionViewCell: UICollectionViewCell {
         }
         
         name = UILabel()
-        name?.text = "测试"
+//        name?.text = "测试"
         name?.font = UIFont.systemFontOfSize(14)
         name?.textColor = UIColor.init(rgb: 0x282828)
         self.contentView.addSubview(name!)
@@ -44,4 +63,27 @@ class SpotsCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    func setModel(model:AnyObject) {
+        if (model.isKindOfClass(ScenceModel)) {
+            let smodel = model as! ScenceModel
+            if UserModel.sharedUserModel.selectLanguage == 1 {
+                name?.text = smodel.sname
+            }
+            else {
+                name?.text = smodel.senglishname
+            }
+            
+        }
+        else if (model.isKindOfClass(ScencePointModel)) {
+            let pmodel = model as! ScencePointModel
+            if UserModel.sharedUserModel.selectLanguage == 1 {
+                name?.text = pmodel.pname
+            }
+            else {
+                name?.text = pmodel.penglishname
+            }
+
+            
+        }
+    }
 }

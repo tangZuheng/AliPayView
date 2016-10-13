@@ -50,7 +50,7 @@ class JudgeDetailViewController: BaseViewController {
         self.navigationController!.navigationBar.alpha = 0.4
         
         img = UIImageView()
-        img?.image = UIImage.init(named: "defaultImg")
+        img?.image = UIImage.init(named: "defaultImg_unknown")
         self.view.addSubview(img!)
         img!.snp_makeConstraints { (make) -> Void in
             make.width.height.equalTo(SCREEN_WIDTH)

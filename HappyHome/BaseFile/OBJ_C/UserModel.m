@@ -8,11 +8,11 @@
 
 #import "UserModel.h"
 
-@implementation UserModel
+@implementation UserModel2
 
-+ (UserModel *)getUserModel {
++ (UserModel2 *)getUserModel {
     static dispatch_once_t once;
-    static UserModel *userModel;
+    static UserModel2 *userModel;
     dispatch_once(&once,^{
         userModel = [[self alloc]init];
         NSDictionary *dic = [userModel getUserModel];

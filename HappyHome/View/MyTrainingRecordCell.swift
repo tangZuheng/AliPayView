@@ -135,14 +135,10 @@ class MyTrainingRecordCell: UITableViewCell {
         dfmatter.dateFormat="yyyy.MM.dd hh:mm:ss"
         updateTimeLabel.text = dfmatter.stringFromDate(model.updateTime!)
         
-        
         let recordLengthDate = NSDate(timeIntervalSince1970: model.recordLength!)
-//        let dformatter = NSDateFormatter()
         dfmatter.dateFormat = "mm:ss"
         recore_lengthLabel.text = dfmatter.stringFromDate(recordLengthDate)
-//        self.slider.value = 0
-        
+
         audioPlayerManage.soundURL = model.recordUrl
-        NetWorkingManager.sharedManager.upload(model.recordUrl!)
     }
 }

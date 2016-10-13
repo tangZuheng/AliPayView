@@ -30,7 +30,12 @@
 		6D0A7B7D1D9FA82400ACC29E /* SecurityService.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0A7B771D9FA82400ACC29E /* SecurityService.m */; };
 		6D0A7B7E1D9FA82400ACC29E /* UserModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0A7B791D9FA82400ACC29E /* UserModel.m */; };
 		6D0A7B811D9FA83500ACC29E /* ZCMBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D0A7B801D9FA83500ACC29E /* ZCMBProgressHUD.m */; };
+		6D1E77601DAD1550002703A9 /* SelectKindViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1E775F1DAD1550002703A9 /* SelectKindViewController.swift */; };
+		6D1E77621DAD2DD3002703A9 /* NotificationConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1E77611DAD2DD3002703A9 /* NotificationConstant.swift */; };
+		6D1E77641DAD350B002703A9 /* ScenicCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1E77631DAD350B002703A9 /* ScenicCollectionView.swift */; };
+		6D1E77661DADD41E002703A9 /* BeanUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1E77651DADD41E002703A9 /* BeanUtils.swift */; };
 		6D27DCFD1DA5174600815E0B /* CountdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D27DCFC1DA5174600815E0B /* CountdownView.swift */; };
+		6D2A9F511DAE73C900DCD08E /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2A9F501DAE73C900DCD08E /* UserModel.swift */; };
 		6D671AA61DA9EFF10070BDC9 /* CircleProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D671AA51DA9EFF10070BDC9 /* CircleProgressView.swift */; };
 		6D671AA81DA9F39A0070BDC9 /* JudgeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D671AA71DA9F39A0070BDC9 /* JudgeDetailViewController.swift */; };
 		6D671AAA1DAA2DEB0070BDC9 /* PKHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D671AA91DAA2DEB0070BDC9 /* PKHistoryViewController.swift */; };
@@ -38,7 +43,6 @@
 		6D671AAE1DAA31480070BDC9 /* StarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D671AAD1DAA31480070BDC9 /* StarView.swift */; };
 		6D86FC071DABCEE900A48F69 /* DistrictManageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D86FC061DABCEE900A48F69 /* DistrictManageModel.swift */; };
 		6D86FC091DABCF1600A48F69 /* DistrictModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D86FC081DABCF1600A48F69 /* DistrictModel.swift */; };
-		6D86FC0B1DABD3CE00A48F69 /* ScenceManage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D86FC0A1DABD3CE00A48F69 /* ScenceManage.swift */; };
 		6D8EBD691DA3A18D00F0AD07 /* SpotsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8EBD681DA3A18D00F0AD07 /* SpotsCollectionViewCell.swift */; };
 		6D8EBD6D1DA3B20900F0AD07 /* TrainingDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8EBD6C1DA3B20900F0AD07 /* TrainingDetailViewController.swift */; };
 		6D8EBD6F1DA3B69E00F0AD07 /* TrainingRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8EBD6E1DA3B69E00F0AD07 /* TrainingRecordViewController.swift */; };
@@ -120,7 +124,12 @@
 		6D0A7B791D9FA82400ACC29E /* UserModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserModel.m; sourceTree = "<group>"; };
 		6D0A7B7F1D9FA83500ACC29E /* ZCMBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCMBProgressHUD.h; sourceTree = "<group>"; };
 		6D0A7B801D9FA83500ACC29E /* ZCMBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCMBProgressHUD.m; sourceTree = "<group>"; };
+		6D1E775F1DAD1550002703A9 /* SelectKindViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectKindViewController.swift; sourceTree = "<group>"; };
+		6D1E77611DAD2DD3002703A9 /* NotificationConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationConstant.swift; sourceTree = "<group>"; };
+		6D1E77631DAD350B002703A9 /* ScenicCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScenicCollectionView.swift; sourceTree = "<group>"; };
+		6D1E77651DADD41E002703A9 /* BeanUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeanUtils.swift; sourceTree = "<group>"; };
 		6D27DCFC1DA5174600815E0B /* CountdownView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountdownView.swift; sourceTree = "<group>"; };
+		6D2A9F501DAE73C900DCD08E /* UserModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		6D671AA51DA9EFF10070BDC9 /* CircleProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleProgressView.swift; sourceTree = "<group>"; };
 		6D671AA71DA9F39A0070BDC9 /* JudgeDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JudgeDetailViewController.swift; sourceTree = "<group>"; };
 		6D671AA91DAA2DEB0070BDC9 /* PKHistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHistoryViewController.swift; sourceTree = "<group>"; };
@@ -128,7 +137,6 @@
 		6D671AAD1DAA31480070BDC9 /* StarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StarView.swift; sourceTree = "<group>"; };
 		6D86FC061DABCEE900A48F69 /* DistrictManageModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictManageModel.swift; sourceTree = "<group>"; };
 		6D86FC081DABCF1600A48F69 /* DistrictModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictModel.swift; sourceTree = "<group>"; };
-		6D86FC0A1DABD3CE00A48F69 /* ScenceManage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScenceManage.swift; sourceTree = "<group>"; };
 		6D8EBD681DA3A18D00F0AD07 /* SpotsCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotsCollectionViewCell.swift; sourceTree = "<group>"; };
 		6D8EBD6C1DA3B20900F0AD07 /* TrainingDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrainingDetailViewController.swift; sourceTree = "<group>"; };
 		6D8EBD6E1DA3B69E00F0AD07 /* TrainingRecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TrainingRecordViewController.swift; sourceTree = "<group>"; };
@@ -276,13 +284,14 @@
 			children = (
 				6D0A7B371D9D4EDF00ACC29E /* url_swift.swift */,
 				6D0A7B341D9D4EDF00ACC29E /* NetWorkingManager.swift */,
+				6D1E77611DAD2DD3002703A9 /* NotificationConstant.swift */,
 				6DF9A8061DA5286B006936E6 /* AudioRecorderManage.swift */,
 				6D9D03BE1DA7A84C00E3DA52 /* AudioPlayerManage.swift */,
 				6DF9A8081DA551B1006936E6 /* SQLiteManage.swift */,
+				6D2A9F501DAE73C900DCD08E /* UserModel.swift */,
 				6DF07F321DA6A70F00238FB7 /* RecordObject.swift */,
 				6D86FC081DABCF1600A48F69 /* DistrictModel.swift */,
 				6D86FC061DABCEE900A48F69 /* DistrictManageModel.swift */,
-				6D86FC0A1DABD3CE00A48F69 /* ScenceManage.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -291,11 +300,11 @@
 			isa = PBXGroup;
 			children = (
 				6D0A7B551D9F7D0A00ACC29E /* MainViewController.swift */,
+				6D8EBD6B1DA3B1D500F0AD07 /* 练习 */,
 				6D9D03D01DA8F64300E3DA52 /* 评委 */,
 				6D9D03CD1DA8F4D000E3DA52 /* PK */,
 				6D9D03C61DA8EA5B00E3DA52 /* 听听 */,
 				6DF07F2A1DA68F9F00238FB7 /* 个人中心 */,
-				6D8EBD6B1DA3B1D500F0AD07 /* 练习 */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -312,6 +321,7 @@
 			children = (
 				6D0A7B351D9D4EDF00ACC29E /* Public.swift */,
 				6D0A7B361D9D4EDF00ACC29E /* RAC_Public.swift */,
+				6D1E77651DADD41E002703A9 /* BeanUtils.swift */,
 			);
 			path = swift;
 			sourceTree = "<group>";
@@ -319,6 +329,7 @@
 		6D27DCFB1DA516B000815E0B /* View */ = {
 			isa = PBXGroup;
 			children = (
+				6D1E77631DAD350B002703A9 /* ScenicCollectionView.swift */,
 				6D671AA51DA9EFF10070BDC9 /* CircleProgressView.swift */,
 				6D27DCFC1DA5174600815E0B /* CountdownView.swift */,
 				6DF07F2B1DA6994200238FB7 /* UserHeardeView.swift */,
@@ -361,6 +372,7 @@
 				6D0A7B5C1D9F977D00ACC29E /* ListenViewController.swift */,
 				6D9D03C71DA8EA7E00E3DA52 /* ListenListViewController.swift */,
 				6D9D03C91DA8EAD800E3DA52 /* ListenDetailViewController.swift */,
+				6D1E775F1DAD1550002703A9 /* SelectKindViewController.swift */,
 			);
 			name = "听听";
 			sourceTree = "<group>";
@@ -600,6 +612,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6D0A7B5F1D9F97B900ACC29E /* TrainingViewController.swift in Sources */,
+				6D1E77641DAD350B002703A9 /* ScenicCollectionView.swift in Sources */,
 				6D27DCFD1DA5174600815E0B /* CountdownView.swift in Sources */,
 				6DF07F311DA69FAA00238FB7 /* MyTrainingRecordCell.swift in Sources */,
 				6D0A7B581D9F809F00ACC29E /* ControllerManager.swift in Sources */,
@@ -632,6 +645,7 @@
 				6D8EBD6D1DA3B20900F0AD07 /* TrainingDetailViewController.swift in Sources */,
 				6D0A7B651D9F97FD00ACC29E /* UserViewController.swift in Sources */,
 				6D0A7B7A1D9FA82400ACC29E /* NSData+Send.m in Sources */,
+				6D2A9F511DAE73C900DCD08E /* UserModel.swift in Sources */,
 				6D0A7B3A1D9D4EDF00ACC29E /* RAC_Public.swift in Sources */,
 				6D0A7B7D1D9FA82400ACC29E /* SecurityService.m in Sources */,
 				6D671AAE1DAA31480070BDC9 /* StarView.swift in Sources */,
@@ -641,13 +655,15 @@
 				6DD6F4871DAA9EF7006B652E /* FiveStarViewController.swift in Sources */,
 				6D0A7B5D1D9F977D00ACC29E /* ListenViewController.swift in Sources */,
 				6D9D03C81DA8EA7E00E3DA52 /* ListenListViewController.swift in Sources */,
-				6D86FC0B1DABD3CE00A48F69 /* ScenceManage.swift in Sources */,
+				6D1E77661DADD41E002703A9 /* BeanUtils.swift in Sources */,
 				6D0A7B5A1D9F80DD00ACC29E /* MainTabBarController.swift in Sources */,
 				6DD6F4831DAA8C55006B652E /* YesterdayPKViewController.swift in Sources */,
 				6D0A7B391D9D4EDF00ACC29E /* Public.swift in Sources */,
 				6D86FC091DABCF1600A48F69 /* DistrictModel.swift in Sources */,
 				6D9D03CC1DA8EBAA00E3DA52 /* ListenDetailCell.swift in Sources */,
+				6D1E77601DAD1550002703A9 /* SelectKindViewController.swift in Sources */,
 				6D9D03C11DA8A02900E3DA52 /* LoginViewController.swift in Sources */,
+				6D1E77621DAD2DD3002703A9 /* NotificationConstant.swift in Sources */,
 				6D0A7B061D9D492200ACC29E /* AppDelegate.swift in Sources */,
 				6D671AA61DA9EFF10070BDC9 /* CircleProgressView.swift in Sources */,
 				6DF07F2C1DA6994200238FB7 /* UserHeardeView.swift in Sources */,

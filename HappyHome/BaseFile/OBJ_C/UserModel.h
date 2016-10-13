@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface UserModel : NSObject
+@interface UserModel2 : NSObject
 
 @property (nonatomic) BOOL isLogin;
 
@@ -27,7 +27,7 @@
 @property (nonatomic,strong) NSString *userCode;
 
 
-+ (UserModel *)getUserModel;
++ (UserModel2 *)getUserModel;
 //保存用户信息
 - (void)saveUserModel:(NSDictionary *)Dic;
 //设置用户信息

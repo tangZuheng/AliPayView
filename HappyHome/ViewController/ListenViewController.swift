@@ -8,77 +8,69 @@
 
 import UIKit
 
-class ListenViewController: BaseViewController,UICollectionViewDelegate,UICollectionViewDataSource {
+class ListenViewController: BaseViewController,UICollectionViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.initfaceView()
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        ScenicCollectionView.sharedManager.collectionView.delegate = self
+        self.view.addSubview(ScenicCollectionView.sharedManager)
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    }
+    
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+        BeanUtils.setPropertysToNil(self)
     }
     
     func initfaceView(){
         self.title = "听听"
-        let kindButton = UIButton()
-        kindButton.setImage(UIImage.init(named: "xaila"), forState: .Normal)
         
-        ScenceManage.sharedManager.getScenceList()
+        let kingButton = UIButton()
+        kingButton.frame = CGRectMake(0, 0, 100, 44)
+        kingButton.setTitle(DistrictManageModel.sharedManager.selectDistrict?.name, forState: .Normal)
+        kingButton.setImage(UIImage.init(named: "xiala"), forState: .Normal)
+        kingButton.titleLabel?.font = UIFont.systemFontOfSize(14)
+        kingButton.titleLabel!.textAlignment = .Center
+        kingButton.setTitleColor(colorForNavigationBarTitle(), forState: .Normal)
+        kingButton.titleEdgeInsets = UIEdgeInsetsMake(0, -kingButton.imageView!.image!.size.width-5, 0, kingButton.imageView!.image!.size.width)
+        kingButton.imageEdgeInsets = UIEdgeInsetsMake(0, kingButton.titleLabel!.bounds.size.width-5, 0, -kingButton.titleLabel!.bounds.size.width)
+        kingButton.contentHorizontalAlignment = .Right
         
-//
-//        _addressButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//        _addressButton.frame = CGRectMake(0, 0, 80, 44);
-//        [_addressButton setImage:IMAGE_NAME(@"kinds_xiala_icon") forState:UIControlStateNormal];
-//        [_addressButton setTitle:[DistrictManageModel shareInstance].selectDistrict.name forState:UIControlStateNormal];
-//        _addressButton.titleLabel.textAlignment = NSTextAlignmentCenter;
-//        _addressButton.titleLabel.font = [UIFont systemFontOfSize:14];
-//        [_addressButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//        [_addressButton setBackgroundColor:[UIColor clearColor]];
-//        [_addressButton setTitleEdgeInsets:UIEdgeInsetsMake(0, -_addressButton.imageView.image.size.width-5, 0, _addressButton.imageView.image.size.width)];
-//        [_addressButton setImageEdgeInsets:UIEdgeInsetsMake(0, _addressButton.titleLabel.bounds.size.width + 10, 0, -_addressButton.titleLabel.bounds.size.width-5)];
-//        [_addressButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentRight];
-//        [_addressButton addTarget:self action:@selector(addressButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-//        
-//        let address = UIBarButtonItem.init(customView: <#T##UIView#>)
-//        UIBarButtonItem *address = [[UIBarButtonItem alloc] initWithCustomView:self.addressButton];
-//        self.navigationItem.rightBarButtonItem = address;
-//        [self.view addSubview:self.collectionView];
+        kingButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
+            let vc = SelectKindViewController()
+            self.pushToNextController(vc)
+        }
+        let kingButtonItem = UIBarButtonItem.init(customView: kingButton)
+        self.navigationItem.rightBarButtonItem =  kingButtonItem
         
-        let flowLayout = UICollectionViewFlowLayout()
-        
-        flowLayout.scrollDirection = .Vertical
-        flowLayout.minimumLineSpacing = 5
-        flowLayout.minimumInteritemSpacing = 5
-        flowLayout.itemSize = CGSizeMake((SCREEN_SIZE.width - 10)/3, (SCREEN_SIZE.width - 10)/3 + 30)
-        
-        
-        let collectionView = UICollectionView.init(frame: CGRectMake(0, navBar_Fheight, SCREEN_SIZE.width, SCREEN_SIZE.height - navBar_Fheight - tabBar_height), collectionViewLayout: flowLayout)
-        collectionView.backgroundColor = UIColor.whiteColor()
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.registerClass(SpotsCollectionViewCell.classForCoder(), forCellWithReuseIdentifier: "SpotsCollectionViewCellIdentifier")
-        collectionView.backgroundColor = colorForBackground()
-        self.view.addSubview(collectionView)
-
+        NSNotificationCenter.defaultCenter().rac_addObserverForName(UpdateDistrictNotification, object: nil).subscribeNext { _ in
+            kingButton.setTitle(DistrictManageModel.sharedManager.selectDistrict?.name, forState: .Normal)
+            kingButton.titleEdgeInsets = UIEdgeInsetsMake(0, -kingButton.imageView!.image!.size.width-5, 0, kingButton.imageView!.image!.size.width)
+            kingButton.imageEdgeInsets = UIEdgeInsetsMake(0, kingButton.titleLabel!.bounds.size.width-5, 0, -kingButton.titleLabel!.bounds.size.width)
+        }
     }
     
-    //MARK: UICollectionViewDataSource
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
-    }
-    
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let identifier = "SpotsCollectionViewCellIdentifier"
-        let cell:SpotsCollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier(identifier, forIndexPath: indexPath) as! SpotsCollectionViewCell
-        return cell
+    //MARK: 事件
+    //昨日PK
+    func selectKindButtonClick() {
+        let vc = SelectKindViewController()
+        self.pushToNextController(vc)
     }
     
     //MARK: UICollectionViewDelegate
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let vc = ListenListViewController()
+        vc.model = ScenicCollectionView.sharedManager.dataArr.objectAtIndex(indexPath.row) as! ScenceModel
         self.pushToNextController(vc)
     }
 

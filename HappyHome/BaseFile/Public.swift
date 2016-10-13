@@ -12,7 +12,8 @@ import AVFoundation
 import ReactiveCocoa
 import Alamofire
 import SnapKit
-
+import HandyJSON
+import MJRefresh
 
 /**< size define */
 //let root = (ControllerManager.sharedManager().rootViewController?.viewControllersArr?.firstObject as! UIViewController).navigationController?.navigationBar.frame
@@ -77,3 +78,16 @@ extension UIColor {
         )
     }
 }
+
+// 扩展String
+extension String {
+    subscript (r: Range<Int>) -> String {
+        get {
+            let startIndex = self.startIndex.advancedBy(r.startIndex)
+            let endIndex = self.startIndex.advancedBy(r.endIndex)
+            
+            return self[Range(start: startIndex, end: endIndex)]
+        }
+    }
+}
+

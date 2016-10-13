@@ -49,6 +49,13 @@ class MainViewController: UIViewController {
             make.centerX.equalToSuperview()
         }
         chinaBtn.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
+            UserModel.sharedUserModel.selectLanguage = 1
+            self.presentViewController(ControllerManager.sharedManager().rootViewController!, animated: true, completion: {
+                
+            })
+        }
+        englishBtn.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
+            UserModel.sharedUserModel.selectLanguage = 2
             self.presentViewController(ControllerManager.sharedManager().rootViewController!, animated: true, completion: {
                 
             })

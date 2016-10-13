@@ -58,6 +58,17 @@ class BaseViewController: UIViewController {
         ZCMBProgressHUD.stopMBProgressHUD(self.navigationController?.view)
     }
     
+    //显示提示框
+    func showSuccessHUDWithText(text:String)
+    {
+        ZCMBProgressHUD.showResultHUDWithResult(true, andText: text, toView: self.navigationController?.view)
+    }
+    
+    func showFailHUDWithText(text:String)
+    {
+        ZCMBProgressHUD.showResultHUDWithResult(false, andText: text, toView: self.navigationController?.view)
+    }
+    
     func showResultHUDWithResult(result:Bool,text:String) {
         ZCMBProgressHUD.showResultHUDWithResult(result, andText: text, toView: self.navigationController?.view)
     }

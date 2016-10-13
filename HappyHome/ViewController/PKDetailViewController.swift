@@ -7,9 +7,14 @@
 //
 
 import UIKit
+import HandyJSON
 
 class PKDetailViewController: BaseViewController {
 
+    var model:ScenceModel!
+    var pointModel:ScencePointModel!
+    var presentTime:NSTimeInterval!
+    
     var img:UIImageView?
     var name:UILabel?
     
@@ -32,6 +37,7 @@ class PKDetailViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initfaceView()
+        self.initControlEvent()
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -49,9 +55,6 @@ class PKDetailViewController: BaseViewController {
                 self.audioRecorderManage.pausePlaying()
             }
         }
-        //        if self.audioRecorderManage.audioPlayer !=nil &&self.audioRecorderManage.audioPlayer.playing {
-        //            self.audioRecorderManage.pausePlaying()
-        //        }
         self.audioRecorderManage.audioRecorder.deleteRecording()
         
         super.viewWillDisappear(animated)
@@ -63,7 +66,7 @@ class PKDetailViewController: BaseViewController {
     }
     
     func initfaceView(){
-        self.title = "测试"
+        self.title = "PK"
 
         self.navigationController!.navigationBar.tintColor = UIColor.whiteColor()
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
@@ -89,7 +92,7 @@ class PKDetailViewController: BaseViewController {
         }
         
         name = UILabel()
-        name?.text = "测试"
+//        name?.text = "测试"
         name?.textColor = UIColor.whiteColor()
         self.view.addSubview(name!)
         name!.snp_makeConstraints { (make) -> Void in
@@ -129,7 +132,6 @@ class PKDetailViewController: BaseViewController {
         
         slider.minimumTrackTintColor = UIColor.init(rgb: 0xfbbebe);
         slider.maximumTrackTintColor = UIColor.init(rgb: 0xdcdcdc);
-        //        slider.value = 0.5
         slider.setThumbImage(UIImage.init(named: "进度点"), forState: .Normal)
         slider.userInteractionEnabled = false
         bottomView.addSubview(slider)
@@ -145,29 +147,56 @@ class PKDetailViewController: BaseViewController {
             make.centerX.equalTo(bottomView)
             make.bottom.equalTo(bottomView).offset(-50)
         }
+        self.updateView()
+    }
+    
+    //所有事件
+    func initControlEvent(){
         startButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
             if 1 == self.state {
-                let view = CountdownView()
-                view.show(2, andBlock: { (UIView) in
-                    print("倒计时到了")
-                    self.state = 2
-                    self.updateView()
-                    //                    AudioRecorderManage.getSavePath()
-                    self.audioRecorderManage.startRecord()
-                    self.displayLink = CADisplayLink.init(target: self, selector: #selector(TrainingRecordViewController.updateTime))
-                    self.displayLink!.frameInterval = 1
-                    self.displayLink!.paused = false
-                    self.displayLink?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSRunLoopCommonModes)
+                NetWorkingManager.sharedManager.checkPK(self.model.sid!, completion: { (retObject, error) in
+                    if retObject != nil {
+                        self.pointModel = JSONDeserializer<ScencePointModel>.deserializeFrom(retObject?.objectForKey("data")?.objectForKey("pointBean") as! NSDictionary)
+                        self.presentTime = retObject?.objectForKey("data")?.objectForKey("presentTime") as! NSTimeInterval
+                        if UserModel.sharedUserModel.selectLanguage == 1 {
+                            self.name?.text = self.pointModel.pname
+                        }
+                        else {
+                            self.name?.text = self.pointModel.penglishname
+                        }
+                        
+                        let view = CountdownView()
+                        view.show(5, andBlock: { (UIView) in
+                            print("倒计时到了")
+                            self.state = 2
+                            self.updateView()
+                            self.audioRecorderManage.startRecord()
+                            self.displayLink = CADisplayLink.init(target: self, selector: #selector(TrainingRecordViewController.updateTime))
+                            self.displayLink!.frameInterval = 1
+                            self.displayLink!.paused = false
+                            self.displayLink?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSRunLoopCommonModes)
+                        })
+                    }
+                    else {
+                        self.showFailHUDWithText(error!.localizedDescription)
+                    }
                 })
+                
             }
             else {
                 self.state = 3
                 self.maxTime = self.audioRecorderManage.audioRecorder.currentTime
                 self.updateView()
                 self.audioRecorderManage.stopRecord()
+                
+                NetWorkingManager.sharedManager.uploadPK(self.model.sid!, pid: self.pointModel.pid!, presentTime: self.presentTime, fileURL: self.audioRecorderManage.audioRecorder.url, completion: { (retObject, error) in
+                    
+                })
+                
+                
             }
         }
-        self.updateView()
+
     }
     
     func updateView() -> Void {
@@ -176,7 +205,7 @@ class PKDetailViewController: BaseViewController {
             maxTime = 180
             endTime.text = "03:00"
             
-            startButton.enabled = true
+//            startButton.enabled = true
             startButton.setImage(UIImage.init(named: "开始按钮"), forState: .Normal)
 
         }
