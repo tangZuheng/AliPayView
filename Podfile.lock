@@ -1,52 +1,44 @@
 PODS:
   - Alamofire (3.5.1)
+  - CXAlertView (1.1.0)
   - HandyJSON (0.4.0)
   - LTMorphingLabel (0.3.0)
-  - Masonry (1.0.2)
   - MBProgressHUD (1.0.0)
   - MJRefresh (3.1.12)
   - ReactiveCocoa (4.2.2):
     - Result (~> 2.0)
   - Result (2.1.3)
+  - SDWebImage (3.8.2):
+    - SDWebImage/Core (= 3.8.2)
+  - SDWebImage/Core (3.8.2)
   - SnapKit (0.22.0)
   - SQLite.swift (0.10.1)
-  - SwiftyJSON (2.4.0)
 
 DEPENDENCIES:
   - Alamofire
+  - CXAlertView
   - HandyJSON (= 0.4.0)
   - LTMorphingLabel
-  - Masonry (~> 1.0.2)
   - MBProgressHUD (~> 1.0.0)
   - MJRefresh (~> 3.1.2)
   - ReactiveCocoa (~> 4.2.2)
+  - SDWebImage (~> 3.8)
   - SnapKit (~> 0.22.0)
   - SQLite.swift (~> 0.10.1)
-  - SwiftyJSON (from `https://github.com/SwiftyJSON/SwiftyJSON.git`, branch `swift2`)
-
-EXTERNAL SOURCES:
-  SwiftyJSON:
-    :branch: swift2
-    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
-
-CHECKOUT OPTIONS:
-  SwiftyJSON:
-    :commit: 54017d514a87b2b855b407131292c510cdeb65f8
-    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
 
 SPEC CHECKSUMS:
   Alamofire: 0dfba1184a543e2aa160f4e39cac4e8aba48d223
+  CXAlertView: 7387ca9af81796ab22d26ff2fc3cfcb082f3ee09
   HandyJSON: 92708e8790347978ac6568c25e316d5be6256d8b
   LTMorphingLabel: 2777d8d9cb699125f48dfcd95d78bd3d77c87ade
-  Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   MBProgressHUD: 4890f671c94e8a0f3cf959aa731e9de2f036d71a
   MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806
   ReactiveCocoa: 72263e7ac0770c274617ccd345e01049d0ca38ae
   Result: 18e1a7597fbcca5923c565b40a25a98afafdee02
+  SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   SnapKit: 0dd2fd157330f1ea11fd84da13e6be8a7a22bae0
   SQLite.swift: 6a6e4b034efc317ce4e203b6af2d3024fee2b570
-  SwiftyJSON: 96918c1bf505efa50c4f72957018dd3452090c9c
 
-PODFILE CHECKSUM: 77a95eb93c5fd4332f54defa54f097e02ab78bbc
+PODFILE CHECKSUM: 02ab03e5f37a2c37ac59182edfca67261c5ecf85
 
 COCOAPODS: 1.0.1

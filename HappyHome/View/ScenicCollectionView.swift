@@ -45,7 +45,12 @@ class ScenicCollectionView: UIView,UICollectionViewDataSource {
         collectionView.mj_header = MJRefreshNormalHeader.init(refreshingBlock: {
             self.initDataSouce()
         })
-//        collectionView.mj_header.beginRefreshing()
+        collectionView.mj_header.beginRefreshing()
+        
+        NSNotificationCenter.defaultCenter().rac_addObserverForName(UpdateDistrictNotification, object: nil).subscribeNext { _ in
+            self.dataArr.removeAllObjects()
+            self.collectionView.mj_header.beginRefreshing()
+        }
     }
     
     func initDataSouce(){
@@ -70,14 +75,14 @@ class ScenicCollectionView: UIView,UICollectionViewDataSource {
     
     //MARK: UICollectionViewDataSource
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return dataArr.count
-        return 10
+        return dataArr.count
+//        return 10
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let identifier = "SpotsCollectionViewCellIdentifier"
         let cell:SpotsCollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier(identifier, forIndexPath: indexPath) as! SpotsCollectionViewCell
-//        cell.setModel(dataArr.objectAtIndex(indexPath.row))
+        cell.setModel(dataArr.objectAtIndex(indexPath.row))
         return cell
     }
 }

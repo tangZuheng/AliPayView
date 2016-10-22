@@ -24,6 +24,8 @@ class ListenListViewController: BaseViewController,UICollectionViewDelegate,UICo
         self.initfaceView()
     }
     
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -91,6 +93,10 @@ class ListenListViewController: BaseViewController,UICollectionViewDelegate,UICo
     //MARK: UICollectionViewDelegate
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let vc = ListenDetailViewController()
+        let pointModel = dataArr.objectAtIndex(indexPath.row) as! ScencePointModel
+        vc.pid = pointModel.pid
+        vc.pname = pointModel.pname
+        vc.ppicture = pointModel.ppicture
         self.pushToNextController(vc)
     }
 }

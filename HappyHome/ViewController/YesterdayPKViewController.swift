@@ -7,10 +7,14 @@
 //
 
 import UIKit
+import MJRefresh
+import HandyJSON
 
 class YesterdayPKViewController: BaseViewController,UITableViewDataSource,UITableViewDelegate {
 
-    let dataArr = SQLiteManage.sharedManager.searchRecord()
+    var dataArr = NSMutableArray()
+    
+    let tableView = UITableView.init()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +37,7 @@ class YesterdayPKViewController: BaseViewController,UITableViewDataSource,UITabl
         
         self.title = "昨日PK"
         
-        let tableView = UITableView.init()
+        
         tableView.dataSource = self
         tableView.delegate = self
         self.view.addSubview(tableView)
@@ -45,7 +49,36 @@ class YesterdayPKViewController: BaseViewController,UITableViewDataSource,UITabl
             make.top.equalTo(navBar_Fheight+10)
             make.bottom.equalToSuperview()
         }
+        tableView.mj_header = MJRefreshNormalHeader.init(refreshingBlock: {
+            self.initDataSouce()
+        })
+        tableView.mj_header.beginRefreshing()
+        
     }
+    
+    func initDataSouce(){
+        NetWorkingManager.sharedManager.getYesterdayPKList { (retObject, error) in
+            self.tableView.mj_header.endRefreshing()
+            if error == nil {
+                if retObject?.objectForKey("data")! is NSArray
+                {
+                    let arr = retObject?.objectForKey("data")! as! NSArray
+                        self.dataArr.removeAllObjects()
+                    for item in arr {
+                        let model = JSONDeserializer<YesterdayPKModel>.deserializeFrom(item as! NSDictionary)
+                        self.dataArr.addObject(model!)
+                    }
+                    self.tableView.reloadData()
+                }
+                
+            }
+            else {
+                self.showFailHUDWithText(error!.localizedDescription)
+            }
+        }
+    }
+    
+    
     
     //MARK: UITableViewDataSource
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -63,8 +96,14 @@ class YesterdayPKViewController: BaseViewController,UITableViewDataSource,UITabl
             cell = YesterdayPKCell.init(style: .Default, reuseIdentifier: identifir)
             cell?.selectionStyle = .None
         }
-        cell?.setModel(dataArr.objectAtIndex(indexPath.row) as! RecordObject)
+        cell?.setModel(dataArr.objectAtIndex(indexPath.row) as! YesterdayPKModel)
         return cell!
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let vc = YesterdayPKDetailViewController()
+        vc.model = dataArr.objectAtIndex(indexPath.row) as! YesterdayPKModel
+        self.pushToNextController(vc)
     }
 
 }

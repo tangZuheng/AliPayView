@@ -7,22 +7,46 @@
 //
 
 import UIKit
+import HandyJSON
+import SDWebImage
+import AVFoundation
 
 class JudgeDetailViewController: BaseViewController {
 
+    var model:ScenceModel!
+    var pointModel:ScencePointModel!
+    
+    var leftSoundModel:SoundModel!
+    var rightSoundModel:SoundModel!
+    
     var img:UIImageView?
     var name:UILabel?
     
     var leftProgressView: CircleProgressView!
     var rightProgressView: CircleProgressView!
     
+    let leftHead = UIImageView()
+    let rightHead = UIImageView()
+    
+    let leftPlayButton = UIButton()
+    let rightPlayButton = UIButton()
+    
+    let leftTipButton = UIButton()
+    let rightTipButton = UIButton()
+    
     let leftWinButton = UIButton()
     let centerWinButton = UIButton()
     let rightWinButton = UIButton()
+    let commitButton = UIButton()
+    
+    var leftPlay:Bool = false   // 左边是否已经播放
+    var rightPlay:Bool = false  // 右边时候已经播放
+    var result:Int! = 0         //1为左边胜，2为平手，3为右边胜
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initfaceView()
+        self.initDataSouce()
         self.initControlEvent()
     }
     
@@ -42,7 +66,7 @@ class JudgeDetailViewController: BaseViewController {
     }
     
     func initfaceView(){
-        self.title = "测试"
+        self.title = "评委"
         
         self.navigationController!.navigationBar.tintColor = UIColor.whiteColor()
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
@@ -50,7 +74,7 @@ class JudgeDetailViewController: BaseViewController {
         self.navigationController!.navigationBar.alpha = 0.4
         
         img = UIImageView()
-        img?.image = UIImage.init(named: "defaultImg_unknown")
+        img?.image = UIImage.init(named: "defaultImg")
         self.view.addSubview(img!)
         img!.snp_makeConstraints { (make) -> Void in
             make.width.height.equalTo(SCREEN_WIDTH)
@@ -68,7 +92,6 @@ class JudgeDetailViewController: BaseViewController {
         }
         
         name = UILabel()
-        name?.text = "测试"
         name?.textColor = UIColor.whiteColor()
         self.view.addSubview(name!)
         name!.snp_makeConstraints { (make) -> Void in
@@ -92,7 +115,6 @@ class JudgeDetailViewController: BaseViewController {
         vsImg.snp_makeConstraints { (make) in
             make.top.equalTo(60)
             make.centerX.equalToSuperview()
-//            make.centerY.equalTo(leftProgressView)
         }
         
         leftProgressView = CircleProgressView()
@@ -100,25 +122,28 @@ class JudgeDetailViewController: BaseViewController {
         leftProgressView.trackWidth = 4
         leftProgressView.trackBackgroundColor = UIColor.init(rgb: 0x666666)
         leftProgressView.trackFillColor = UIColor.init(rgb: 0xe7e7e7)
-//        leftProgressView.centerFillColor = UIColor.init(rgb: 0x232323)
-        leftProgressView.centerImage = UIImage.init(named: "user_head")
-        leftProgressView.progress = 0.4
         bottomView.addSubview(leftProgressView)
         leftProgressView.snp_makeConstraints { (make) in
             make.width.height.equalTo(75*SCREEN_SCALE)
             make.centerY.equalTo(vsImg).offset(5)
-//            make.right.equalTo(vsImg.snp_left).offset(-10)
             make.left.equalTo(20)
         }
         
-        let leftPlayButton = UIButton()
+        leftHead.image = placeholderHead
+        leftHead.layer.masksToBounds = true
+        leftHead.layer.cornerRadius = (75*SCREEN_SCALE-8)/2
+        leftProgressView.addSubview(leftHead)
+        leftHead.snp_makeConstraints { (make) in
+            make.edges.equalTo(leftProgressView).inset(UIEdgeInsetsMake(4, 4, 4, 4))
+        }
+        
         leftPlayButton.setBackgroundImage(UIImage.init(named: "Judge_play"), forState: .Normal)
         leftProgressView.addSubview(leftPlayButton)
         leftPlayButton.snp_makeConstraints { (make) in
             make.edges.equalTo(leftProgressView).inset(UIEdgeInsetsMake(4, 4, 4, 4))
         }
         
-        let leftTipButton = UIButton()
+        
         leftTipButton.setBackgroundImage(UIImage.init(named: "Judge_tip"), forState: .Normal)
         bottomView.addSubview(leftTipButton)
         leftTipButton.snp_makeConstraints { (make) in
@@ -133,25 +158,30 @@ class JudgeDetailViewController: BaseViewController {
         rightProgressView.trackWidth = 4
         rightProgressView.trackBackgroundColor = UIColor.init(rgb: 0x666666)
         rightProgressView.trackFillColor = UIColor.init(rgb: 0xe7e7e7)
-        //        leftProgressView.centerFillColor = UIColor.init(rgb: 0x232323)
-        rightProgressView.centerImage = UIImage.init(named: "user_head")
-        rightProgressView.progress = 0.4
+//        rightProgressView.centerImage = UIImage.init(named: "user_head")
+//        rightProgressView.progress = 0.4
         bottomView.addSubview(rightProgressView)
         rightProgressView.snp_makeConstraints { (make) in
             make.width.height.equalTo(75*SCREEN_SCALE)
             make.centerY.equalTo(vsImg).offset(5)
             make.right.equalTo(-20)
-//            make.left.equalTo(vsImg.snp_right).offset(10)
         }
         
-        let rightPlayButton = UIButton()
+        rightHead.image = placeholderHead
+        rightHead.layer.masksToBounds = true
+        rightHead.layer.cornerRadius = (75*SCREEN_SCALE-8)/2
+        rightProgressView.addSubview(rightHead)
+        rightHead.snp_makeConstraints { (make) in
+            make.edges.equalTo(rightProgressView).inset(UIEdgeInsetsMake(4, 4, 4, 4))
+        }
+        
         rightPlayButton.setBackgroundImage(UIImage.init(named: "Judge_play"), forState: .Normal)
         rightProgressView.addSubview(rightPlayButton)
         rightPlayButton.snp_makeConstraints { (make) in
             make.edges.equalTo(rightProgressView).inset(UIEdgeInsetsMake(4, 4, 4, 4))
         }
         
-        let rightTipButton = UIButton()
+        
         rightTipButton.setBackgroundImage(UIImage.init(named: "Judge_tip"), forState: .Normal)
         bottomView.addSubview(rightTipButton)
         rightTipButton.snp_makeConstraints { (make) in
@@ -195,8 +225,6 @@ class JudgeDetailViewController: BaseViewController {
             make.centerX.equalToSuperview()
         }
         
-        
-        
         rightWinButton.setTitle("我赢了", forState: .Normal)
         rightWinButton.titleLabel?.font = UIFont.systemFontOfSize(14)
         rightWinButton.setTitleColor(UIColor.init(rgb: 0x282828), forState: .Normal)
@@ -214,11 +242,17 @@ class JudgeDetailViewController: BaseViewController {
             make.right.equalTo(rightProgressView.snp_right)
         }
         
-        let commitButton = UIButton()
+        
         commitButton.setTitle("确定", forState: .Normal)
         commitButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         commitButton.titleLabel?.font = UIFont.systemFontOfSize(16)
         commitButton.backgroundColor = UIColor.init(rgb: 0xff3838)
+        self.updateCommitButton()
+//        commitButton.setImage(createImageWithColor(UIColor.init(rgb: 0xff3838)), forState: .Normal)
+//        commitButton.setImage(createImageWithColor(UIColor.grayColor()), forState: .Disabled)
+        
+        
+        
         bottomView.addSubview(commitButton)
         commitButton.snp_makeConstraints { (make) in
             make.width.equalToSuperview()
@@ -226,37 +260,202 @@ class JudgeDetailViewController: BaseViewController {
             make.bottom.equalToSuperview()
             make.height.equalTo(40)
         }
-
     }
     
+    func updateView() {
+        leftPlay = false
+        rightPlay = false
+        result = 0
+        
+        img?.sd_setImageWithURL(NSURL.init(string: self.pointModel.ppicture!), placeholderImage: placeholderImage!)
+        name?.text = self.pointModel.pname
+        
+        self.leftHead.sd_setImageWithURL(NSURL.init(string: self.leftSoundModel.userheader!), placeholderImage: placeholderHead)
+        self.rightHead.sd_setImageWithURL(NSURL.init(string: self.rightSoundModel.userheader!), placeholderImage: placeholderHead)
+    }
+    
+    func initDataSouce(){
+        self.startMBProgressHUD()
+        NetWorkingManager.sharedManager.JudgeIndex(self.model.sid!) { (retObject, error) in
+            self.stopMBProgressHUD()
+            if error == nil {
+                let data = retObject?.objectForKey("data")
+                if data != nil {
+                    self.leftSoundModel = JSONDeserializer<SoundModel>.deserializeFrom(data?.objectForKey("soundBean") as! NSDictionary)
+                    self.rightSoundModel = JSONDeserializer<SoundModel>.deserializeFrom(data?.objectForKey("pksoundBean") as! NSDictionary)
+                    self.pointModel  = JSONDeserializer<ScencePointModel>.deserializeFrom(data?.objectForKey("pointBean") as! NSDictionary)
+                    self.updateView()
+                    self.updateCommitButton()
+                }
+            }
+            else {
+                ZCMBProgressHUD.showResultHUDWithResult(true, andText: error!.localizedDescription, toView: self.navigationController?.view, andSecond: 2, completionBlock: {
+                    self.navigationController?.popViewControllerAnimated(true)
+                })
+            }
+        }
+    }
     //所有事件
     func initControlEvent(){
         leftWinButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
             if !self.leftWinButton.selected
             {
-                self.leftWinButton.selected = true
-                self.centerWinButton.selected = false
-                self.rightWinButton.selected = false
+                self.result = 1
+                self.updateCommitButton()
             }
         }
         
         centerWinButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
             if !self.centerWinButton.selected
             {
-                self.leftWinButton.selected = false
-                self.centerWinButton.selected = true
-                self.rightWinButton.selected = false
+                self.result = 2
+                self.updateCommitButton()
             }
         }
         
         rightWinButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
             if !self.rightWinButton.selected
             {
-                self.leftWinButton.selected = false
-                self.centerWinButton.selected = false
-                self.rightWinButton.selected = true
+                self.result = 3
+                self.updateCommitButton()
             }
         }
+        leftPlayButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
+            NetAudioPlayerManage.sharedManager.soundURL = NSURL.init(string: self.leftSoundModel.soundname!)
+            NetAudioPlayerManage.sharedManager.startPlaying()
+            
+            self.startMBProgressHUD()
+            self.leftPlayButton.hidden = true
+//            self.rightPlayButton.enabled = false
+            self.leftPlay = true
+            self.updateCommitButton()
+        }
+        rightPlayButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
+            NetAudioPlayerManage.sharedManager.soundURL = NSURL.init(string: self.rightSoundModel.soundname!)
+            NetAudioPlayerManage.sharedManager.startPlaying()
+            
+            self.startMBProgressHUD()
+            self.rightPlayButton.hidden = true
+//            self.leftPlayButton.enabled = false
+            self.rightPlay = true
+            self.updateCommitButton()
+        }
         
+        leftTipButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
+            let alertView = TipAlertView.init(title: "请选择举报内容", contentView: nil, cancelButtonTitle: "取消")
+            alertView.addButtonWithTitle("确定", type: .Default, handler: { (CXAlertVie, AlertButtonItem) in
+                
+            })
+            alertView.show()
+        }
+        
+        
+        rightTipButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
+            let alertView = TipAlertView.init(title: "请选择举报内容", contentView: nil, cancelButtonTitle: "取消")
+            alertView.addButtonWithTitle("确定", type: .Default, handler: { (CXAlertVie, AlertButtonItem) in
+                
+            })
+            alertView.show()
+        }
+        
+        
+        commitButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
+            //提交结果
+            self.startMBProgressHUD()
+            NetWorkingManager.sharedManager.JudgeResult(self.leftSoundModel.soundid!, pksoundid: self.rightSoundModel.soundid!, result: self.result, completion: { (retObject, error) in
+                self.stopMBProgressHUD()
+                if error == nil {
+                    let view = UIAlertView.init(title: "", message: "亲，谢谢你对我们评委工作的支持，评论下一条？", delegate: nil, cancelButtonTitle: "确定", otherButtonTitles: "取消")
+                        view.rac_buttonClickedSignal().subscribeNext({ (indexNumber) in
+                        if indexNumber as! Int == 0 {
+                            self.initDataSouce()
+                        }
+                        else {
+                            self.navigationController?.popViewControllerAnimated(true)
+                        }
+                    })
+                    view.show()
+                }
+                else {
+                    self.showFailHUDWithText(error!.localizedDescription)
+                }
+            })
+            
+            
+        }
+        
+        NSNotificationCenter.defaultCenter().rac_addObserverForName(MusicTimeIntervalNotification, object: nil).subscribeNext {
+            notificationCenter in
+            
+            self.stopMBProgressHUD()
+            
+            let not_object = notificationCenter.object as! String
+            if not_object == self.leftSoundModel.soundname{
+                self.leftProgressView.progress = CMTimeGetSeconds(NetAudioPlayerManage.sharedManager.audioPlayer.currentTime())/self.leftSoundModel.soundtime!
+            }
+            else {
+                self.rightProgressView.progress = CMTimeGetSeconds(NetAudioPlayerManage.sharedManager.audioPlayer.currentTime())/self.rightSoundModel.soundtime!
+            }
+        }
+        NSNotificationCenter.defaultCenter().rac_addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: nil).subscribeNext {
+            notificationCenter in
+            if self.leftPlayButton.hidden{
+                self.leftPlayButton.hidden = false
+                self.leftProgressView.progress = 0
+                
+            }
+            else {
+                self.rightPlayButton.hidden = false
+                self.rightProgressView.progress = 0
+                
+            }
+            self.leftPlayButton.enabled = true
+            self.rightPlayButton.enabled = true
+            
+        }
+        
+        
+    }
+    
+    
+    
+    //
+    func updateCommitButton() {
+        
+        leftTipButton.enabled = leftPlay
+        rightTipButton.enabled = rightPlay
+        
+        leftWinButton.enabled = leftPlay&&rightPlay
+        centerWinButton.enabled = leftPlay&&rightPlay
+        rightWinButton.enabled = leftPlay&&rightPlay
+        
+        if result == 0 {
+            self.leftWinButton.selected = false
+            self.centerWinButton.selected = false
+            self.rightWinButton.selected = false
+        }
+        else if result == 1 {
+            self.leftWinButton.selected = true
+            self.centerWinButton.selected = false
+            self.rightWinButton.selected = false
+        }
+        else if result == 2 {
+            self.leftWinButton.selected = false
+            self.centerWinButton.selected = true
+            self.rightWinButton.selected = false
+        }
+        else if result == 3 {
+            self.leftWinButton.selected = false
+            self.centerWinButton.selected = false
+            self.rightWinButton.selected = true
+        }
+        
+        commitButton.enabled = (result != 0)&&leftPlay&&rightPlay
+        if commitButton.enabled {
+            commitButton.backgroundColor = UIColor.init(rgb: 0xff3838)
+        }
+        else {
+            commitButton.backgroundColor = UIColor.init(rgb: 0xe5e5e5)
+        }
     }
 }

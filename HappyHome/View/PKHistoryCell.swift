@@ -95,16 +95,14 @@ class PKHistoryCell: UITableViewCell {
         
     }
     
-    func setModel(model:RecordObject) -> Void {
+    func setModel(model:PKHistoryModel) -> Void {
         
-        iconView.image = UIImage.init(named: model.img)
+        iconView.sd_setImageWithURL(NSURL.init(string: model.picture!), placeholderImage: placeholderImage)
+        nameLabel.text = model.sname
         
-        let nameText = NSMutableAttributedString.init(string: model.spotsName+"  "+model.explainName)
-        nameText.addAttributes([NSForegroundColorAttributeName : UIColor.init(rgb: 0x282828)], range: NSMakeRange(0, model.spotsName.characters.count))
-        nameText.addAttributes([NSFontAttributeName : UIFont.systemFontOfSize(14)], range: NSMakeRange(0, model.spotsName.characters.count))
-        nameLabel.attributedText = nameText;
+        starView.starNumber = model.level!
         
-        starView.starNumber = 3
+        remainingTimeLabel.text = "有效期:" + String(model.day!) + "天"
     }
 
 }

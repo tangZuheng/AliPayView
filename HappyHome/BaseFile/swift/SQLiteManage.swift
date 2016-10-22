@@ -13,7 +13,7 @@ class SQLiteManage: NSObject {
     
     static let sharedManager = SQLiteManage()
     
-    override init()
+    private override init()
     {
         super.init()
         
@@ -48,6 +48,37 @@ class SQLiteManage: NSObject {
         createTable_Record()
         
         createTable_PKRecord()
+        
+        createTable_User()
+    }
+    
+    // 创建 用户表
+    private func createTable_User(){
+        getConnection();
+        let user = Table("user")
+        let id = Expression<Int64>("id")
+        let isLogin = Expression<Bool>("isLogin")
+        let uid = Expression<Int?>("uid")
+        let username = Expression<String?>("username")
+        let nickname = Expression<String?>("nickname")
+        let picture = Expression<String?>("picture")
+        let englishTestNumber = Expression<Int?>("englishTestNumber")
+
+        do
+        {
+            try db!.run(user.create(ifNotExists: true) { t in     // CREATE TABLE "record" (
+                t.column(id, primaryKey: true) //     "id" INTEGER PRIMARY KEY NOT NULL,
+                t.column(isLogin, unique: false)
+                t.column(uid, unique: false)
+                t.column(username, unique: false)
+                t.column(nickname, unique: false)
+                t.column(picture, unique: false)
+                t.column(englishTestNumber, unique: false)
+                })
+            
+        }catch _{
+            
+        }
     }
     
     // 创建 练习录音表
@@ -183,13 +214,7 @@ class SQLiteManage: NSObject {
             return arr
         }
     }
-    
-    //查询PK记录
-    func searchFirstRecord()
-    {
-        
-    }
-    
+
     //查询PK记录
     func searchPKRecord() -> NSMutableArray{
         let pk_record = Table("pk_record")
@@ -223,7 +248,7 @@ class SQLiteManage: NSObject {
         }
     }
 
-    
+    //分页查询练习记录
     func searchRecord(page:Int,pageSize:Int) {
         do {
             let sqlStr = "SELECT * FROM record limit " + String(pageSize) + " offset " + String(pageSize*(page-1))
@@ -235,6 +260,8 @@ class SQLiteManage: NSObject {
             
         }
     }
+    
+    //删除所有练习记录
     func deleteALLRecord() {
         let record = Table("record")
         let delete = record.delete()
@@ -250,6 +277,7 @@ class SQLiteManage: NSObject {
         }
     }
     
+    //删除PK记录
     func deletePKRecord(rowid:Int64) {
         let pk_record = Table("pk_record")
         let id = Expression<Int64>("id")
@@ -259,6 +287,67 @@ class SQLiteManage: NSObject {
             _ = try db!.run(alice.delete())
         }
         catch _ as NSError{
+        }
+    }
+    
+    //更新登陆的用户信息
+    func updateUser(userModel:UserModel) {
+        let user = Table("user")
+        let id = Expression<Int64>("id")
+        let isLogin = Expression<Bool>("isLogin")
+        let uid = Expression<Int>("uid")
+        let username = Expression<String?>("username")
+        let nickname = Expression<String?>("nickname")
+        let picture = Expression<String?>("picture")
+        let englishTestNumber = Expression<Int>("englishTestNumber")
+        
+        do {
+            var rowid:Int64?
+            
+            for recordValue in try db!.prepare(user) {
+                rowid = recordValue.get(id)
+                break
+            }
+            if rowid == nil {
+                let insert = user.insert( isLogin <- userModel.isLogin,uid <- userModel.uid, username <- userModel.username, nickname <- userModel.nickname,picture <- userModel.picture, englishTestNumber <- userModel.englishTestNumber)
+                try rowid = db!.run(insert)
+            }
+            else {
+                let alice = user.filter(id == rowid!)
+                try db!.run(alice.update(isLogin <- userModel.isLogin,uid <- userModel.uid, username <- userModel.username, nickname <- userModel.nickname,picture <- userModel.picture, englishTestNumber <- userModel.englishTestNumber))
+            }
+        }
+        catch _{
+        }
+    }
+    
+    //获取登陆的用户信息
+    func getUser() -> UserModel?{
+        let user = Table("user")
+        let isLogin = Expression<Bool>("isLogin")
+        let uid = Expression<Int?>("uid")
+        let username = Expression<String?>("username")
+        let nickname = Expression<String?>("nickname")
+        let picture = Expression<String?>("picture")
+        let englishTestNumber = Expression<Int?>("englishTestNumber")
+        
+
+        do {
+            for recordValue in try db!.prepare(user) {
+                let model = UserModel.init()
+                model.isLogin = recordValue.get(isLogin)
+                model.uid = recordValue.get(uid)!
+                model.username = recordValue.get(username)!
+                model.nickname = recordValue.get(nickname)!
+                model.picture = recordValue.get(picture)!
+                model.englishTestNumber = recordValue.get(englishTestNumber)!
+                
+                return model
+            }
+            return nil
+        }
+        catch _{
+            return nil
         }
     }
 }

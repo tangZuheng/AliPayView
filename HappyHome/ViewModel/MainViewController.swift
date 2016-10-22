@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CXAlertView
 
 class MainViewController: UIViewController {
 
@@ -22,6 +23,8 @@ class MainViewController: UIViewController {
     
     func initfaceView()
     {
+        PKRecordManage.sharedManager.start()
+        
         self.view.backgroundColor = colorForBackground()
         
         let backImg = UIImageView()

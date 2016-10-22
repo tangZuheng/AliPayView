@@ -66,7 +66,7 @@ class MyTopCell: UITableViewCell {
         updateTimeLabel.snp_makeConstraints { (make) in
             make.bottom.equalTo(-8)
             make.left.equalTo(iconView.snp_right).offset(10)
-            make.width.equalTo(100)
+            make.width.equalTo(60)
             make.height.equalTo(10)
         }
         
@@ -89,24 +89,31 @@ class MyTopCell: UITableViewCell {
         }
     }
     
-    func setModel(model:RecordObject) -> Void {
+    func setModel(model:MyTopModel) -> Void {
         
-        iconView.image = UIImage.init(named: model.img)
+        iconView.sd_setImageWithURL(NSURL.init(string: model.ppicture!), placeholderImage: placeholderImage)
         
-        let nameText = NSMutableAttributedString.init(string: model.spotsName+"  "+model.explainName)
-        nameText.addAttributes([NSForegroundColorAttributeName : UIColor.init(rgb: 0x282828)], range: NSMakeRange(0, model.spotsName.characters.count))
-        nameText.addAttributes([NSFontAttributeName : UIFont.systemFontOfSize(14)], range: NSMakeRange(0, model.spotsName.characters.count))
+        let nameText = NSMutableAttributedString.init(string: model.sname!+"  "+model.pname!)
+        nameText.addAttributes([NSForegroundColorAttributeName : UIColor.init(rgb: 0x282828)], range: NSMakeRange(0, model.sname!.characters.count))
+        nameText.addAttributes([NSFontAttributeName : UIFont.systemFontOfSize(14)], range: NSMakeRange(0, model.sname!.characters.count))
         nameLabel.attributedText = nameText;
         
         let dfmatter = NSDateFormatter()
-        dfmatter.dateFormat="yyyy.MM.dd hh:mm:ss"
-        updateTimeLabel.text = dfmatter.stringFromDate(model.updateTime!)
+        dfmatter.dateFormat="yyyy.MM.dd"
+        let zone:NSTimeZone? = NSTimeZone(name: "Asia/Chongqing")
+        dfmatter.timeZone = zone
+        let date = NSDate(timeIntervalSince1970: model.pktime!/1000)
+        updateTimeLabel.text = dfmatter.stringFromDate(date)
         
-        
-        let recordLengthDate = NSDate(timeIntervalSince1970: model.recordLength!)
-        //        let dformatter = NSDateFormatter()
+        let recordLengthDate = NSDate(timeIntervalSince1970: model.soundtime!)
         dfmatter.dateFormat = "mm:ss"
         recore_lengthLabel.text = dfmatter.stringFromDate(recordLengthDate)
+        
+        
+//        let recordLengthDate = NSDate(timeIntervalSince1970: model.recordLength!)
+//        //        let dformatter = NSDateFormatter()
+//        dfmatter.dateFormat = "mm:ss"
+//        recore_lengthLabel.text = dfmatter.stringFromDate(recordLengthDate)
 
     }
 }

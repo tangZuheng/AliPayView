@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class MyTrainingRecordCell: UITableViewCell {
     
@@ -16,9 +17,48 @@ class MyTrainingRecordCell: UITableViewCell {
     let recore_lengthLabel = UILabel()
     let playButton = UIButton()
     
-    let audioPlayerManage = AudioPlayerManage()
+//    let audioPlayerManage = AudioPlayerManage()
+    
+    var recordObject:RecordObject?
     
     var playing = false
+        {
+            didSet {
+                if !playing {
+                    if AudioPlayerManage.sharedManager.soundURL == recordObject!.recordUrl {
+                        AudioPlayerManage.sharedManager.pausePlaying()
+                    }
+                    
+                    self.playButton.setImage(UIImage.init(named: "user_play"), forState: .Normal)
+                    if self.displayLink != nil {
+                        self.displayLink!.paused = true
+                    }
+                    let dfmatter = NSDateFormatter()
+                    dfmatter.dateFormat = "mm:ss"
+                    let recordLengthDate = NSDate(timeIntervalSince1970: self.recordObject!.recordLength!)
+                    self.recore_lengthLabel.text = dfmatter.stringFromDate(recordLengthDate)
+                    self.recore_lengthLabel.textColor = UIColor.init(rgb: 0x999999)
+                    
+                }
+                else {
+                    if AudioPlayerManage.sharedManager.soundURL == recordObject!.recordUrl {
+                        AudioPlayerManage.sharedManager.startPlaying()
+                    }
+                    self.playButton.setImage(UIImage.init(named: "user_pause"), forState: .Normal)
+                    
+                    self.displayLink = CADisplayLink.init(target: self, selector: #selector(MyTrainingRecordCell.updateTime))
+                    self.displayLink!.frameInterval = 1
+                    self.displayLink!.paused = false
+                    self.displayLink?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSRunLoopCommonModes)
+                    
+                    NSNotificationCenter.defaultCenter().postNotificationName(PausePlayingNotification, object: self)
+                    
+                }
+        }
+    }
+    
+    //定时器
+    var displayLink:CADisplayLink?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -34,18 +74,23 @@ class MyTrainingRecordCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.initfaceView()
+        self.initControlEvent()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+//        self.audioPlayerManage.stopPlaying()
+        BeanUtils.setPropertysToNil(self)
+    }
+    
     func initfaceView() {
-//
         iconView.image = UIImage.init(named: "defaultImg")
         self.contentView.addSubview(iconView)
-        
-//        self.imageView?.image = UIImage.init(named: "defaultImg")
+
         iconView.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(5)
             make.left.equalTo(5)
@@ -100,32 +145,34 @@ class MyTrainingRecordCell: UITableViewCell {
             make.centerY.equalToSuperview()
             make.height.width.equalTo(30)
         }
+        
+    }
+    
+    func initControlEvent() {
         playButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
-            
-//            if self.audioPlayerManage.audioPlayer != nil
-//            {
-//                self.playing = self.audioPlayerManage.audioPlayer.playing
-//                if self.audioPlayerManage.audioPlayer.playing {
-//                    self.audioPlayerManage.pausePlaying()
-//                    self.playButton.setImage(UIImage.init(named: "user_play"), forState: .Normal)
-//                    
-//                }
-//                else {
-//                    self.audioPlayerManage.startPlaying()
-//                    self.playButton.setImage(UIImage.init(named: "user_pause"), forState: .Normal)
-//                }
-//            }
-//            else {
-//                self.audioPlayerManage.startPlaying()
-//                self.playButton.setImage(UIImage.init(named: "user_pause"), forState: .Normal)
-//            }
+            AudioPlayerManage.sharedManager.soundURL = self.recordObject?.recordUrl
+            self.playing = !self.playing
         }
+         
+        
+        NSNotificationCenter.defaultCenter().rac_addObserverForName(PausePlayingNotification, object: nil).subscribeNext { notificationCenter in
+//            print(notificationCenter)
+            let not_object = notificationCenter.object as! MyTrainingRecordCell
+            if not_object != self{
+                if self.playing {
+                    self.playing = false
+                }
+            }
+        }
+        
+        
     }
     
     func setModel(model:RecordObject) -> Void {
 
-        iconView.image = UIImage.init(named: model.img)
-        
+        recordObject = model
+//        iconView.image = UIImage.init(named: model.img)
+        iconView.sd_setImageWithURL(NSURL.init(string: model.img), placeholderImage: placeholderImage!)
         let nameText = NSMutableAttributedString.init(string: model.spotsName+"  "+model.explainName)
         nameText.addAttributes([NSForegroundColorAttributeName : UIColor.init(rgb: 0x282828)], range: NSMakeRange(0, model.spotsName.characters.count))
         nameText.addAttributes([NSFontAttributeName : UIFont.systemFontOfSize(14)], range: NSMakeRange(0, model.spotsName.characters.count))
@@ -138,7 +185,29 @@ class MyTrainingRecordCell: UITableViewCell {
         let recordLengthDate = NSDate(timeIntervalSince1970: model.recordLength!)
         dfmatter.dateFormat = "mm:ss"
         recore_lengthLabel.text = dfmatter.stringFromDate(recordLengthDate)
-
-        audioPlayerManage.soundURL = model.recordUrl
+        
+        if AudioPlayerManage.sharedManager.soundURL == model.recordUrl {
+            self.playing = AudioPlayerManage.sharedManager.audioPlayer.playing
+        }
+        else {
+            self.playing = false
+        }
+//        audioPlayerManage.soundURL = model.recordUrl
     }
+    
+    func updateTime() -> Void {
+        let dfmatter = NSDateFormatter()
+        dfmatter.dateFormat = "mm:ss"
+        let time = self.recordObject!.recordLength! - AudioPlayerManage.sharedManager.audioPlayer.currentTime
+        if time > 0 {
+            let recordLengthDate = NSDate(timeIntervalSince1970: time)
+            self.recore_lengthLabel.text = dfmatter.stringFromDate(recordLengthDate)
+            self.recore_lengthLabel.textColor = UIColor.init(rgb: 0xff3838)
+        }
+        else {
+            self.playing = false
+//            self.audioPlayerManage.soundURL = self.recordObject!.recordUrl
+        }
+    }
+    
 }

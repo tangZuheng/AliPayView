@@ -7,16 +7,28 @@
 //
 
 import UIKit
+import HandyJSON
 
 class ListenDetailViewController: BaseViewController,UITableViewDataSource,UITableViewDelegate {
     
+    var pid:Int?
+    var ppicture:String?
+    var pname:String?
+    
+//    var model:ScenceModel!
+//    var pointModel:ScencePointModel!
+    
     var img:UIImageView?
     var name:UILabel?
+    
+    let dataArr = NSMutableArray()
+    let tableView = UITableView.init()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.initfaceView()
+        self.initDataSouce()
         // Do any additional setup after loading the view.
     }
     
@@ -26,6 +38,9 @@ class ListenDetailViewController: BaseViewController,UITableViewDataSource,UITab
         self.navigationController!.navigationBar.barTintColor = UIColor.whiteColor()
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: colorForNavigationBarTitle()]
         self.navigationController!.navigationBar.alpha = 1
+        NetAudioPlayerManage.sharedManager.pausePlaying()
+        
+        super.viewWillDisappear(animated)
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,15 +52,15 @@ class ListenDetailViewController: BaseViewController,UITableViewDataSource,UITab
     func initfaceView(){
         self.title = "听听排行榜"
         
-        //        self.navigationItem.backBarButtonItem.
-        
         self.navigationController!.navigationBar.tintColor = UIColor.whiteColor()
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
         self.navigationController!.navigationBar.barTintColor = UIColor.blackColor()
         self.navigationController!.navigationBar.alpha = 0.4
         
         img = UIImageView()
-        img?.image = UIImage.init(named: "defaultImg")
+        img?.sd_setImageWithURL(NSURL.init(string: self.ppicture!), placeholderImage: placeholderImage!)
+
+//        img?.image = UIImage.init(named: "defaultImg")
         self.view.addSubview(img!)
         img!.snp_makeConstraints { (make) -> Void in
             make.width.height.equalTo(SCREEN_WIDTH)
@@ -63,8 +78,8 @@ class ListenDetailViewController: BaseViewController,UITableViewDataSource,UITab
         }
         
         name = UILabel()
-        name?.text = "测试"
         name?.textColor = UIColor.whiteColor()
+        name?.text = self.pname
         self.view.addSubview(name!)
         name!.snp_makeConstraints { (make) -> Void in
             make.left.equalTo(10)
@@ -73,7 +88,7 @@ class ListenDetailViewController: BaseViewController,UITableViewDataSource,UITab
             make.bottom.equalTo(img!).offset(0)
         }
         
-        let tableView = UITableView.init()
+        
         tableView.dataSource = self
         tableView.delegate = self
         self.view.addSubview(tableView)
@@ -81,11 +96,39 @@ class ListenDetailViewController: BaseViewController,UITableViewDataSource,UITab
         tableView.scrollEnabled = false
         tableView.frame = CGRectMake(0, SCREEN_WIDTH+10, SCREEN_WIDTH, SCREEN_HEIGH - SCREEN_WIDTH - 10)
 //        tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0)
+        
+//        collectionView.mj_header = MJRefreshNormalHeader.init(refreshingBlock: {
+//            self.initDataSouce()
+//        })
+//        collectionView.mj_header.beginRefreshing()
+        
+        
+    }
+    
+    func initDataSouce(){
+        self.startMBProgressHUD()
+        NetWorkingManager.sharedManager.getScencePointTopList(self.pid!) { (retObject, error) in
+//            self.tableView.mj_header.endRefreshing()
+            self.stopMBProgressHUD()
+            if error == nil {
+                let arr = retObject?.objectForKey("data")! as! NSArray
+                self.dataArr.removeAllObjects()
+                for item in arr {
+                    let model = JSONDeserializer<ScencePointTopModel>.deserializeFrom(item as! NSDictionary)
+                    self.dataArr.addObject(model!)
+                }
+                
+                self.tableView.reloadData()
+            }
+            else {
+                self.showFailHUDWithText(error!.localizedDescription)
+            }
+        }
     }
     
     //MARK: UITableViewDataSource
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return self.dataArr.count
     }
     
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
@@ -100,7 +143,7 @@ class ListenDetailViewController: BaseViewController,UITableViewDataSource,UITab
             cell?.selectionStyle = .None
         }
         cell?.imageView?.image = UIImage.init(named: "listen_"+String(indexPath.row+1))
-//        cell?.setModel(dataArr.objectAtIndex(indexPath.row) as! RecordObject)
+        cell?.setModel(dataArr.objectAtIndex(indexPath.row) as! ScencePointTopModel )
         return cell!
     }
 

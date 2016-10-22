@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class SpotsCollectionViewCell: UICollectionViewCell {
     var img:UIImageView?
@@ -66,6 +67,7 @@ class SpotsCollectionViewCell: UICollectionViewCell {
     func setModel(model:AnyObject) {
         if (model.isKindOfClass(ScenceModel)) {
             let smodel = model as! ScenceModel
+            img?.sd_setImageWithURL(NSURL.init(string: smodel.picture!), placeholderImage: placeholderImage!)
             if UserModel.sharedUserModel.selectLanguage == 1 {
                 name?.text = smodel.sname
             }
@@ -76,6 +78,7 @@ class SpotsCollectionViewCell: UICollectionViewCell {
         }
         else if (model.isKindOfClass(ScencePointModel)) {
             let pmodel = model as! ScencePointModel
+            img?.sd_setImageWithURL(NSURL.init(string: pmodel.ppicture!), placeholderImage: placeholderImage!)
             if UserModel.sharedUserModel.selectLanguage == 1 {
                 name?.text = pmodel.pname
             }

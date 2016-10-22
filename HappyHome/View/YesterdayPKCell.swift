@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 class YesterdayPKCell: UITableViewCell {
 
@@ -42,10 +43,9 @@ class YesterdayPKCell: UITableViewCell {
     
     func initfaceView() {
         //
-        iconView.image = UIImage.init(named: "defaultImg")
+        iconView.image = placeholderImage
         self.contentView.addSubview(iconView)
         
-        //        self.imageView?.image = UIImage.init(named: "defaultImg")
         iconView.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(5)
             make.left.equalTo(5)
@@ -75,7 +75,9 @@ class YesterdayPKCell: UITableViewCell {
             make.height.equalTo(10)
         }
         
-        rightHeadImg.image = UIImage.init(named: "user_head")
+        rightHeadImg.image = placeholderHead
+        rightHeadImg.layer.masksToBounds = true
+        rightHeadImg.layer.cornerRadius = 15*SCREEN_SCALE
         self.contentView.addSubview(rightHeadImg)
         rightHeadImg.snp_makeConstraints { (make) -> Void in
             make.centerY.equalToSuperview()
@@ -83,7 +85,7 @@ class YesterdayPKCell: UITableViewCell {
             make.height.width.equalTo(30*SCREEN_SCALE)
         }
         
-        rightIcon.image = UIImage.init(named: "yesterdayPK_win")
+//        rightIcon.image = UIImage.init(named: "yesterdayPK_win")
         self.contentView.addSubview(rightIcon)
         rightIcon.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(rightHeadImg.snp_left)
@@ -99,7 +101,9 @@ class YesterdayPKCell: UITableViewCell {
             make.right.equalTo(rightHeadImg.snp_left).offset(-10)
         }
         
-        leftHeadImg.image = UIImage.init(named: "user_head")
+        leftHeadImg.image = placeholderHead
+        leftHeadImg.layer.masksToBounds = true
+        leftHeadImg.layer.cornerRadius = 15*SCREEN_SCALE
         self.contentView.addSubview(leftHeadImg)
         leftHeadImg.snp_makeConstraints { (make) -> Void in
             make.centerY.equalToSuperview()
@@ -115,19 +119,41 @@ class YesterdayPKCell: UITableViewCell {
         }
     }
     
-    func setModel(model:RecordObject) -> Void {
+    func setModel(model:YesterdayPKModel) -> Void {
         
-        iconView.image = UIImage.init(named: model.img)
+        iconView.sd_setImageWithURL(NSURL.init(string: model.ppicture!), placeholderImage: placeholderImage)
         
-        let nameText = NSMutableAttributedString.init(string: model.spotsName+"  "+model.explainName)
-        nameText.addAttributes([NSForegroundColorAttributeName : UIColor.init(rgb: 0x282828)], range: NSMakeRange(0, model.spotsName.characters.count))
-        nameText.addAttributes([NSFontAttributeName : UIFont.systemFontOfSize(14)], range: NSMakeRange(0, model.spotsName.characters.count))
+        let nameText = NSMutableAttributedString.init(string: model.sname!+"  "+model.pname!)
+        nameText.addAttributes([NSForegroundColorAttributeName : UIColor.init(rgb: 0x282828)], range: NSMakeRange(0, model.sname!.characters.count))
+        nameText.addAttributes([NSFontAttributeName : UIFont.systemFontOfSize(14)], range: NSMakeRange(0, model.sname!.characters.count))
         nameLabel.attributedText = nameText;
         
         let dfmatter = NSDateFormatter()
-        dfmatter.dateFormat="yyyy.MM.dd hh:mm:ss"
-        updateTimeLabel.text = dfmatter.stringFromDate(model.updateTime!)
+        dfmatter.dateFormat="yyyy.MM.dd"
+        let zone:NSTimeZone? = NSTimeZone(name: "Asia/Chongqing")
+        dfmatter.timeZone = zone
+        let date = NSDate(timeIntervalSince1970: model.pktime!/1000)
+        updateTimeLabel.text = dfmatter.stringFromDate(date)
         
+        leftHeadImg.sd_setImageWithURL(NSURL.init(string: model.header!), placeholderImage: placeholderHead)
+        rightHeadImg.sd_setImageWithURL(NSURL.init(string: model.pkheader!), placeholderImage: placeholderHead)
+        
+        if model.pkresult < 10 {
+            leftIcon.image = UIImage.init(named: "yesterdayPK_win")
+            leftIcon.hidden = false
+            rightIcon.hidden = true
+        }
+        else if model.pkresult == 10 {
+            leftIcon.image = UIImage.init(named: "yesterdayPK_pin")
+            rightIcon.image = UIImage.init(named: "yesterdayPK_pin")
+            leftIcon.hidden = false
+            rightIcon.hidden = false
+        }
+        else {
+            rightIcon.image = UIImage.init(named: "yesterdayPK_win")
+            rightIcon.hidden = false
+            leftIcon.hidden = true
+        }
     }
 
 }

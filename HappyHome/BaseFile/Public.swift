@@ -14,6 +14,7 @@ import Alamofire
 import SnapKit
 import HandyJSON
 import MJRefresh
+import SDWebImage
 
 /**< size define */
 //let root = (ControllerManager.sharedManager().rootViewController?.viewControllersArr?.firstObject as! UIViewController).navigationController?.navigationBar.frame
@@ -30,6 +31,12 @@ let  SCREEN_WIDTH = UIScreen.mainScreen().bounds.width
 let  SCREEN_HEIGH = UIScreen.mainScreen().bounds.height
 
 let  SCREEN_SCALE = UIScreen.mainScreen().bounds.width/320
+
+let placeholderImage = UIImage.init(named: "defaultImg")
+
+let placeholderHead = UIImage.init(named: "user_head")
+
+let APP_VERSION = NSBundle.mainBundle().infoDictionary!["CFBundleVersion"] as! String
 
 func RGB(R:CGFloat, G:CGFloat, B:CGFloat) -> UIColor {
     return UIColor(red: R / 255.0, green: G / 255.0, blue: B / 255.0, alpha: 1)
@@ -68,6 +75,12 @@ func createImageWithColor(color: UIColor) -> UIImage
     return theImage!
 }
 
+
+//func getPlaceholderImage() -> UIImage
+//{
+//    return UIImage.init(named: "defaultImg")!
+//}
+
 extension UIColor {
     convenience init(rgb: UInt) {
         self.init(
@@ -79,15 +92,16 @@ extension UIColor {
     }
 }
 
-// 扩展String
-extension String {
-    subscript (r: Range<Int>) -> String {
-        get {
-            let startIndex = self.startIndex.advancedBy(r.startIndex)
-            let endIndex = self.startIndex.advancedBy(r.endIndex)
-            
-            return self[Range(start: startIndex, end: endIndex)]
-        }
-    }
-}
+
+//// 扩展String
+//extension String {
+//    subscript (r: Range<Int>) -> String {
+//        get {
+//            let startIndex = self.startIndex.advancedBy(r.startIndex)
+//            let endIndex = self.startIndex.advancedBy(r.endIndex)
+//            
+//            return self[Range(start: startIndex, end: endIndex)]
+//        }
+//    }
+//}
 

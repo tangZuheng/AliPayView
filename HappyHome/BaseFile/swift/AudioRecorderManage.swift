@@ -14,11 +14,6 @@ class AudioRecorderManage: NSObject {
     var audioRecorder:AVAudioRecorder!
     var audioPlayer:AVAudioPlayer!
     
-//    // 文件路径
-//    let path = NSSearchPathForDirectoriesInDomains(
-//        .DocumentDirectory, .UserDomainMask, true
-//        ).first!
-    
     //录音名
     var recordingName:String!
     
@@ -88,6 +83,8 @@ class AudioRecorderManage: NSObject {
         //开始播放
         if (!audioRecorder.recording){
             do {
+                try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+                try AVAudioSession.sharedInstance().setActive(true)
                 if audioPlayer == nil {
                     try audioPlayer = AVAudioPlayer(contentsOfURL: audioRecorder.url)
                 }
@@ -104,7 +101,6 @@ class AudioRecorderManage: NSObject {
             do {
                 if audioPlayer == nil {
                     try audioPlayer = AVAudioPlayer(contentsOfURL: audioRecorder.url)
-
                 }
                 audioPlayer.pause()
                 print("pause!!")
@@ -112,4 +108,18 @@ class AudioRecorderManage: NSObject {
             }
         }
     }
+}
+
+// MARK: - for AVAudioSession
+extension AudioRecorderManage {
+    
+    private func configAudioSession() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("启动后台模式失败，error -- \(error)")
+        }
+    }
+
 }

@@ -7,15 +7,22 @@
 //
 
 import UIKit
+import ReactiveCocoa
+import HandyJSON
 
 class LoginViewController: BaseViewController {
     
+    let usernameField = UITextField()
+    let passwordField = UITextField()
+    
     var loginButton:UIButton?
     var registerButton:UIButton?
+    let forgetButton = UIButton()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initfaceView()
+        self.initControlEvent()
         // Do any additional setup after loading the view.
     }
     
@@ -45,12 +52,13 @@ class LoginViewController: BaseViewController {
             make.center.equalToSuperview()
         }
         
-        let usernameField = UITextField()
+        
         usernameField.leftViewMode = .Always
         usernameField.leftView = usernameLeft
         usernameField.placeholder = "请输入注册手机号"
         usernameField.backgroundColor = UIColor.whiteColor()
 //        usernameField.borderStyle = .RoundedRect
+//        usernameField.keyboardType = .NamePhonePad
         usernameField.font = UIFont.systemFontOfSize(14)
         usernameField.layer.masksToBounds = true
         usernameField.layer.cornerRadius = 2
@@ -77,13 +85,12 @@ class LoginViewController: BaseViewController {
             make.center.equalToSuperview()
         }
         
-        let passwordField = UITextField()
+        
         passwordField.leftViewMode = .Always
         passwordField.leftView = passwordLeft
         passwordField.placeholder = "请输入6-16位密码"
         passwordField.secureTextEntry = true
         passwordField.backgroundColor = UIColor.whiteColor()
-//        passwordField.borderStyle = .RoundedRect
         passwordField.font = UIFont.systemFontOfSize(14)
         passwordField.layer.masksToBounds = true
         passwordField.layer.cornerRadius = 2
@@ -133,7 +140,7 @@ class LoginViewController: BaseViewController {
             make.height.equalTo((loginButton?.snp_height)!)
         }
         
-        let forgetButton = UIButton()
+        
         forgetButton.setTitle("忘记密码?", forState: .Normal)
         forgetButton.setTitleColor(UIColor.init(rgb: 0xff3838), forState: .Normal)
         forgetButton.titleLabel?.font = UIFont.systemFontOfSize(14)
@@ -146,6 +153,13 @@ class LoginViewController: BaseViewController {
             make.height.equalTo(35)
         }
         
+            }
+    
+    func initControlEvent() {
+//        RAC(loginButton,"enabled") <= RACSignal.combineLatest([self.usernameField.rac_textSignal(),self.passwordField.rac_textSignal()], reduce: { () -> AnyObject! in
+//            return self.usernameField.text!.characters.count == 11 && self.passwordField.text!.characters.count >= 6
+//        })
+        
         registerButton!.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
             let vc = RegisterViewController()
             self.pushToNextController(vc)
@@ -156,6 +170,23 @@ class LoginViewController: BaseViewController {
             self.pushToNextController(vc)
         }
         
+        loginButton!.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
+            NetWorkingManager.sharedManager.Login(self.usernameField.text!, password: self.passwordField.text!, completion: { (retObject, error) in
+                if error == nil {
+                    let dic = retObject?.valueForKey("data") as! NSDictionary
+                    UserModel.sharedUserModel.setUserModel(dic)
+                    UserModel.sharedUserModel.savaUserModel()
+                    NSNotificationCenter.defaultCenter().postNotificationName(LoginStateUpdateNotification, object: nil)
+                    self.navigationController?.popViewControllerAnimated(true);
+                }
+                else {
+                    self.showFailHUDWithText(error!.localizedDescription)
+                }
+
+            })
+        }
+
+
     }
     
 }

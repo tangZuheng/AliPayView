@@ -9,5 +9,6 @@
 
 #import "ZCMBProgressHUD.h"
 #import "myUILabel.h"
+#import <CXAlertView/CXAlertView.h>
 
 

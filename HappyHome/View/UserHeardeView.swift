@@ -14,6 +14,7 @@ class UserHeardeView: UIView {
     var loginButton:UIButton?
     var registerButton:UIButton?
     
+    var nicknameLabel = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -77,6 +78,38 @@ class UserHeardeView: UIView {
             make.bottom.equalTo(-20)
             make.width.equalTo((loginButton?.snp_width)!)
             make.height.equalTo((loginButton?.snp_height)!)
+        }
+        
+        nicknameLabel.textColor = UIColor.whiteColor()
+        nicknameLabel.font = UIFont.systemFontOfSize(14);
+        nicknameLabel.textAlignment = .Center
+        self.addSubview(nicknameLabel)
+        nicknameLabel.snp_makeConstraints { (make) -> Void in
+            make.top.equalTo((userHeadButton?.snp_bottom)!).offset(20)
+            make.left.equalTo(20)
+            make.centerX.equalToSuperview()
+        }
+        
+        
+        self.updateLoginState()
+        
+        NSNotificationCenter.defaultCenter().rac_addObserverForName(LoginStateUpdateNotification, object: nil).subscribeNext {
+            notificationCenter in
+            self.updateLoginState()
+        }
+    }
+    
+    func updateLoginState() {
+        if UserModel.sharedUserModel.isLogin {
+            loginButton?.hidden = true
+            registerButton?.hidden = true
+            nicknameLabel.hidden = false
+            nicknameLabel.text = UserModel.sharedUserModel.nickname
+        }
+        else {
+            loginButton?.hidden = false
+            registerButton?.hidden = false
+            nicknameLabel.hidden = true
         }
     }
 

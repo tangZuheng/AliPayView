@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>CXAlertView.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>HandyJSON.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -29,11 +34,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Masonry.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>Pods-HappyHome.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -49,6 +49,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>SDWebImage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>SQLite.swift.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -59,15 +64,15 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>SwiftyJSON.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>0E831F397186839A245153EE54F1C202</key>
+		<key>05F789D2233CB093D5D04F62BE6C0DB0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>24D2D5A8883E3209C4E384A9408897F2</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -82,7 +87,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6795EA5772E8B0BF6769D5955FDF0829</key>
+		<key>58ADC6EE23534BB7AD994770E6C64748</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -92,17 +97,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>97061D271C1A119870339D836C09FE89</key>
+		<key>97FAF1D3FB56B5DDE9524DB2BC19FA3B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A9A83F63385AA43314397B8DD375464B</key>
+		<key>B03A4E6C6D57C1DF4D8F272380F1559F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D22C9B639A0F54968CD862D41D070FD4</key>
+		<key>C87ED133647719555F3AD103744B144E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CA2614AAB541A10B0E32114B33A9719A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -113,16 +123,6 @@
 			<true/>
 		</dict>
 		<key>DE3F1B8ECF90FDCE852C052C6F02BE68</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>F021BFCC973AD7B06532894D258D8537</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>F447A22A71D1B514186157AD736D9709</key>
 		<dict>
 			<key>primary</key>
 			<true/>

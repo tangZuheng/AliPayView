@@ -90,7 +90,9 @@ class TrainingDetailViewController: BaseViewController,UICollectionViewDelegate,
     
     //MARK: UICollectionViewDelegate
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        let vc = ListenDetailViewController()
+        let vc = TrainingRecordViewController()
+        vc.model = self.model
+        vc.pointModel = dataArr.objectAtIndex(indexPath.row) as! ScencePointModel
         self.pushToNextController(vc)
     }
 

@@ -10,7 +10,9 @@ import UIKit
 
 class MyTrainingRecordViewController: BaseViewController,UITableViewDataSource,UITableViewDelegate {
     
-    let dataArr = SQLiteManage.sharedManager.searchRecord()
+    var dataArr = SQLiteManage.sharedManager.searchRecord()
+    
+    let tableView = UITableView.init()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +23,12 @@ class MyTrainingRecordViewController: BaseViewController,UITableViewDataSource,U
     override func viewWillAppear(animated: Bool) {
         self.navigationController!.navigationBarHidden = false
         super.viewDidAppear(animated)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        AudioPlayerManage.sharedManager.stopPlaying()
+        
+        super.viewWillDisappear(animated)
     }
 
     override func didReceiveMemoryWarning() {
@@ -33,10 +41,13 @@ class MyTrainingRecordViewController: BaseViewController,UITableViewDataSource,U
         
         self.title = "我的练习"
         
-        let editButton = UIBarButtonItem.init(title: "清空记录", style: .Plain, target: self, action: nil)
-        self.navigationItem.rightBarButtonItem =  editButton
+        if dataArr.count > 0 {
+            let editButton = UIBarButtonItem.init(title: "清空记录", style: .Plain, target: self, action: #selector(MyTrainingRecordViewController.rightButtonClick))
+            editButton.setTitleTextAttributes([NSForegroundColorAttributeName: colorForNavigationBarTitle(),NSFontAttributeName:UIFont.systemFontOfSize(14)], forState: .Normal)
+            self.navigationItem.rightBarButtonItem =  editButton
+        }
+    
         
-        let tableView = UITableView.init()
         tableView.dataSource = self
         tableView.delegate = self
         self.view.addSubview(tableView)
@@ -50,6 +61,22 @@ class MyTrainingRecordViewController: BaseViewController,UITableViewDataSource,U
             make.bottom.equalToSuperview()
         }
     }
+    
+    func rightButtonClick() {
+        let view = UIAlertView.init(title: "", message: "亲，你确定要删除吗？", delegate: nil, cancelButtonTitle: "确定",otherButtonTitles:"取消")
+        view.rac_buttonClickedSignal().subscribeNext({ (indexNumber) in
+            if indexNumber as! Int == 0 {
+                SQLiteManage.sharedManager.deleteALLRecord()
+                self.dataArr = SQLiteManage.sharedManager.searchRecord()
+                self.tableView.reloadData()
+            }
+            else {
+                
+            }
+        })
+        view.show()
+    }
+    
     
     //MARK: UITableViewDataSource
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

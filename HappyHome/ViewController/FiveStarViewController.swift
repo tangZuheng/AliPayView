@@ -7,10 +7,14 @@
 //
 
 import UIKit
+import MJRefresh
+import HandyJSON
 
 class FiveStarViewController: BaseViewController,UITableViewDataSource,UITableViewDelegate {
 
-    let dataArr = SQLiteManage.sharedManager.searchRecord()
+    var dataArr = NSMutableArray()
+    
+    let tableView = UITableView.init()
     
     let fiveStarButton = UIButton()
     let myTopButton = UIButton()
@@ -35,7 +39,6 @@ class FiveStarViewController: BaseViewController,UITableViewDataSource,UITableVi
         
         self.title = "五星记录"
         
-        let tableView = UITableView.init()
         tableView.dataSource = self
         tableView.delegate = self
         self.view.addSubview(tableView)
@@ -46,6 +49,34 @@ class FiveStarViewController: BaseViewController,UITableViewDataSource,UITableVi
             make.centerX.equalToSuperview()
             make.top.equalTo(navBar_Fheight+10)
             make.bottom.equalToSuperview()
+        }
+        
+        tableView.mj_header = MJRefreshNormalHeader.init(refreshingBlock: {
+            self.initDataSouce()
+        })
+        tableView.mj_header.beginRefreshing()
+        
+    }
+    
+    func initDataSouce(){
+        NetWorkingManager.sharedManager.getFiverecordList { (retObject, error) in
+            self.tableView.mj_header.endRefreshing()
+            if error == nil {
+                if retObject?.objectForKey("data")! is NSArray
+                {
+                    let arr = retObject?.objectForKey("data")! as! NSArray
+                    self.dataArr.removeAllObjects()
+                    for item in arr {
+                        let model = JSONDeserializer<FiverecordModel>.deserializeFrom(item as! NSDictionary)
+                        self.dataArr.addObject(model!)
+                    }
+                    self.tableView.reloadData()
+                }
+                
+            }
+            else {
+                self.showFailHUDWithText(error!.localizedDescription)
+            }
         }
     }
     
@@ -72,7 +103,7 @@ class FiveStarViewController: BaseViewController,UITableViewDataSource,UITableVi
             cell = FiveStarCellCell.init(style: .Default, reuseIdentifier: identifir)
             cell?.selectionStyle = .None
         }
-        cell?.setModel(dataArr.objectAtIndex(indexPath.row) as! RecordObject)
+        cell?.setModel(dataArr.objectAtIndex(indexPath.row) as! FiverecordModel)
         return cell!
     }
 

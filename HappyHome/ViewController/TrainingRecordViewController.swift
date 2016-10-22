@@ -10,6 +10,9 @@ import UIKit
 
 class TrainingRecordViewController: BaseViewController {
     
+    var model:ScenceModel!
+    var pointModel:ScencePointModel!
+    
     var img:UIImageView?
     var name:UILabel?
     
@@ -24,7 +27,7 @@ class TrainingRecordViewController: BaseViewController {
     var state = 1
     
     //最大时间3分钟
-    var maxTime:NSTimeInterval = 180
+    var maxTime:NSTimeInterval = 600
     
     //定时器
     var displayLink:CADisplayLink?
@@ -51,9 +54,6 @@ class TrainingRecordViewController: BaseViewController {
                 self.audioRecorderManage.pausePlaying()
             }
         }
-//        if self.audioRecorderManage.audioPlayer !=nil &&self.audioRecorderManage.audioPlayer.playing {
-//            self.audioRecorderManage.pausePlaying()
-//        }
         self.audioRecorderManage.audioRecorder.deleteRecording()
         
         super.viewWillDisappear(animated)
@@ -65,9 +65,7 @@ class TrainingRecordViewController: BaseViewController {
     }
     
     func initfaceView(){
-        self.title = "测试"
-        
-//        self.navigationItem.backBarButtonItem.
+        self.title = self.model.sname
         
         self.navigationController!.navigationBar.tintColor = UIColor.whiteColor()
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
@@ -75,7 +73,8 @@ class TrainingRecordViewController: BaseViewController {
         self.navigationController!.navigationBar.alpha = 0.4
         
         img = UIImageView()
-        img?.image = UIImage.init(named: "defaultImg")
+        img?.sd_setImageWithURL(NSURL.init(string: self.pointModel.ppicture!), placeholderImage: placeholderImage!)
+//        img?.image = UIImage.init(named: "defaultImg")
         self.view.addSubview(img!)
         img!.snp_makeConstraints { (make) -> Void in
             make.width.height.equalTo(SCREEN_WIDTH)
@@ -87,18 +86,23 @@ class TrainingRecordViewController: BaseViewController {
         nameBack.alpha = 0.3
         img?.addSubview(nameBack)
         nameBack.snp_makeConstraints { (make) in
-            make.left.equalTo(10)
-            make.right.equalTo(10)
+            make.width.equalTo(img!)
             make.height.equalTo(35)
             make.bottom.equalTo(img!).offset(0)
         }
         
         name = UILabel()
-        name?.text = "测试"
         name?.textColor = UIColor.whiteColor()
+        if UserModel.sharedUserModel.selectLanguage == 1 {
+            name?.text = self.pointModel.pname
+        }
+        else {
+            name?.text = self.pointModel.penglishname
+        }
         self.view.addSubview(name!)
         name!.snp_makeConstraints { (make) -> Void in
-            make.width.equalTo(img!)
+            make.left.equalTo(10)
+            make.right.equalTo(10)
             make.height.equalTo(nameBack)
             make.bottom.equalTo(img!).offset(0)
         }
@@ -123,7 +127,7 @@ class TrainingRecordViewController: BaseViewController {
         }
         
         endTime.textColor = UIColor.whiteColor()
-        endTime.text = "03:00"
+        endTime.text = "10:00"
         bottomView.addSubview(endTime)
         endTime.snp_makeConstraints { (make) in
             make.top.equalTo(startTime)
@@ -132,9 +136,8 @@ class TrainingRecordViewController: BaseViewController {
             make.height.equalTo(startTime)
         }
         
-        slider.minimumTrackTintColor = UIColor.init(rgb: 0xfbbebe);
+        slider.minimumTrackTintColor = UIColor.init(rgb: 0xff3838);
         slider.maximumTrackTintColor = UIColor.init(rgb: 0xdcdcdc);
-//        slider.value = 0.5
         slider.setThumbImage(UIImage.init(named: "进度点"), forState: .Normal)
         slider.userInteractionEnabled = false
         bottomView.addSubview(slider)
@@ -157,7 +160,6 @@ class TrainingRecordViewController: BaseViewController {
                     print("倒计时到了")
                     self.state = 2
                     self.updateView()
-//                    AudioRecorderManage.getSavePath()
                     self.audioRecorderManage.startRecord()
                     self.displayLink = CADisplayLink.init(target: self, selector: #selector(TrainingRecordViewController.updateTime))
                     self.displayLink!.frameInterval = 1
@@ -207,7 +209,7 @@ class TrainingRecordViewController: BaseViewController {
             let view = UIAlertView.init(title: "提示", message: "保存或者删除？", delegate: nil, cancelButtonTitle: "保存",otherButtonTitles:"删除")
             view.rac_buttonClickedSignal().subscribeNext({ (indexNumber) in
                 if indexNumber as! Int == 0 {
-                    SQLiteManage.sharedManager.insertRecord(String(self.audioRecorderManage.recordingName), imgVal: "defaultImg",  spotsNameVal: "测试1", explainNameVal: "测试2",recordLengthVal: self.maxTime)
+                    SQLiteManage.sharedManager.insertRecord(String(self.audioRecorderManage.recordingName), imgVal: self.pointModel.ppicture! ,  spotsNameVal: self.model.sname!, explainNameVal: self.pointModel.pname! ,recordLengthVal: self.maxTime)
                 }
                 else {
                     self.audioRecorderManage.audioRecorder.deleteRecording()

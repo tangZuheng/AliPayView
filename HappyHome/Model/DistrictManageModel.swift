@@ -15,6 +15,11 @@ class DistrictManageModel: NSObject {
     var districtArray:NSMutableArray = NSMutableArray()
     
     private var _selectDistrict:DistrictModel?
+    
+    private override init() {
+        
+    }
+    
     var selectDistrict:DistrictModel?
         {
         get {

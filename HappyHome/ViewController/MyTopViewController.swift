@@ -7,10 +7,17 @@
 //
 
 import UIKit
+import MJRefresh
+import HandyJSON
 
 class MyTopViewController: BaseViewController,UITableViewDataSource,UITableViewDelegate {
 
-    let dataArr = SQLiteManage.sharedManager.searchRecord()
+    var dataArr = NSMutableArray()
+    
+    let headLabel = UILabel()
+    let tableView = UITableView.init()
+    
+    var historytopfive:Int! = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,8 +41,8 @@ class MyTopViewController: BaseViewController,UITableViewDataSource,UITableViewD
         
         self.title = "我的TOP5"
         
-        let headLabel = UILabel()
-        headLabel.text = "历史记录:5"
+        
+        headLabel.text = "历史记录:0"
         headLabel.backgroundColor = UIColor.clearColor()
         headLabel.textColor = UIColor.init(rgb: 0x666666)
         headLabel.font = UIFont.systemFontOfSize(14)
@@ -48,7 +55,6 @@ class MyTopViewController: BaseViewController,UITableViewDataSource,UITableViewD
             make.top.equalTo(navBar_Fheight)
         }
         
-        let tableView = UITableView.init()
         tableView.dataSource = self
         tableView.delegate = self
         self.view.addSubview(tableView)
@@ -60,7 +66,42 @@ class MyTopViewController: BaseViewController,UITableViewDataSource,UITableViewD
             make.top.equalTo(headLabel.snp_bottom)
             make.bottom.equalToSuperview()
         }
+        
+        tableView.mj_header = MJRefreshNormalHeader.init(refreshingBlock: {
+            self.initDataSouce()
+        })
+        tableView.mj_header.beginRefreshing()
     }
+    
+    func initDataSouce(){
+        NetWorkingManager.sharedManager.getMytopList { (retObject, error) in
+            self.tableView.mj_header.endRefreshing()
+            if error == nil {
+                if !(retObject?.objectForKey("data")!.objectForKey("historytopfive")! is NSNull)
+                {
+                    self.historytopfive = retObject?.objectForKey("data")!.objectForKey("historytopfive")! as! Int
+                    self.headLabel.text = "历史记录:" + String(self.historytopfive)
+                }
+                
+
+                if retObject?.objectForKey("data")!.objectForKey("MyTopBeans")! is NSArray
+                {
+                    let arr = retObject?.objectForKey("data")!.objectForKey("MyTopBeans")! as! NSArray
+                    self.dataArr.removeAllObjects()
+                    for item in arr {
+                        let model = JSONDeserializer<MyTopModel>.deserializeFrom(item as! NSDictionary)
+                        self.dataArr.addObject(model!)
+                    }
+                    self.tableView.reloadData()
+                }
+                
+            }
+            else {
+                self.showFailHUDWithText(error!.localizedDescription)
+            }
+        }
+    }
+    
     
     //MARK: 事件
     
@@ -81,12 +122,16 @@ class MyTopViewController: BaseViewController,UITableViewDataSource,UITableViewD
             cell?.accessoryType = .DisclosureIndicator
             cell?.selectionStyle = .None
         }
-        cell?.setModel(dataArr.objectAtIndex(indexPath.row) as! RecordObject)
+        cell?.setModel(dataArr.objectAtIndex(indexPath.row) as! MyTopModel)
         return cell!
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let model = dataArr.objectAtIndex(indexPath.row) as! MyTopModel
         let vc = ListenDetailViewController()
+        vc.pid = model.pid
+        vc.pname = model.pname
+        vc.ppicture = model.ppicture
         self.pushToNextController(vc)
     }
 }

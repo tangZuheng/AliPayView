@@ -10,8 +10,8 @@ import UIKit
 
 class UserViewController: BaseViewController,UITableViewDataSource,UITableViewDelegate {
     
-    let titleArr = NSArray.init(objects: NSArray.init(objects: "PK记录","昨日PK","我的练习"),NSArray.init(objects: "意见反馈","系统消息","PK规则","评委规则"),NSArray.init(objects: "关于我们","账户管理"))
-    let imgArr = NSArray.init(objects: NSArray.init(objects: "PK记录","昨日PK","我的练习"),NSArray.init(objects: "意见反馈","系统消息","PK规则","评委规则"),NSArray.init(objects: "关于我们","账户管理"))
+    let titleArr = NSArray.init(objects: NSArray.init(objects: "PK记录","昨日PK","我的练习"),NSArray.init(objects: "意见反馈","系统消息","PK规则","评委规则","FAQ/常见问题"),NSArray.init(objects: "关于我们","账户管理"))
+    let imgArr = NSArray.init(objects: NSArray.init(objects: "PK记录","昨日PK","我的练习"),NSArray.init(objects: "意见反馈","系统消息","PK规则","评委规则","FAQ"),NSArray.init(objects: "关于我们","账户管理"))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,6 +83,8 @@ class UserViewController: BaseViewController,UITableViewDataSource,UITableViewDe
             cell = UITableViewCell.init(style: .Default, reuseIdentifier: identifir)
             cell?.accessoryType = .DisclosureIndicator
             cell?.selectionStyle = .None
+            cell?.textLabel?.font = UIFont.systemFontOfSize(16)
+            cell?.textLabel?.textColor = UIColor.init(rgb: 0x282828)
         }
         let titleArr_secton = titleArr.objectAtIndex(indexPath.section)
         let imgArr_secton = imgArr.objectAtIndex(indexPath.section)
@@ -93,6 +95,10 @@ class UserViewController: BaseViewController,UITableViewDataSource,UITableViewDe
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if !UserModel.sharedUserModel.isLogin {
+            self.pushLoginController()
+            return
+        }
         if indexPath.section == 0 {
             if indexPath.row == 0 {
                 let vc = PKHistoryViewController()
@@ -106,6 +112,41 @@ class UserViewController: BaseViewController,UITableViewDataSource,UITableViewDe
                 let vc = MyTrainingRecordViewController()
                 self.pushToNextController(vc)
             }
+        }
+        else if indexPath.section == 1 {
+            if indexPath.row == 0 {
+                let vc = FeedbackViewController()
+                self.pushToNextController(vc)
+            }
+            else if indexPath.row == 1 {
+                
+            }
+            else if indexPath.row == 2 {
+                let vc = UserTextDetailViewController()
+                vc.textImageName = "PK规则_detail"
+                self.pushToNextController(vc, withVCTitle: "PK规则")
+            }
+            else if indexPath.row == 3 {
+                let vc = UserTextDetailViewController()
+                vc.textImageName = "评论规则_detail"
+                self.pushToNextController(vc, withVCTitle: "评论规则")
+            }
+            else if indexPath.row == 4 {
+                let vc = UserTextDetailViewController()
+                vc.textImageName = "FQA_detail"
+                self.pushToNextController(vc, withVCTitle: "FQA")
+            }
+        }
+        else if indexPath.section == 2 {
+            if indexPath.row == 0 {
+                let vc = AboutUsViewController()
+                self.pushToNextController(vc)
+            }
+            else {
+                let vc = AccountManageViewController()
+                self.pushToNextController(vc)
+            }
+            
         }
     }
 }

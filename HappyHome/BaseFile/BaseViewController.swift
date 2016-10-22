@@ -24,8 +24,6 @@ class BaseViewController: UIViewController {
         self.view.backgroundColor                            = colorForBackground()
         self.automaticallyAdjustsScrollViewInsets            = false
     }
-    
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -43,12 +41,17 @@ class BaseViewController: UIViewController {
     func pushToNextController(nextVC:UIViewController,withVCTitle:String) -> Void {
         let goback_item = UIBarButtonItem.init(title: "", style: .Plain, target: nil, action: nil)
         self.navigationItem.backBarButtonItem = goback_item
-        nextVC.title = title
+        nextVC.title = withVCTitle
         nextVC.hidesBottomBarWhenPushed = true
         self.view.endEditing(true)
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
    
+    func pushLoginController() -> Void {
+        let vc = LoginViewController()
+        self.pushToNextController(vc)
+    }
+    
     //开始加载MBProgressHUD
     func startMBProgressHUD() {
         ZCMBProgressHUD.startMBProgressHUD(self.navigationController?.view)

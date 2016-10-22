@@ -96,9 +96,18 @@ class FiveStarCellCell: UITableViewCell {
         
     }
     
-    func setModel(model:RecordObject) -> Void {
+    func setModel(model:FiverecordModel) -> Void {
         
-        iconView.image = UIImage.init(named: model.img)
-        nameLabel.text = model.spotsName
+        iconView.sd_setImageWithURL(NSURL.init(string: model.picture!), placeholderImage: placeholderImage)
+        nameLabel.text = model.sname
+        remainingTimeLabel.text = "累计:" + String(model.day!) + "天"
+//        let dfmatter = NSDateFormatter()
+//        dfmatter.dateFormat="yyyy.MM.dd HH:mm:ss"
+//        let zone:NSTimeZone? = NSTimeZone(name: "Asia/Chongqing")
+//        dfmatter.timeZone = zone
+//        let date = NSDate(timeIntervalSince1970: model.pktime!/1000)
+//        updateTimeLabel.text = dfmatter.stringFromDate(date)
+//        
+        
     }
 }

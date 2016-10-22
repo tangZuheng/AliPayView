@@ -29,7 +29,7 @@ class CountdownView: UIView {
             }) { (finished) in
                 if finished {
                     // 启用计时器，控制每秒执行一次tickDown方法
-                    self.timer = NSTimer.scheduledTimerWithTimeInterval(0.5,target:self,selector:#selector(CountdownView.tickDown),userInfo:nil,repeats:true)
+                    self.timer = NSTimer.scheduledTimerWithTimeInterval(1,target:self,selector:#selector(CountdownView.tickDown),userInfo:nil,repeats:true)
                 }
                 
         }

@@ -38,9 +38,15 @@ class PKRecordManage: NSObject {
     
     static let sharedManager = PKRecordManage()
     
+    let globalQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+    
     var pk_record_arr:NSMutableArray = NSMutableArray()
     
     var isUplode:Bool! = false
+    
+    private override init() {
+        
+    }
     
     func start() {
         pk_record_arr = SQLiteManage.sharedManager.searchPKRecord()
@@ -50,7 +56,7 @@ class PKRecordManage: NSObject {
     func uplode() {
         if isUplode != true && pk_record_arr.count > 0{
             let model = pk_record_arr.firstObject as! PKRecordModel
-            dispatch_async(DISPATCH_TARGET_QUEUE_DEFAULT, {
+            dispatch_async(globalQueue, {
                 self.isUplode = true
                 NetWorkingManager.sharedManager.uploadPK(model, completion: { (retObject, error) in
                     if error == nil {

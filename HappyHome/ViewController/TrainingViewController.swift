@@ -31,6 +31,9 @@ class TrainingViewController: BaseViewController,UICollectionViewDelegate {
     func initfaceView(){
         self.title = "练习"
         
+        
+        
+        
         let kingButton = UIButton()
         kingButton.frame = CGRectMake(0, 0, 100, 44)
         kingButton.setTitle(DistrictManageModel.sharedManager.selectDistrict?.name, forState: .Normal)
@@ -54,7 +57,6 @@ class TrainingViewController: BaseViewController,UICollectionViewDelegate {
             kingButton.titleEdgeInsets = UIEdgeInsetsMake(0, -kingButton.imageView!.image!.size.width-5, 0, kingButton.imageView!.image!.size.width)
             kingButton.imageEdgeInsets = UIEdgeInsetsMake(0, kingButton.titleLabel!.bounds.size.width-5, 0, -kingButton.titleLabel!.bounds.size.width)
         }
-
     }
     
     //MARK: UICollectionViewDelegate
@@ -63,5 +65,9 @@ class TrainingViewController: BaseViewController,UICollectionViewDelegate {
         vc.model = ScenicCollectionView.sharedManager.dataArr.objectAtIndex(indexPath.row) as! ScenceModel
         self.pushToNextController(vc)
     }
-
+    
+    
+    
+    
+    
 }

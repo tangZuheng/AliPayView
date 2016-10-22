@@ -31,7 +31,7 @@ class JudgeViewController: BaseViewController,UICollectionViewDelegate {
     
 
     func initfaceView(){
-        self.title = "排行榜"
+        self.title = "评委"
         
         let kingButton = UIButton()
         kingButton.frame = CGRectMake(0, 0, 100, 44)
@@ -62,9 +62,12 @@ class JudgeViewController: BaseViewController,UICollectionViewDelegate {
     
     //MARK: UICollectionViewDelegate
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        if !UserModel.sharedUserModel.isLogin {
+            self.pushLoginController()
+            return
+        }
         let vc = JudgeDetailViewController()
+        vc.model = ScenicCollectionView.sharedManager.dataArr.objectAtIndex(indexPath.row) as! ScenceModel
         self.pushToNextController(vc)
     }
-
-
 }

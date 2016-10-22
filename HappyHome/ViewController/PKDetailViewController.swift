@@ -27,7 +27,7 @@ class PKDetailViewController: BaseViewController {
     var state = 1
     
     //最大时间3分钟
-    var maxTime:NSTimeInterval = 180
+    var maxTime:NSTimeInterval = 600
     
     //定时器
     var displayLink:CADisplayLink?
@@ -50,13 +50,7 @@ class PKDetailViewController: BaseViewController {
         if self.audioRecorderManage.audioRecorder.recording {
             self.audioRecorderManage.stopRecord()
         }
-        if self.audioRecorderManage.audioPlayer != nil {
-            if self.audioRecorderManage.audioPlayer.playing {
-                self.audioRecorderManage.pausePlaying()
-            }
-        }
         self.audioRecorderManage.audioRecorder.deleteRecording()
-        
         super.viewWillDisappear(animated)
     }
     
@@ -66,7 +60,7 @@ class PKDetailViewController: BaseViewController {
     }
     
     func initfaceView(){
-        self.title = "PK"
+        self.title = self.model.sname
 
         self.navigationController!.navigationBar.tintColor = UIColor.whiteColor()
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
@@ -74,7 +68,7 @@ class PKDetailViewController: BaseViewController {
         self.navigationController!.navigationBar.alpha = 0.4
         
         img = UIImageView()
-        img?.image = UIImage.init(named: "defaultImg")
+        img?.image = UIImage.init(named: "defaultImg_unknown")
         self.view.addSubview(img!)
         img!.snp_makeConstraints { (make) -> Void in
             make.width.height.equalTo(SCREEN_WIDTH)
@@ -122,7 +116,7 @@ class PKDetailViewController: BaseViewController {
         }
         
         endTime.textColor = UIColor.whiteColor()
-        endTime.text = "03:00"
+        endTime.text = "10:00"
         bottomView.addSubview(endTime)
         endTime.snp_makeConstraints { (make) in
             make.top.equalTo(startTime)
@@ -131,7 +125,7 @@ class PKDetailViewController: BaseViewController {
             make.height.equalTo(startTime)
         }
         
-        slider.minimumTrackTintColor = UIColor.init(rgb: 0xfbbebe);
+        slider.minimumTrackTintColor = UIColor.init(rgb: 0xff3838);
         slider.maximumTrackTintColor = UIColor.init(rgb: 0xdcdcdc);
         slider.setThumbImage(UIImage.init(named: "进度点"), forState: .Normal)
         slider.userInteractionEnabled = false
@@ -155,28 +149,39 @@ class PKDetailViewController: BaseViewController {
     func initControlEvent(){
         startButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
             if 1 == self.state {
+                self.startMBProgressHUD()
                 NetWorkingManager.sharedManager.checkPK(self.model.sid!, completion: { (retObject, error) in
+                    self.stopMBProgressHUD()
                     if error == nil {
-                        self.pointModel = JSONDeserializer<ScencePointModel>.deserializeFrom(retObject?.objectForKey("data")?.objectForKey("pointBean") as! NSDictionary)
-                        self.presentTime = retObject?.objectForKey("data")?.objectForKey("presentTime") as! NSTimeInterval
-                        if UserModel.sharedUserModel.selectLanguage == 1 {
-                            self.name?.text = self.pointModel.pname
+                        let code = retObject?.objectForKey("code") as! Int
+                        if code == 103 {
+                            self.showFailHUDWithText((retObject?.objectForKey("message"))! as! String)
                         }
                         else {
-                            self.name?.text = self.pointModel.penglishname
+                            self.pointModel = JSONDeserializer<ScencePointModel>.deserializeFrom(retObject?.objectForKey("data")?.objectForKey("pointBean") as! NSDictionary)
+                            self.presentTime = retObject?.objectForKey("data")?.objectForKey("presentTime") as! NSTimeInterval
+                            self.img?.sd_setImageWithURL(NSURL.init(string: self.pointModel.ppicture!), placeholderImage: placeholderImage!)
+                            
+                            if UserModel.sharedUserModel.selectLanguage == 1 {
+                                self.name?.text = self.pointModel.pname
+                            }
+                            else {
+                                self.name?.text = self.pointModel.penglishname
+                            }
+                            
+                            let view = CountdownView()
+                            view.show(5, andBlock: { (UIView) in
+                                print("倒计时到了")
+                                self.state = 2
+                                self.updateView()
+                                self.audioRecorderManage.startRecord()
+                                self.displayLink = CADisplayLink.init(target: self, selector: #selector(TrainingRecordViewController.updateTime))
+                                self.displayLink!.frameInterval = 1
+                                self.displayLink!.paused = false
+                                self.displayLink?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSRunLoopCommonModes)
+                            })
+
                         }
-                        
-                        let view = CountdownView()
-                        view.show(5, andBlock: { (UIView) in
-                            print("倒计时到了")
-                            self.state = 2
-                            self.updateView()
-                            self.audioRecorderManage.startRecord()
-                            self.displayLink = CADisplayLink.init(target: self, selector: #selector(TrainingRecordViewController.updateTime))
-                            self.displayLink!.frameInterval = 1
-                            self.displayLink!.paused = false
-                            self.displayLink?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSRunLoopCommonModes)
-                        })
                     }
                     else {
                         self.showFailHUDWithText(error!.localizedDescription)
@@ -197,7 +202,9 @@ class PKDetailViewController: BaseViewController {
                 model.fileURL = self.audioRecorderManage.recordingName
                 
                 PKRecordManage.sharedManager.insertDataSql(model)
-                ZCMBProgressHUD.showResultHUDWithResult(true, andText: "", toView: self.navigationController?.view, andSecond: 2, completionBlock: {
+                ZCMBProgressHUD.showResultHUDWithResult(true, andText: "亲，录音已上传，就等着好消息吧!", toView: self.navigationController?.view, andSecond: 2, completionBlock: {
+                    
+                    self.audioRecorderManage = AudioRecorderManage.init()
                     self.navigationController?.popViewControllerAnimated(true)
                 })
             }
@@ -209,7 +216,7 @@ class PKDetailViewController: BaseViewController {
         if 1 == self.state {
             //开始录制前
             maxTime = 180
-            endTime.text = "03:00"
+            endTime.text = "10:00"
             
 //            startButton.enabled = true
             startButton.setImage(UIImage.init(named: "开始按钮"), forState: .Normal)

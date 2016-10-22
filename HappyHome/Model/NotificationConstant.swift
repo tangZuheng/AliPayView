@@ -10,3 +10,15 @@ import UIKit
 
 //地区修改
 let UpdateDistrictNotification = "UpdateDistrictNotification"
+
+//暂停播放录音
+let PausePlayingNotification = "PausePlayingNotification"
+
+//停止所有播放
+let StopAllPlayingNotification = "StopAllPlayingNotification"
+
+//网络播放时间变化
+let MusicTimeIntervalNotification = "MusicTimeIntervalNotification"
+
+//登录状态改变
+let LoginStateUpdateNotification = "LoginStateUpdateNotification"

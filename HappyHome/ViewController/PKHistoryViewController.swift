@@ -7,10 +7,14 @@
 //
 
 import UIKit
+import MJRefresh
+import HandyJSON
 
 class PKHistoryViewController: BaseViewController,UITableViewDataSource,UITableViewDelegate {
 
-    let dataArr = SQLiteManage.sharedManager.searchRecord()
+    var dataArr = NSMutableArray()
+    
+    let tableView = UITableView.init()
     
     let fiveStarButton = UIButton()
     let myTopButton = UIButton()
@@ -54,7 +58,7 @@ class PKHistoryViewController: BaseViewController,UITableViewDataSource,UITableV
             make.top.equalTo(navBar_Fheight)
         }
         
-        let tableView = UITableView.init()
+        
         tableView.dataSource = self
         tableView.delegate = self
         self.view.addSubview(tableView)
@@ -66,6 +70,11 @@ class PKHistoryViewController: BaseViewController,UITableViewDataSource,UITableV
             make.top.equalTo(headLabel.snp_bottom)
             make.bottom.equalToSuperview().offset(-40)
         }
+        tableView.mj_header = MJRefreshNormalHeader.init(refreshingBlock: {
+            self.initDataSouce()
+        })
+        tableView.mj_header.beginRefreshing()
+        
         
         let footerView = UIView()
         footerView.backgroundColor = UIColor.init(rgb: 0xff3838)
@@ -121,6 +130,29 @@ class PKHistoryViewController: BaseViewController,UITableViewDataSource,UITableV
 
     }
     
+    
+    func initDataSouce(){
+        NetWorkingManager.sharedManager.getRecordList { (retObject, error) in
+            self.tableView.mj_header.endRefreshing()
+            if error == nil {
+                if retObject?.objectForKey("data")! is NSArray
+                {
+                    let arr = retObject?.objectForKey("data")! as! NSArray
+                    self.dataArr.removeAllObjects()
+                    for item in arr {
+                        let model = JSONDeserializer<PKHistoryModel>.deserializeFrom(item as! NSDictionary)
+                        self.dataArr.addObject(model!)
+                    }
+                    self.tableView.reloadData()
+                }
+                
+            }
+            else {
+                self.showFailHUDWithText(error!.localizedDescription)
+            }
+        }
+    }
+    
     //MARK: 事件
     //昨日PK
     func YesterdayPKButtonClick() {
@@ -144,7 +176,7 @@ class PKHistoryViewController: BaseViewController,UITableViewDataSource,UITableV
             cell = PKHistoryCell.init(style: .Default, reuseIdentifier: identifir)
             cell?.selectionStyle = .None
         }
-        cell?.setModel(dataArr.objectAtIndex(indexPath.row) as! RecordObject)
+        cell?.setModel(dataArr.objectAtIndex(indexPath.row) as! PKHistoryModel)
         return cell!
     }
 

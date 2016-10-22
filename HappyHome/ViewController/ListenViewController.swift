@@ -35,6 +35,13 @@ class ListenViewController: BaseViewController,UICollectionViewDelegate {
     func initfaceView(){
         self.title = "听听"
         
+        #if DEBUG
+        //测试用
+        let editButton = UIBarButtonItem.init(title: "修改uid", style: .Plain, target: self, action: #selector(ListenViewController.updateUid))
+        editButton.setTitleTextAttributes([NSForegroundColorAttributeName: colorForNavigationBarTitle(),NSFontAttributeName:UIFont.systemFontOfSize(14)], forState: .Normal)
+        self.navigationItem.leftBarButtonItem =  editButton
+        #endif
+        
         let kingButton = UIButton()
         kingButton.frame = CGRectMake(0, 0, 100, 44)
         kingButton.setTitle(DistrictManageModel.sharedManager.selectDistrict?.name, forState: .Normal)
@@ -67,11 +74,36 @@ class ListenViewController: BaseViewController,UICollectionViewDelegate {
         self.pushToNextController(vc)
     }
     
+    func updateUid(){
+        
+        let view = UIAlertView.init(title: "修改Uid", message: "", delegate: nil, cancelButtonTitle: "确定", otherButtonTitles: "取消")
+        view.alertViewStyle = .PlainTextInput
+        
+        let nameField = view.textFieldAtIndex(0)
+//        UITextField *nameField = [view textFieldAtIndex:0];
+        nameField?.text = String(UserModel.sharedUserModel.uid)
+        
+        view.rac_buttonClickedSignal().subscribeNext({ (indexNumber) in
+            if indexNumber as! Int == 0 {
+                UserModel.sharedUserModel.uid =  Int.init((nameField?.text)!)
+            }
+            else {
+                
+            }
+        })
+        
+        view.show()
+        
+        
+    }
+    
     //MARK: UICollectionViewDelegate
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let vc = ListenListViewController()
         vc.model = ScenicCollectionView.sharedManager.dataArr.objectAtIndex(indexPath.row) as! ScenceModel
         self.pushToNextController(vc)
     }
+    
+    
 
 }

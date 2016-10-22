@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 import ReactiveCocoa
 import Result
-import SwiftyJSON
+//import SwiftyJSON
 
 let HTTP_METHOD_GET   = "GET"
 let HTTP_METHOD_POST  = "POST"
@@ -19,7 +19,9 @@ class NetWorkingManager: NSObject {
     
     static let sharedManager = NetWorkingManager()
     
-    
+    private override init() {
+        
+    }
     
     /*!
       @param method  请求方式
@@ -158,52 +160,147 @@ class NetWorkingManager: NSObject {
         }
     }
     
-    //上传录音
-    func uploadPK(sid:Int,pid:Int,presentTime:NSTimeInterval,fileURL:NSURL,completion:(retObject: NSDictionary?, error: NSError?)->()) {
-        let parameters:[String: AnyObject] = [
-            "sid":String(sid),
-            "pid":String(pid),
-            "language":String(UserModel.sharedUserModel.selectLanguage),
-            "uid":String(UserModel.sharedUserModel.uid),
-            "presentTime":String(presentTime)
-        ]
-        self .UploadWithUrl(pk_upload_List_url, parameters: parameters, fileURL: fileURL, background: false) { (retObject, error) in
-            completion(retObject: retObject,error: error)
-        }
-    }
-    
-    //上传录音
-    func uploadPK(uid:Int,sid:Int,pid:Int,language:Int,presentTime:NSTimeInterval,soundtime:NSTimeInterval,fileURL:NSURL,completion:(retObject: NSDictionary?, error: NSError?)->()) {
-        let parameters:[String: AnyObject] = [
-            "sid":String(sid),
-            "pid":String(pid),
-            "language":String(language),
-            "uid":String(uid),
-            "presentTime":String(presentTime),
-            "soundtime":String(soundtime)
-        ]
-        self .UploadWithUrl(pk_upload_List_url, parameters: parameters, fileURL: fileURL, background: false) { (retObject, error) in
-            completion(retObject: retObject,error: error)
-        }
-    }
+//    //上传录音
+//    func uploadPK(sid:Int,pid:Int,presentTime:NSTimeInterval,fileURL:NSURL,completion:(retObject: NSDictionary?, error: NSError?)->()) {
+//        let parameters:[String: AnyObject] = [
+//            "sid":String(sid),
+//            "pid":String(pid),
+//            "language":String(UserModel.sharedUserModel.selectLanguage),
+//            "uid":String(UserModel.sharedUserModel.uid),
+//            "presentTime":String(presentTime)
+//        ]
+//        self .UploadWithUrl(pk_upload_List_url, parameters: parameters, fileURL: fileURL, background: false) { (retObject, error) in
+//            completion(retObject: retObject,error: error)
+//        }
+//    }
+//    
+//    //上传录音
+//    func uploadPK(uid:Int,sid:Int,pid:Int,language:Int,presentTime:NSTimeInterval,soundtime:NSTimeInterval,fileURL:NSURL,completion:(retObject: NSDictionary?, error: NSError?)->()) {
+//        let parameters:[String: AnyObject] = [
+//            "sid":String(sid),
+//            "pid":String(pid),
+//            "language":String(language),
+//            "uid":String(uid),
+//            "presentTime":String(presentTime),
+//            "soundtime":String(soundtime)
+//        ]
+//        self .UploadWithUrl(pk_upload_List_url, parameters: parameters, fileURL: fileURL, background: false) { (retObject, error) in
+//            completion(retObject: retObject,error: error)
+//        }
+//    }
     
     //上传录音
     func uploadPK(model:PKRecordModel,completion:(retObject: NSDictionary?, error: NSError?)->()) {
         let parameters:[String: AnyObject] = [
-            "sid":String(model.sid),
-            "pid":String(model.pid),
-            "language":String(model.language),
-            "uid":String(model.uid),
-            "presentTime":String(model.presentTime),
-            "soundtime":String(model.soundtime)
+            "sid":String(model.sid!),
+            "pid":String(model.pid!),
+            "language":String(model.language!),
+            "uid":String(model.uid!),
+            "presentTime":String(model.presentTime!),
+            "soundtime":String(model.soundtime!)
         ]
+//        let fileManager = NSFileManager.defaultManager()
+//        let urls = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+//        let documentDirectory = urls[0] as NSURL
+        
+//        let fileURL = documentDirectory.URLByAppendingPathComponent(model.fileURL!)
+        
         let fileManager = NSFileManager.defaultManager()
         let urls = fileManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
         let documentDirectory = urls[0] as NSURL
-        
         let fileURL = documentDirectory.URLByAppendingPathComponent(model.fileURL!)
         
         self .UploadWithUrl(pk_upload_List_url, parameters: parameters, fileURL: fileURL!, background: false) { (retObject, error) in
+            completion(retObject: retObject,error: error)
+        }
+    }
+    
+    
+    //评分分配录音
+    func JudgeIndex(sid:Int,completion:(retObject: NSDictionary?, error: NSError?)->()) {
+        let parameters:[String: AnyObject]  = [
+            "sid": sid,
+            "language":UserModel.sharedUserModel.selectLanguage,
+            "uid":UserModel.sharedUserModel.uid
+        ]
+        self.HTTPWithUrl(HTTP_METHOD_GET, url: judge_index_url, parameters: parameters, background: false) { (retObject, error) in
+            completion(retObject: retObject,error: error)
+        }
+    }
+    
+    //评分分配结果
+    func JudgeResult(soundid:Int,pksoundid:Int, result:Int,completion:(retObject: NSDictionary?, error: NSError?)->()) {
+        let parameters:[String: AnyObject]  = [
+            "result": result,
+            "soundid":soundid,
+            "pksoundid":pksoundid,
+            "uid":UserModel.sharedUserModel.uid
+        ]
+        self.HTTPWithUrl(HTTP_METHOD_GET, url: judge_result_url, parameters: parameters, background: false) { (retObject, error) in
+            completion(retObject: retObject,error: error)
+        }
+    }
+    
+    //登录
+    func Login(username:String,password:String,completion:(retObject: NSDictionary?, error: NSError?)->()) {
+        let parameters:[String: AnyObject]  = [
+            "username": username,
+            "password":password,
+        ]
+        self.HTTPWithUrl(HTTP_METHOD_GET, url: login_url, parameters: parameters, background: false) { (retObject, error) in
+            completion(retObject: retObject,error: error)
+        }
+    }
+    
+    //获取讲解点排行
+    func getScencePointTopList(pid:Int,completion:(retObject: NSDictionary?, error: NSError?)->()) {
+        let parameters:[String: AnyObject] = [
+            "pid": pid,
+            "language":UserModel.sharedUserModel.selectLanguage
+        ]
+        self.HTTPWithUrl(HTTP_METHOD_GET, url: scencePoint_top_url, parameters: parameters, background: false) { (retObject, error) in
+            completion(retObject: retObject,error: error)
+        }
+    }
+    
+    //PK历史
+    func getRecordList(completion:(retObject: NSDictionary?, error: NSError?)->()) {
+        let parameters:[String: AnyObject] = [
+            "uid": UserModel.sharedUserModel.uid,
+            "language":UserModel.sharedUserModel.selectLanguage
+        ]
+        self.HTTPWithUrl(HTTP_METHOD_GET, url: pk_record_List_url, parameters: parameters, background: false) { (retObject, error) in
+            completion(retObject: retObject,error: error)
+        }
+    }
+    
+    //昨日PK
+    func getYesterdayPKList(completion:(retObject: NSDictionary?, error: NSError?)->()) {
+        let parameters:[String: AnyObject] = [
+            "uid": UserModel.sharedUserModel.uid,
+            "language":UserModel.sharedUserModel.selectLanguage
+        ]
+        self.HTTPWithUrl(HTTP_METHOD_GET, url: pk_yesterday_List_url, parameters: parameters, background: false) { (retObject, error) in
+            completion(retObject: retObject,error: error)
+        }
+    }
+    //5星记录
+    func getFiverecordList(completion:(retObject: NSDictionary?, error: NSError?)->()) {
+        let parameters:[String: AnyObject] = [
+            "uid": UserModel.sharedUserModel.uid,
+            "language":UserModel.sharedUserModel.selectLanguage
+        ]
+        self.HTTPWithUrl(HTTP_METHOD_GET, url: pk_fiverecord_List_url, parameters: parameters, background: false) { (retObject, error) in
+            completion(retObject: retObject,error: error)
+        }
+    }
+    //my top5
+    func getMytopList(completion:(retObject: NSDictionary?, error: NSError?)->()) {
+        let parameters:[String: AnyObject] = [
+            "uid": UserModel.sharedUserModel.uid,
+            "language":UserModel.sharedUserModel.selectLanguage
+        ]
+        self.HTTPWithUrl(HTTP_METHOD_GET, url: pk_mytop_List_url, parameters: parameters, background: false) { (retObject, error) in
             completion(retObject: retObject,error: error)
         }
     }

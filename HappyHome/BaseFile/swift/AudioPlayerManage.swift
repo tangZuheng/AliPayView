@@ -10,31 +10,51 @@ import UIKit
 import AVFoundation
 
 class AudioPlayerManage: NSObject, AVAudioPlayerDelegate{
+    
+    static let sharedManager = AudioPlayerManage()
+    
+    private override init() {
+        
+    }
+    
+    deinit {
+//        NSNotificationCenter.defaultCenter().removeObserver(self)
+        BeanUtils.setPropertysToNil(self)
+    }
+    
     var audioPlayer:AVAudioPlayer!
     var soundURL:NSURL!
-    
+    {
+        didSet{
+            do {
+                try audioPlayer = AVAudioPlayer(contentsOfURL: soundURL)
+            }
+            catch {
+                
+            }
+        }
+    }
     func startPlaying() {
         //开始播放
-        do {
-            if audioPlayer == nil {
-                try audioPlayer = AVAudioPlayer(contentsOfURL: soundURL)
-//                audioPlayer.delegate = self
-            }
+        if audioPlayer != nil {
             audioPlayer.play()
             print("play!!")
-        } catch {
         }
     }
     
     func pausePlaying() {
         //暂停播放
-        do {
-            if audioPlayer == nil {
-                try audioPlayer = AVAudioPlayer(contentsOfURL: soundURL)
-            }
+        if audioPlayer != nil {
             audioPlayer.pause()
             print("pause!!")
-        } catch {
+        }
+    }
+    
+    func stopPlaying() {
+        //停止播放
+        if audioPlayer != nil {
+            audioPlayer.stop()
+            print("stop!!")
         }
     }
 }

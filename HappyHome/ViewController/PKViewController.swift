@@ -64,12 +64,20 @@ class PKViewController: BaseViewController,UICollectionViewDelegate {
     //MARK: 事件
     //昨日PK
     func YesterdayPKButtonClick() {
+        if !UserModel.sharedUserModel.isLogin {
+            self.pushLoginController()
+            return
+        }
         let vc = PKHistoryViewController()
         self.pushToNextController(vc)
     }
     
     //MARK: UICollectionViewDelegate
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        if !UserModel.sharedUserModel.isLogin {
+            self.pushLoginController()
+            return
+        }
         let vc = PKDetailViewController()
         vc.model = ScenicCollectionView.sharedManager.dataArr.objectAtIndex(indexPath.row) as! ScenceModel
         self.pushToNextController(vc)
