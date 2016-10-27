@@ -42,6 +42,7 @@ class PKHistoryViewController: BaseViewController,UITableViewDataSource,UITableV
         self.title = "PK记录"
         
         let editButton = UIBarButtonItem.init(title: "昨日PK", style: .Plain, target: self, action: #selector(PKHistoryViewController.YesterdayPKButtonClick))
+        editButton.setTitleTextAttributes([NSForegroundColorAttributeName: colorForNavigationBarTitle(),NSFontAttributeName:UIFont.systemFontOfSize(14)], forState: .Normal)
         self.navigationItem.rightBarButtonItem =  editButton
         
         let headLabel = UILabel()
@@ -145,7 +146,7 @@ class PKHistoryViewController: BaseViewController,UITableViewDataSource,UITableV
                     }
                     self.tableView.reloadData()
                 }
-                
+                self.tableView.tableViewDisplayWitMsg("暂时没有PK记录，赶紧去PK吧~~~", rowCount: self.dataArr.count)
             }
             else {
                 self.showFailHUDWithText(error!.localizedDescription)

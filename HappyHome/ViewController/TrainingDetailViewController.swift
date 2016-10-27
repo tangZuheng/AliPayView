@@ -31,7 +31,13 @@ class TrainingDetailViewController: BaseViewController,UICollectionViewDelegate,
     
     
     func initfaceView(){
-        self.title = model.sname
+        
+        if UserModel.sharedUserModel.selectLanguage == 1 {
+            self.title = model.sname
+        }
+        else {
+            self.title = model.senglishname
+        }
         
         let flowLayout = UICollectionViewFlowLayout()
         

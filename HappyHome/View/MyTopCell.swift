@@ -54,10 +54,10 @@ class MyTopCell: UITableViewCell {
         nameLabel.snp_makeConstraints { (make) in
             make.top.equalTo(10)
             make.left.equalTo(iconView.snp_right).offset(10)
-            make.width.equalTo(200)
+//            make.width.equalTo(200)
+            make.right.equalToSuperview()
             make.height.equalTo(15)
         }
-        
         
         updateTimeLabel.font = UIFont.systemFontOfSize(10)
         updateTimeLabel.textColor = UIColor.init(rgb: 0x999999)
@@ -93,10 +93,22 @@ class MyTopCell: UITableViewCell {
         
         iconView.sd_setImageWithURL(NSURL.init(string: model.ppicture!), placeholderImage: placeholderImage)
         
-        let nameText = NSMutableAttributedString.init(string: model.sname!+"  "+model.pname!)
-        nameText.addAttributes([NSForegroundColorAttributeName : UIColor.init(rgb: 0x282828)], range: NSMakeRange(0, model.sname!.characters.count))
-        nameText.addAttributes([NSFontAttributeName : UIFont.systemFontOfSize(14)], range: NSMakeRange(0, model.sname!.characters.count))
-        nameLabel.attributedText = nameText;
+        var sname = model.sname
+        var pname = model.pname
+        if UserModel.sharedUserModel.selectLanguage == 0 {
+            sname = model.senglishname
+            pname = model.penglishname
+        }
+        let nameText = NSMutableAttributedString.init(string: sname!+"  "+pname!)
+        nameText.addAttributes([NSForegroundColorAttributeName : UIColor.init(rgb: 0x282828)], range: NSMakeRange(0, sname!.characters.count))
+        nameText.addAttributes([NSFontAttributeName : UIFont.systemFontOfSize(14)], range: NSMakeRange(0, sname!.characters.count))
+        nameLabel.attributedText = nameText
+        
+//        
+//        let nameText = NSMutableAttributedString.init(string: model.sname!+"  "+model.pname!)
+//        nameText.addAttributes([NSForegroundColorAttributeName : UIColor.init(rgb: 0x282828)], range: NSMakeRange(0, model.sname!.characters.count))
+//        nameText.addAttributes([NSFontAttributeName : UIFont.systemFontOfSize(14)], range: NSMakeRange(0, model.sname!.characters.count))
+//        nameLabel.attributedText = nameText;
         
         let dfmatter = NSDateFormatter()
         dfmatter.dateFormat="yyyy.MM.dd"

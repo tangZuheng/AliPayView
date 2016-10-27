@@ -8,7 +8,7 @@
 
 import UIKit
 import SDWebImage
-//import AVFoundation
+import AVFoundation
 
 class YesterdayPKDetailViewController: BaseViewController {
     
@@ -34,31 +34,36 @@ class YesterdayPKDetailViewController: BaseViewController {
     
     let commitButton = UIButton()
     
+    var leftPlayTime : Int64 = 0
+    var rightPlayTime : Int64 = 0
+    
     var leftPlay:Bool = false   // 左边是否正在播放播放
     {
+        
         didSet {
             if leftPlay {
-                self.rightProgressView.progress = 0
                 self.rightPlay = false
                 leftPlayButton.setBackgroundImage(UIImage.init(named: "Judge_pause"), forState: .Normal)
                 let musicURL = NSURL.init(string: self.model.soundname!)!
-                if musicURL.isEqual(MusicPlayerManager.sharedInstance.currentURL) {
-                    MusicPlayerManager.sharedInstance.goOn()
-                }
-                else {
-                    MusicPlayerManager.sharedInstance.play(musicURL, callBack: { (tmpProgress, playProgress) in
-                        if !NSThread.isMainThread() {
-                            dispatch_async(dispatch_get_main_queue(), {
+                MusicPlayerManager.sharedInstance.play(musicURL, callBack: { (tmpProgress, playProgress) in
+                    if !NSThread.isMainThread() {
+                        dispatch_async(dispatch_get_main_queue(), {
+                            if MusicPlayerManager.sharedInstance.playTime >= 0.01
+                            {
                                 self.leftProgressView.progress = Double(MusicPlayerManager.sharedInstance.progress)
-                                if MusicPlayerManager.sharedInstance.playDuration - MusicPlayerManager.sharedInstance.playTime < 0.1 {
-                                    self.leftPlay = false
-                                    self.leftProgressView.progress = 0
-                                }
-                            })
-                            
+                                self.leftPlayTime = Int64(MusicPlayerManager.sharedInstance.playTime)
+                            }
+                        })
+                    }
+                    else {
+                        if MusicPlayerManager.sharedInstance.playTime >= 0.01
+                        {
+                            self.leftProgressView.progress = Double(MusicPlayerManager.sharedInstance.progress)
+                            self.leftPlayTime = Int64(MusicPlayerManager.sharedInstance.playTime)
                         }
-                    })
-                }
+                    }
+                })
+                MusicPlayerManager.sharedInstance.player?.seekToTime(CMTimeMake(self.leftPlayTime,1))
             }
             else {
                 leftPlayButton.setBackgroundImage(UIImage.init(named: "Judge_play"), forState: .Normal)
@@ -71,26 +76,28 @@ class YesterdayPKDetailViewController: BaseViewController {
         {
         didSet {
             if rightPlay {
-                self.leftProgressView.progress = 0
                 self.leftPlay = false
                 rightPlayButton.setBackgroundImage(UIImage.init(named: "Judge_pause"), forState: .Normal)
                 let musicURL = NSURL.init(string: self.model.pksoundname!)!
-                if musicURL.isEqual(MusicPlayerManager.sharedInstance.currentURL) {
-                    MusicPlayerManager.sharedInstance.goOn()
-                }
-                else {
-                    MusicPlayerManager.sharedInstance.play(musicURL, callBack: { (tmpProgress, playProgress) in
-                        if !NSThread.isMainThread() {
-                            dispatch_async(dispatch_get_main_queue(), {
+                MusicPlayerManager.sharedInstance.play(musicURL, callBack: { (tmpProgress, playProgress) in
+                    if !NSThread.isMainThread() {
+                        dispatch_async(dispatch_get_main_queue(), {
+                            if MusicPlayerManager.sharedInstance.playTime >= 0.01
+                            {
                                 self.rightProgressView.progress = Double(MusicPlayerManager.sharedInstance.progress)
-                                if MusicPlayerManager.sharedInstance.playDuration - MusicPlayerManager.sharedInstance.playTime < 0.1 {
-                                    self.rightPlay = false
-                                    self.rightProgressView.progress = 0
-                                }
-                            })
+                                self.rightPlayTime = Int64(MusicPlayerManager.sharedInstance.playTime)
+                            }
+                        })
+                    }
+                    else {
+                        if MusicPlayerManager.sharedInstance.playTime >= 0.01
+                        {
+                            self.rightProgressView.progress = Double(MusicPlayerManager.sharedInstance.progress)
+                            self.rightPlayTime = Int64(MusicPlayerManager.sharedInstance.playTime)
                         }
-                    })
-                }
+                    }
+                })
+                MusicPlayerManager.sharedInstance.player?.seekToTime(CMTimeMake(self.rightPlayTime,1))
             }
             else {
                 rightPlayButton.setBackgroundImage(UIImage.init(named: "Judge_play"), forState: .Normal)
@@ -123,7 +130,12 @@ class YesterdayPKDetailViewController: BaseViewController {
     }
     
     func initfaceView(){
-        self.title = model.sname
+        if UserModel.sharedUserModel.selectLanguage == 1 {
+            self.title = self.model.sname
+        }
+        else {
+            self.title = self.model.senglishname
+        }
         
         self.navigationController!.navigationBar.tintColor = UIColor.whiteColor()
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
@@ -149,7 +161,14 @@ class YesterdayPKDetailViewController: BaseViewController {
         }
         
         name = UILabel()
-        name?.text = model.pname
+//        name?.text = model.pname
+        name?.textColor = UIColor.whiteColor()
+        if UserModel.sharedUserModel.selectLanguage == 1 {
+            name?.text = model.pname
+        }
+        else {
+            name?.text = model.penglishname
+        }
         name?.textColor = UIColor.whiteColor()
         self.view.addSubview(name!)
         name!.snp_makeConstraints { (make) -> Void in
@@ -213,7 +232,7 @@ class YesterdayPKDetailViewController: BaseViewController {
         leftNictname.font = UIFont.systemFontOfSize(14)
         leftNictname.textColor = UIColor.whiteColor()
         leftNictname.textAlignment = .Center
-        leftNictname.text = "111"
+        leftNictname.text = model.nickname
         bottomView.addSubview(leftNictname)
         leftNictname.snp_makeConstraints { (make) in
             make.left.equalTo(20)
@@ -259,7 +278,7 @@ class YesterdayPKDetailViewController: BaseViewController {
         rightNictname.font = UIFont.systemFontOfSize(14)
         rightNictname.textColor = UIColor.whiteColor()
         rightNictname.textAlignment = .Center
-        rightNictname.text = "222"
+        rightNictname.text = model.pknickname
         bottomView.addSubview(rightNictname)
         rightNictname.snp_makeConstraints { (make) in
             make.right.equalTo(-20)
@@ -322,14 +341,35 @@ class YesterdayPKDetailViewController: BaseViewController {
             
         }
         
-//        NSNotificationCenter.defaultCenter().rac_addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: nil).subscribeNext {
-//            notificationCenter in
-//            if self.leftPlay {
-//                self.leftPlay = false
-//            }
-//            if self.rightPlay {
-//                self.rightPlay = false
-//            }
-//        }
+        NSNotificationCenter.defaultCenter().rac_addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: nil).subscribeNext {
+            notificationCenter in
+            NSOperationQueue.mainQueue().addOperationWithBlock {
+                if self.leftPlay {
+                    self.leftPlay = false
+                    self.leftPlayTime = 0
+                    self.leftProgressView.progress = 0
+                }
+                if self.rightPlay {
+                    self.rightPlay = false
+                    self.rightPlayTime = 0
+                    self.rightProgressView.progress = 0
+                }
+            }
+        }
+        
+        NSNotificationCenter.defaultCenter().rac_addObserverForName(AVPlayerItemDidFieldTimeNotification, object: nil).subscribeNext {
+            notificationCenter in
+            NSOperationQueue.mainQueue().addOperationWithBlock {
+                self.showFailHUDWithText("录音加载失败...")
+                if self.leftPlay {
+                    self.leftPlay = false
+                    self.leftProgressView.progress = 0
+                }
+                if self.rightPlay {
+                    self.rightPlay = false
+                    self.rightProgressView.progress = 0
+                }
+            }
+        }
     }
 }

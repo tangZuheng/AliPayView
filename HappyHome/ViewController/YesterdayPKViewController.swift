@@ -69,8 +69,9 @@ class YesterdayPKViewController: BaseViewController,UITableViewDataSource,UITabl
                         self.dataArr.addObject(model!)
                     }
                     self.tableView.reloadData()
+                    
                 }
-                
+                self.tableView.tableViewDisplayWitMsg("暂时没有昨日PK记录，赶紧去PK吧~~~", rowCount: self.dataArr.count)
             }
             else {
                 self.showFailHUDWithText(error!.localizedDescription)

@@ -39,8 +39,85 @@ class JudgeDetailViewController: BaseViewController {
     let rightWinButton = UIButton()
     let commitButton = UIButton()
     
-    var leftPlay:Bool = false   // 左边是否已经播放
-    var rightPlay:Bool = false  // 右边时候已经播放
+    var leftIsPlay:Bool = false     //左边是否已经播放
+    var rightIsPlay:Bool = false    // 右边是否已经播放
+    
+    var leftPlayTime : Int64 = 0
+    var rightPlayTime : Int64 = 0
+    
+    
+    var leftPlay:Bool = false       // 左边是否正在播放
+    {
+        didSet {
+            if leftPlay {
+                leftIsPlay = true
+                self.rightPlay = false
+                leftPlayButton.setBackgroundImage(UIImage.init(named: "Judge_pause"), forState: .Normal)
+                let musicURL = NSURL.init(string: self.leftSoundModel.soundname!)!
+                MusicPlayerManager.sharedInstance.play(musicURL, callBack: { (tmpProgress, playProgress) in
+                    if !NSThread.isMainThread() {
+                        dispatch_async(dispatch_get_main_queue(), {
+                            if MusicPlayerManager.sharedInstance.playTime >= 0.01
+                            {
+                                self.leftProgressView.progress = Double(MusicPlayerManager.sharedInstance.progress)
+                                self.leftPlayTime = Int64(MusicPlayerManager.sharedInstance.playTime)
+                            }
+                        })
+                    }
+                    else {
+                        if MusicPlayerManager.sharedInstance.playTime >= 0.01
+                        {
+                            self.leftProgressView.progress = Double(MusicPlayerManager.sharedInstance.progress)
+                            self.leftPlayTime = Int64(MusicPlayerManager.sharedInstance.playTime)
+                        }
+                    }
+                })
+                MusicPlayerManager.sharedInstance.player?.seekToTime(CMTimeMake(self.leftPlayTime,1))
+                self.updateCommitButton()
+            }
+            else {
+                leftPlayButton.setBackgroundImage(UIImage.init(named: "Judge_play"), forState: .Normal)
+                MusicPlayerManager.sharedInstance.pause()
+                self.updateCommitButton()
+            }
+        }
+    }
+    var rightPlay:Bool = false  // 右边是否正在播放
+        {
+        didSet {
+            if rightPlay {
+                rightIsPlay = true
+                self.leftPlay = false
+                rightPlayButton.setBackgroundImage(UIImage.init(named: "Judge_pause"), forState: .Normal)
+                let musicURL = NSURL.init(string: self.rightSoundModel.soundname!)!
+                MusicPlayerManager.sharedInstance.play(musicURL, callBack: { (tmpProgress, playProgress) in
+                    if !NSThread.isMainThread() {
+                        dispatch_async(dispatch_get_main_queue(), {
+                            if MusicPlayerManager.sharedInstance.playTime >= 0.01
+                            {
+                                self.rightProgressView.progress = Double(MusicPlayerManager.sharedInstance.progress)
+                                self.rightPlayTime = Int64(MusicPlayerManager.sharedInstance.playTime)
+                            }
+                        })
+                    }
+                    else {
+                        if MusicPlayerManager.sharedInstance.playTime >= 0.01
+                        {
+                            self.rightProgressView.progress = Double(MusicPlayerManager.sharedInstance.progress)
+                            self.rightPlayTime = Int64(MusicPlayerManager.sharedInstance.playTime)
+                        }
+                    }
+                })
+                MusicPlayerManager.sharedInstance.player?.seekToTime(CMTimeMake(self.rightPlayTime,1))
+                self.updateCommitButton()
+            }
+            else {
+                rightPlayButton.setBackgroundImage(UIImage.init(named: "Judge_play"), forState: .Normal)
+                MusicPlayerManager.sharedInstance.pause()
+                self.updateCommitButton()
+            }
+        }
+    }
     var result:Int! = 0         //1为左边胜，2为平手，3为右边胜
     
     override func viewDidLoad() {
@@ -57,6 +134,9 @@ class JudgeDetailViewController: BaseViewController {
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: colorForNavigationBarTitle()]
         self.navigationController!.navigationBar.alpha = 1
         
+        self.leftPlay = false
+        self.rightPlay = false
+        MusicPlayerManager.sharedInstance.stop()
         super.viewWillDisappear(animated)
     }
     
@@ -158,8 +238,6 @@ class JudgeDetailViewController: BaseViewController {
         rightProgressView.trackWidth = 4
         rightProgressView.trackBackgroundColor = UIColor.init(rgb: 0x666666)
         rightProgressView.trackFillColor = UIColor.init(rgb: 0xe7e7e7)
-//        rightProgressView.centerImage = UIImage.init(named: "user_head")
-//        rightProgressView.progress = 0.4
         bottomView.addSubview(rightProgressView)
         rightProgressView.snp_makeConstraints { (make) in
             make.width.height.equalTo(75*SCREEN_SCALE)
@@ -248,10 +326,6 @@ class JudgeDetailViewController: BaseViewController {
         commitButton.titleLabel?.font = UIFont.systemFontOfSize(16)
         commitButton.backgroundColor = UIColor.init(rgb: 0xff3838)
         self.updateCommitButton()
-//        commitButton.setImage(createImageWithColor(UIColor.init(rgb: 0xff3838)), forState: .Normal)
-//        commitButton.setImage(createImageWithColor(UIColor.grayColor()), forState: .Disabled)
-        
-        
         
         bottomView.addSubview(commitButton)
         commitButton.snp_makeConstraints { (make) in
@@ -263,12 +337,27 @@ class JudgeDetailViewController: BaseViewController {
     }
     
     func updateView() {
-        leftPlay = false
-        rightPlay = false
+        leftIsPlay = false
+        rightIsPlay = false
+        
+        self.leftPlayTime = 0
+        self.rightPlayTime = 0
+        
+        self.leftProgressView.progress = 0
+        self.rightProgressView.progress = 0
+        
         result = 0
         
         img?.sd_setImageWithURL(NSURL.init(string: self.pointModel.ppicture!), placeholderImage: placeholderImage!)
-        name?.text = self.pointModel.pname
+        
+        if UserModel.sharedUserModel.selectLanguage == 1 {
+            self.name?.text = self.pointModel.pname
+        }
+        else {
+            self.name?.text = self.pointModel.penglishname
+        }
+        
+//        name?.text = self.pointModel.pname
         
         self.leftHead.sd_setImageWithURL(NSURL.init(string: self.leftSoundModel.userheader!), placeholderImage: placeholderHead)
         self.rightHead.sd_setImageWithURL(NSURL.init(string: self.rightSoundModel.userheader!), placeholderImage: placeholderHead)
@@ -284,6 +373,7 @@ class JudgeDetailViewController: BaseViewController {
                     self.leftSoundModel = JSONDeserializer<SoundModel>.deserializeFrom(data?.objectForKey("soundBean") as! NSDictionary)
                     self.rightSoundModel = JSONDeserializer<SoundModel>.deserializeFrom(data?.objectForKey("pksoundBean") as! NSDictionary)
                     self.pointModel  = JSONDeserializer<ScencePointModel>.deserializeFrom(data?.objectForKey("pointBean") as! NSDictionary)
+                    
                     self.updateView()
                     self.updateCommitButton()
                 }
@@ -321,30 +411,16 @@ class JudgeDetailViewController: BaseViewController {
             }
         }
         leftPlayButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
-            NetAudioPlayerManage.sharedManager.soundURL = NSURL.init(string: self.leftSoundModel.soundname!)
-            NetAudioPlayerManage.sharedManager.startPlaying()
-            
-            self.startMBProgressHUD()
-            self.leftPlayButton.hidden = true
-//            self.rightPlayButton.enabled = false
-            self.leftPlay = true
-            self.updateCommitButton()
+            self.leftPlay = !self.leftPlay
         }
         rightPlayButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
-            NetAudioPlayerManage.sharedManager.soundURL = NSURL.init(string: self.rightSoundModel.soundname!)
-            NetAudioPlayerManage.sharedManager.startPlaying()
-            
-            self.startMBProgressHUD()
-            self.rightPlayButton.hidden = true
-//            self.leftPlayButton.enabled = false
-            self.rightPlay = true
-            self.updateCommitButton()
+            self.rightPlay = !self.rightPlay
         }
         
         leftTipButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
             let alertView = TipAlertView.init(title: "请选择举报内容", contentView: nil, cancelButtonTitle: "取消")
             alertView.addButtonWithTitle("确定", type: .Default, handler: { (CXAlertVie, AlertButtonItem) in
-                
+                alertView.dismiss()
             })
             alertView.show()
         }
@@ -353,7 +429,7 @@ class JudgeDetailViewController: BaseViewController {
         rightTipButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
             let alertView = TipAlertView.init(title: "请选择举报内容", contentView: nil, cancelButtonTitle: "取消")
             alertView.addButtonWithTitle("确定", type: .Default, handler: { (CXAlertVie, AlertButtonItem) in
-                
+                alertView.dismiss()
             })
             alertView.show()
         }
@@ -362,6 +438,8 @@ class JudgeDetailViewController: BaseViewController {
         commitButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
             //提交结果
             self.startMBProgressHUD()
+            self.leftPlay = false
+            self.rightPlay = false
             NetWorkingManager.sharedManager.JudgeResult(self.leftSoundModel.soundid!, pksoundid: self.rightSoundModel.soundid!, result: self.result, completion: { (retObject, error) in
                 self.stopMBProgressHUD()
                 if error == nil {
@@ -384,50 +462,52 @@ class JudgeDetailViewController: BaseViewController {
             
         }
         
-        NSNotificationCenter.defaultCenter().rac_addObserverForName(MusicTimeIntervalNotification, object: nil).subscribeNext {
-            notificationCenter in
-            
-            self.stopMBProgressHUD()
-            
-            let not_object = notificationCenter.object as! String
-            if not_object == self.leftSoundModel.soundname{
-                self.leftProgressView.progress = CMTimeGetSeconds(NetAudioPlayerManage.sharedManager.audioPlayer.currentTime())/self.leftSoundModel.soundtime!
-            }
-            else {
-                self.rightProgressView.progress = CMTimeGetSeconds(NetAudioPlayerManage.sharedManager.audioPlayer.currentTime())/self.rightSoundModel.soundtime!
-            }
-        }
         NSNotificationCenter.defaultCenter().rac_addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: nil).subscribeNext {
-            notificationCenter in
-            if self.leftPlayButton.hidden{
-                self.leftPlayButton.hidden = false
-                self.leftProgressView.progress = 0
-                
+                notificationCenter in
+            NSOperationQueue.mainQueue().addOperationWithBlock {
+                if self.leftPlay {
+                    self.leftPlay = false
+                    self.leftProgressView.progress = 0
+                    self.leftPlayTime = 0
+                }
+                if self.rightPlay {
+                    self.rightPlay = false
+                    self.rightProgressView.progress = 0
+                    self.rightPlayTime = 0
+                }
             }
-            else {
-                self.rightPlayButton.hidden = false
-                self.rightProgressView.progress = 0
-                
-            }
-            self.leftPlayButton.enabled = true
-            self.rightPlayButton.enabled = true
-            
         }
         
-        
+        NSNotificationCenter.defaultCenter().rac_addObserverForName(AVPlayerItemDidFieldTimeNotification, object: nil).subscribeNext {
+            notificationCenter in
+            NSOperationQueue.mainQueue().addOperationWithBlock {
+                self.showFailHUDWithText("录音加载失败...")
+                if self.leftPlay {
+                    self.leftPlay = false
+                    self.leftProgressView.progress = 0
+                }
+                if self.rightPlay {
+                    self.rightPlay = false
+                    self.rightProgressView.progress = 0
+                }
+            }
+        }
     }
-    
-    
     
     //
     func updateCommitButton() {
         
-        leftTipButton.enabled = leftPlay
-        rightTipButton.enabled = rightPlay
+        leftTipButton.enabled = leftIsPlay
+        rightTipButton.enabled = rightIsPlay
         
-        leftWinButton.enabled = leftPlay&&rightPlay
-        centerWinButton.enabled = leftPlay&&rightPlay
-        rightWinButton.enabled = leftPlay&&rightPlay
+        leftWinButton.enabled = leftIsPlay&&rightIsPlay
+        centerWinButton.enabled = leftIsPlay&&rightIsPlay
+        rightWinButton.enabled = leftIsPlay&&rightIsPlay
+        
+//        leftWinButton.enabled = true
+//        centerWinButton.enabled = true
+//        rightWinButton.enabled = true
+//        commitButton.enabled = true
         
         if result == 0 {
             self.leftWinButton.selected = false
@@ -450,7 +530,7 @@ class JudgeDetailViewController: BaseViewController {
             self.rightWinButton.selected = true
         }
         
-        commitButton.enabled = (result != 0)&&leftPlay&&rightPlay
+        commitButton.enabled = (result != 0)&&leftIsPlay&&rightIsPlay
         if commitButton.enabled {
             commitButton.backgroundColor = UIColor.init(rgb: 0xff3838)
         }

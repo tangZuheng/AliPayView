@@ -56,7 +56,8 @@ class PKHistoryCell: UITableViewCell {
         nameLabel.snp_makeConstraints { (make) in
             make.top.equalTo(10)
             make.left.equalTo(iconView.snp_right).offset(10)
-            make.width.equalTo(200)
+//            make.width.equalTo(200)
+            make.right.equalTo(-80)
             make.height.equalTo(15)
         }
         
@@ -88,17 +89,23 @@ class PKHistoryCell: UITableViewCell {
         remainingTimeLabel.textAlignment = .Right
         self.contentView.addSubview(remainingTimeLabel)
         remainingTimeLabel.snp_makeConstraints { (make) in
-            make.width.equalTo(100)
+            make.width.equalTo(70)
             make.centerY.equalToSuperview()
             make.right.equalToSuperview().offset(-10)
         }
-        
     }
     
     func setModel(model:PKHistoryModel) -> Void {
         
         iconView.sd_setImageWithURL(NSURL.init(string: model.picture!), placeholderImage: placeholderImage)
-        nameLabel.text = model.sname
+        
+        if UserModel.sharedUserModel.selectLanguage == 1 {
+            nameLabel.text = model.sname
+        }
+        else {
+            nameLabel.text = model.senglishname
+        }
+        
         
         starView.starNumber = model.level!
         

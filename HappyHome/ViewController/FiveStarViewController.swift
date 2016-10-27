@@ -72,19 +72,12 @@ class FiveStarViewController: BaseViewController,UITableViewDataSource,UITableVi
                     }
                     self.tableView.reloadData()
                 }
-                
+                self.tableView.tableViewDisplayWitMsg("暂时没有五星记录，赶紧去PK吧~~~", rowCount: self.dataArr.count)
             }
             else {
                 self.showFailHUDWithText(error!.localizedDescription)
             }
         }
-    }
-    
-    //MARK: 事件
-    //昨日PK
-    func YesterdayPKButtonClick() {
-        let vc = YesterdayPKViewController()
-        self.pushToNextController(vc)
     }
     
     //MARK: UITableViewDataSource

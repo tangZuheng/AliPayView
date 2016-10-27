@@ -42,7 +42,7 @@ class UserModel: HandyJSON {
     
     var nickname:String?                        //用户昵称
     
-    var picture:String?                        //用户头像
+    var picture:String?=""                      //用户头像
     
     
     required init() {}
@@ -70,7 +70,9 @@ class UserModel: HandyJSON {
             self.uid = dic?.valueForKey("uid") as! Int
             self.username = dic?.valueForKey("username") as? String
             self.nickname = dic?.valueForKey("nickname") as? String
-            self.picture = dic?.valueForKey("picture") as? String
+            if !(dic?.valueForKey("picture") is NSNull) {
+                self.picture = dic?.valueForKey("picture") as? String
+            }
         }
     }
     

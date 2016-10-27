@@ -56,7 +56,8 @@ class FiveStarCellCell: UITableViewCell {
         nameLabel.snp_makeConstraints { (make) in
             make.top.equalTo(10)
             make.left.equalTo(iconView.snp_right).offset(10)
-            make.width.equalTo(200)
+//            make.width.equalTo(200)
+            make.right.equalTo(-80)
             make.height.equalTo(15)
         }
         
@@ -71,7 +72,6 @@ class FiveStarCellCell: UITableViewCell {
             make.width.equalTo(25)
             make.height.equalTo(10)
         }
-        
         
         self.contentView.addSubview(starView)
         starView.height = 10
@@ -89,17 +89,24 @@ class FiveStarCellCell: UITableViewCell {
         remainingTimeLabel.textAlignment = .Right
         self.contentView.addSubview(remainingTimeLabel)
         remainingTimeLabel.snp_makeConstraints { (make) in
-            make.width.equalTo(100)
+            make.width.equalTo(70)
             make.centerY.equalToSuperview()
             make.right.equalToSuperview().offset(-10)
         }
-        
+//        nameLabel.snp_updateConstraints { (make) in
+//            make.right.equalTo(remainingTimeLabel.snp_left).offset(-10)
+//        }
     }
     
     func setModel(model:FiverecordModel) -> Void {
         
         iconView.sd_setImageWithURL(NSURL.init(string: model.picture!), placeholderImage: placeholderImage)
-        nameLabel.text = model.sname
+        if UserModel.sharedUserModel.selectLanguage == 1 {
+            nameLabel.text = model.sname
+        }
+        else {
+            nameLabel.text = model.senglishname
+        }
         remainingTimeLabel.text = "累计:" + String(model.day!) + "天"
 //        let dfmatter = NSDateFormatter()
 //        dfmatter.dateFormat="yyyy.MM.dd HH:mm:ss"

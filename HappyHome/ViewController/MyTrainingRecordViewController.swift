@@ -46,7 +46,7 @@ class MyTrainingRecordViewController: BaseViewController,UITableViewDataSource,U
             editButton.setTitleTextAttributes([NSForegroundColorAttributeName: colorForNavigationBarTitle(),NSFontAttributeName:UIFont.systemFontOfSize(14)], forState: .Normal)
             self.navigationItem.rightBarButtonItem =  editButton
         }
-    
+        self.tableView.tableViewDisplayWitMsg("暂时没有练习记录，赶紧去练习吧~~~", rowCount: self.dataArr.count)
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -69,6 +69,7 @@ class MyTrainingRecordViewController: BaseViewController,UITableViewDataSource,U
                 SQLiteManage.sharedManager.deleteALLRecord()
                 self.dataArr = SQLiteManage.sharedManager.searchRecord()
                 self.tableView.reloadData()
+                self.tableView.tableViewDisplayWitMsg("暂时没有练习记录，赶紧去练习吧~~~", rowCount: self.dataArr.count)
             }
             else {
                 

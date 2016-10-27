@@ -53,14 +53,16 @@ class SpotsCollectionViewCell: UICollectionViewCell {
         }
         
         name = UILabel()
-//        name?.text = "测试"
-        name?.font = UIFont.systemFontOfSize(14)
+        name?.numberOfLines = 2
+        name?.textAlignment = .Center
+        name?.font = UIFont.systemFontOfSize(10)
         name?.textColor = UIColor.init(rgb: 0x282828)
         self.contentView.addSubview(name!)
         name!.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(self)
-            make.height.equalTo(20)
-            make.bottom.equalTo(-5)
+            make.height.equalTo(30)
+            make.bottom.equalTo(0)
+            make.width.equalTo((SCREEN_SIZE.width - 10)/3)
         }
     }
     

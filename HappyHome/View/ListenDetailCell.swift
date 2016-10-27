@@ -28,10 +28,34 @@ class ListenDetailCell: UITableViewCell {
                 let recordLengthDate = NSDate(timeIntervalSince1970: self.topObject!.soundtime!)
                 self.recore_lengthLabel.text = dfmatter.stringFromDate(recordLengthDate)
                 self.recore_lengthLabel.textColor = UIColor.init(rgb: 0x999999)
-                
+                MusicPlayerManager.sharedInstance.pause()
             }
             else {
                 self.playButton.setImage(UIImage.init(named: "user_pause"), forState: .Normal)
+                let musicURL = NSURL.init(string: self.topObject.soundname!)
+                let dfmatter = NSDateFormatter()
+                dfmatter.dateFormat = "mm:ss"
+                self.recore_lengthLabel.textColor = UIColor.init(rgb: 0xff3838)
+                NSNotificationCenter.defaultCenter().postNotificationName(PausePlayingNotification, object: self)
+                MusicPlayerManager.sharedInstance.play(musicURL, callBack: { (tmpProgress, playProgress) in
+                    if !NSThread.isMainThread() {
+                        dispatch_async(dispatch_get_main_queue(), {
+                            if MusicPlayerManager.sharedInstance.playTime >= 0.01
+                            {
+                                let recordLengthDate = NSDate(timeIntervalSince1970:Double(MusicPlayerManager.sharedInstance.playDuration) - Double(MusicPlayerManager.sharedInstance.playTime))
+                                self.recore_lengthLabel.text = dfmatter.stringFromDate(recordLengthDate)
+                                
+                            }
+                        })
+                    }
+                    else {
+                        if MusicPlayerManager.sharedInstance.playTime >= 0.01
+                        {
+                            let recordLengthDate = NSDate(timeIntervalSince1970: self.topObject!.soundtime! - Double(MusicPlayerManager.sharedInstance.playTime))
+                            self.recore_lengthLabel.text = dfmatter.stringFromDate(recordLengthDate)
+                        }
+                    }
+                })
             }
         }
     }
@@ -106,40 +130,34 @@ class ListenDetailCell: UITableViewCell {
     func initControlEvent() {
         playButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
             
-            NetAudioPlayerManage.sharedManager.soundURL = NSURL.init(string: self.topObject.soundname!)
-            NetAudioPlayerManage.sharedManager.startPlaying()
+//            NetAudioPlayerManage.sharedManager.soundURL = NSURL.init(string: self.topObject.soundname!)
+//            NetAudioPlayerManage.sharedManager.startPlaying()
+//            
+//            ZCMBProgressHUD.startMBProgressHUD()
             
-            ZCMBProgressHUD.startMBProgressHUD()
+            
+            self.playing = !self.playing
 
         }
         
-        NSNotificationCenter.defaultCenter().rac_addObserverForName(MusicTimeIntervalNotification, object: nil).subscribeNext {
-            notificationCenter in
-            
-            ZCMBProgressHUD.stopMBProgressHUD()
-            
-            let not_object = notificationCenter.object as! String
-            if not_object == self.topObject!.soundname{
-                self.playing = true
-                
-                let dfmatter = NSDateFormatter()
-                dfmatter.dateFormat = "mm:ss"
-                let time = self.topObject!.soundtime! - CMTimeGetSeconds(NetAudioPlayerManage.sharedManager.audioPlayer.currentTime()) + 1
-                let recordLengthDate = NSDate(timeIntervalSince1970: time)
-                self.recore_lengthLabel.text = dfmatter.stringFromDate(recordLengthDate)
-                self.recore_lengthLabel.textColor = UIColor.init(rgb: 0xff3838)
-                
+        NSNotificationCenter.defaultCenter().rac_addObserverForName(PausePlayingNotification, object: nil).subscribeNext { notificationCenter in
+            if notificationCenter.object is ListenDetailCell
+            {
+                let not_object = notificationCenter.object as! ListenDetailCell
+                if not_object != self{
+                    self.playing = false
+                }
             }
-            else {
-                self.playing = false
-            }
+            
         }
+        
         NSNotificationCenter.defaultCenter().rac_addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: nil).subscribeNext {
             notificationCenter in
-            self.playing = false;
+            NSOperationQueue.mainQueue().addOperationWithBlock {
+                self.playing = false
+                MusicPlayerManager.sharedInstance.stop()
+            }
         }
-        
-        
     }
     
     func setModel(model:ScencePointTopModel) -> Void {

@@ -26,7 +26,7 @@ class PKDetailViewController: BaseViewController {
     
     var state = 1
     
-    //最大时间3分钟
+    //最大时间10分钟
     var maxTime:NSTimeInterval = 600
     
     //定时器
@@ -60,7 +60,7 @@ class PKDetailViewController: BaseViewController {
     }
     
     func initfaceView(){
-        self.title = self.model.sname
+        self.title = "PK"
 
         self.navigationController!.navigationBar.tintColor = UIColor.whiteColor()
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
@@ -116,7 +116,7 @@ class PKDetailViewController: BaseViewController {
         }
         
         endTime.textColor = UIColor.whiteColor()
-        endTime.text = "10:00"
+//        endTime.text = "10:00"
         bottomView.addSubview(endTime)
         endTime.snp_makeConstraints { (make) in
             make.top.equalTo(startTime)
@@ -190,23 +190,7 @@ class PKDetailViewController: BaseViewController {
                 
             }
             else {
-                self.maxTime = self.audioRecorderManage.audioRecorder.currentTime
-                self.audioRecorderManage.stopRecord()
-                let model = PKRecordModel()
-                model.uid = UserModel.sharedUserModel.uid
-                model.sid = self.pointModel.sid
-                model.pid = self.pointModel.pid
-                model.language = UserModel.sharedUserModel.selectLanguage
-                model.presentTime = self.presentTime
-                model.soundtime = self.maxTime
-                model.fileURL = self.audioRecorderManage.recordingName
-                
-                PKRecordManage.sharedManager.insertDataSql(model)
-                ZCMBProgressHUD.showResultHUDWithResult(true, andText: "亲，录音已上传，就等着好消息吧!", toView: self.navigationController?.view, andSecond: 2, completionBlock: {
-                    
-                    self.audioRecorderManage = AudioRecorderManage.init()
-                    self.navigationController?.popViewControllerAnimated(true)
-                })
+                self.savePKRecord()
             }
         }
 
@@ -215,7 +199,7 @@ class PKDetailViewController: BaseViewController {
     func updateView() -> Void {
         if 1 == self.state {
             //开始录制前
-            maxTime = 180
+            maxTime = 600
             endTime.text = "10:00"
             
 //            startButton.enabled = true
@@ -245,36 +229,35 @@ class PKDetailViewController: BaseViewController {
             endTime.text = dformatter.stringFromDate(dateEnd)
             slider.value = Float(nowTime/maxTime)
             
-            if  nowTime >= 180{
-                self.state = 3
-                self.updateView()
-                self.audioRecorderManage.stopRecord()
-                self.displayLink!.paused = true
-            }
-        }
-        else if 4 == state {
-            let nowTime = self.audioRecorderManage.audioPlayer.currentTime
-            //            let deviceCurrentTime = self.audioRecorderManage.audioRecorder.deviceCurrentTime
-            
-            //转换为时间
-            let timeInterval:NSTimeInterval = nowTime
-            let dateStart = NSDate(timeIntervalSince1970: timeInterval)
-            let dateEnd = NSDate(timeIntervalSince1970: maxTime - timeInterval)
-            
-            let dformatter = NSDateFormatter()
-            dformatter.dateFormat = "mm:ss"
-            //        print("当前日期时间：\(dformatter.stringFromDate(date))")
-            startTime.text = dformatter.stringFromDate(dateStart)
-            endTime.text = dformatter.stringFromDate(dateEnd)
-            slider.value = Float(nowTime/maxTime)
-            
             if  nowTime >= maxTime{
                 self.state = 3
                 self.updateView()
                 self.audioRecorderManage.stopRecord()
                 self.displayLink!.paused = true
+                self.savePKRecord()
             }
         }
+    }
+    
+    func savePKRecord() {
+        //保存录音到数据库
+        self.maxTime = self.audioRecorderManage.audioRecorder.currentTime
+        self.audioRecorderManage.stopRecord()
+        let model = PKRecordModel()
+        model.uid = UserModel.sharedUserModel.uid
+        model.sid = self.pointModel.sid
+        model.pid = self.pointModel.pid
+        model.language = UserModel.sharedUserModel.selectLanguage
+        model.presentTime = self.presentTime
+        model.soundtime = self.maxTime
+        model.fileURL = self.audioRecorderManage.recordingName
+        
+        PKRecordManage.sharedManager.insertDataSql(model)
+        ZCMBProgressHUD.showResultHUDWithResult(true, andText: "亲，录音已上传，就等着好消息吧!", toView: self.navigationController?.view, andSecond: 2, completionBlock: {
+            
+            self.audioRecorderManage = AudioRecorderManage.init()
+            self.navigationController?.popViewControllerAnimated(true)
+        })
     }
 
 

@@ -32,7 +32,6 @@ class RegisterViewController: BaseViewController {
         willSet {
             if newValue {
                 countdownTimer = NSTimer.scheduledTimerWithTimeInterval(1, target: self, selector: #selector(RegisterViewController.updateTime(_:)), userInfo: nil, repeats: true)
-                
                 remainingSeconds = 60
             } else {
                 countdownTimer?.invalidate()
@@ -82,6 +81,7 @@ class RegisterViewController: BaseViewController {
         usernameField.leftView = usernameLeft
         usernameField.placeholder = "请输入注册手机号"
         usernameField.backgroundColor = UIColor.whiteColor()
+        usernameField.keyboardType = .NumberPad
 //        usernameField.borderStyle = .RoundedRect
         usernameField.font = UIFont.systemFontOfSize(14)
         usernameField.layer.masksToBounds = true
@@ -100,6 +100,8 @@ class RegisterViewController: BaseViewController {
         let codeField = UITextField()
         codeField.placeholder = "请输入短信验证码"
         codeField.backgroundColor = UIColor.whiteColor()
+        codeField.leftView = UIView.init(frame: CGRectMake(0, 0, 8, 0))
+        codeField.leftViewMode = .Always
 //        codeField.borderStyle = .RoundedRect
         codeField.font = UIFont.systemFontOfSize(14)
         codeField.layer.masksToBounds = true
@@ -111,7 +113,7 @@ class RegisterViewController: BaseViewController {
         codeField.snp_makeConstraints { (make) in
             make.top.equalTo(usernameField.snp_bottom).offset(15)
             //            make.centerX.equalTo(self.view)
-            make.width.equalTo(SCREEN_WIDTH-190)
+            make.width.equalTo(SCREEN_WIDTH-240)
             make.left.equalTo(40)
             make.height.equalTo(35)
         }
@@ -130,7 +132,7 @@ class RegisterViewController: BaseViewController {
         self.view.addSubview(sendButton)
         sendButton.snp_makeConstraints { (make) in
             make.top.equalTo(codeField)
-            make.width.equalTo(100)
+            make.width.equalTo(150)
             make.right.equalTo(-40)
             make.height.equalTo(35)
         }
@@ -184,7 +186,7 @@ class RegisterViewController: BaseViewController {
         nicknameField.leftViewMode = .Always
         nicknameField.leftView = nicknameLeft
         nicknameField.placeholder = "请输入用户昵称"
-        nicknameField.secureTextEntry = true
+//        nicknameField.secureTextEntry = true
         nicknameField.backgroundColor = UIColor.whiteColor()
 //        nicknameField.borderStyle = .RoundedRect
         nicknameField.font = UIFont.systemFontOfSize(14)
@@ -235,9 +237,65 @@ class RegisterViewController: BaseViewController {
         }
         
         sendButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
-            self.isCounting = true
-
+            if ConfirmMobileNumber.isPhoneNumber(usernameField.text!)
+            {
+                self.startMBProgressHUD()
+                NetWorkingManager.sharedManager.registerSendCode(usernameField.text!, completion: { (retObject, error) in
+                    self.stopMBProgressHUD()
+                    if error == nil {
+                        self.isCounting = true
+                    }
+                    else {
+                        self.showFailHUDWithText(error!.localizedDescription)
+                    }
+                })
+            }
+            else {
+                self.showFailHUDWithText("请输入正确的手机号码!")
+            }
         }
+        
+        registerButton!.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
+            if !ConfirmMobileNumber.isPhoneNumber(usernameField.text!){
+                self.showFailHUDWithText("请输入正确的手机号码!")
+                return
+            }
+            if codeField.text?.characters.count == 0 {
+                self.showFailHUDWithText("请输入正确的验证码!")
+                return
+            }
+            if !(passwordField.text?.characters.count >= 6 && passwordField.text?.characters.count <= 16) {
+                self.showFailHUDWithText("请输入6-16位密码")
+                return
+            }
+            self.startMBProgressHUD()
+            NetWorkingManager.sharedManager.register(usernameField.text!, code: codeField.text!, username: usernameField.text!, password: passwordField.text!, nickname: nicknameField.text!, completion: { (retObject, error) in
+                self.stopMBProgressHUD()
+                if error == nil {
+                    let dic = retObject?.valueForKey("data") as! NSDictionary
+                    UserModel.sharedUserModel.setUserModel(dic)
+                    UserModel.sharedUserModel.savaUserModel()
+                    NSNotificationCenter.defaultCenter().postNotificationName(LoginStateUpdateNotification, object: nil)
+                    self.navigationController?.popToRootViewControllerAnimated(true)
+                }
+                else {
+                    self.showFailHUDWithText(error!.localizedDescription)
+                }
+            })
+            
+        }
+        
+        loginButton!.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
+            for temp in self.navigationController!.viewControllers
+            {
+                if temp is LoginViewController {
+                    self.navigationController?.popToViewController(temp, animated: true)
+                    return
+                }
+            }
+            self.pushLoginController()
+        }
+        
     }
     
     func updateTime(timer: NSTimer) {

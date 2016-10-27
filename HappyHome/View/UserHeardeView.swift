@@ -34,7 +34,7 @@ class UserHeardeView: UIView {
         }
         
         userHeadButton = UIButton()
-        userHeadButton?.setBackgroundImage(UIImage.init(named: "user_head"), forState: .Normal)
+        userHeadButton?.setBackgroundImage(placeholderHead, forState: .Normal)
         userHeadButton?.layer.masksToBounds = true
         userHeadButton?.layer.cornerRadius = (70*SCREEN_SCALE)/2
         //背景边框
@@ -105,12 +105,13 @@ class UserHeardeView: UIView {
             registerButton?.hidden = true
             nicknameLabel.hidden = false
             nicknameLabel.text = UserModel.sharedUserModel.nickname
+            userHeadButton?.sd_setImageWithURL(NSURL.init(string: UserModel.sharedUserModel.picture!), forState: .Normal, placeholderImage: placeholderHead)
         }
         else {
             loginButton?.hidden = false
             registerButton?.hidden = false
             nicknameLabel.hidden = true
+            userHeadButton?.setBackgroundImage(placeholderHead, forState: .Normal)
         }
     }
-
 }

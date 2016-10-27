@@ -10,7 +10,7 @@ import UIKit
 
 class AccountManageViewController: BaseViewController,UITableViewDataSource,UITableViewDelegate {
 
-    let titleArr = NSArray.init(objects: NSArray.init(objects: "账户信息","用户昵称"),NSArray.init(objects: "修改密码","找回密码"),NSArray.init(objects: "退出账号"))
+    let titleArr = NSArray.init(objects: NSArray.init(objects: "账户信息","用户昵称"),NSArray.init(objects: "修改密码","找回密码"),NSArray.init(objects: "清理缓存"),NSArray.init(objects: "退出账号"))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,7 +57,7 @@ class AccountManageViewController: BaseViewController,UITableViewDataSource,UITa
     }
     
     func tableView(tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if section == 2 {
+        if section == 3 {
             return 1
         }
         return 10
@@ -89,6 +89,11 @@ class AccountManageViewController: BaseViewController,UITableViewDataSource,UITa
             cell?.detailTextLabel?.text = ""
             cell?.textLabel?.textColor = UIColor.init(rgb: 0x282828)
         }
+        else if indexPath.section == 2{
+            cell?.accessoryType = .None
+            cell?.detailTextLabel?.text = ""
+            cell?.textLabel?.textColor = UIColor.init(rgb: 0x282828)
+        }
         else {
             cell?.accessoryType = .None
             cell?.detailTextLabel?.text = ""
@@ -102,6 +107,23 @@ class AccountManageViewController: BaseViewController,UITableViewDataSource,UITa
             
         }
         else if indexPath.section == 1 {
+            if indexPath.row == 0 {
+                let vc = UpdatePasswordViewController()
+                self.pushToNextController(vc)
+            }
+            else {
+                let vc = FindPasswordViewController()
+                self.pushToNextController(vc)
+            }
+        }
+        else if indexPath.section == 2 {
+            let view = UIAlertView.init(title: "", message: "亲，你确定需要清理缓存数据？", delegate: nil, cancelButtonTitle: "确定", otherButtonTitles: "取消")
+            view.rac_buttonClickedSignal().subscribeNext({ (indexNumber) in
+                if indexNumber as! Int == 0 {
+                    MusicPlayerManager.sharedInstance.clearMusicDir()
+                }
+            })
+            view.show()
             
         }
         else {

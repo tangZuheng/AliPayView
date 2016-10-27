@@ -38,7 +38,8 @@ class ListenDetailViewController: BaseViewController,UITableViewDataSource,UITab
         self.navigationController!.navigationBar.barTintColor = UIColor.whiteColor()
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: colorForNavigationBarTitle()]
         self.navigationController!.navigationBar.alpha = 1
-        NetAudioPlayerManage.sharedManager.pausePlaying()
+//        NetAudioPlayerManage.sharedManager.pausePlaying()
+        MusicPlayerManager.sharedInstance.stop()
         
         super.viewWillDisappear(animated)
     }
@@ -111,14 +112,18 @@ class ListenDetailViewController: BaseViewController,UITableViewDataSource,UITab
 //            self.tableView.mj_header.endRefreshing()
             self.stopMBProgressHUD()
             if error == nil {
-                let arr = retObject?.objectForKey("data")! as! NSArray
-                self.dataArr.removeAllObjects()
-                for item in arr {
-                    let model = JSONDeserializer<ScencePointTopModel>.deserializeFrom(item as! NSDictionary)
-                    self.dataArr.addObject(model!)
-                }
                 
+                if !(retObject?.objectForKey("data")! is NSNull)
+                {
+                    let arr = retObject?.objectForKey("data")! as! NSArray
+                    self.dataArr.removeAllObjects()
+                    for item in arr {
+                        let model = JSONDeserializer<ScencePointTopModel>.deserializeFrom(item as! NSDictionary)
+                        self.dataArr.addObject(model!)
+                    }
+                }
                 self.tableView.reloadData()
+                self.tableView.tableViewDisplayWitMsg("暂时没有排行榜数据，赶紧去PK吧~~~", rowCount: self.dataArr.count)
             }
             else {
                 self.showFailHUDWithText(error!.localizedDescription)

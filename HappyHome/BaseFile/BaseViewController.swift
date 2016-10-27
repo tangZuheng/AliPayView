@@ -54,11 +54,13 @@ class BaseViewController: UIViewController {
     
     //开始加载MBProgressHUD
     func startMBProgressHUD() {
-        ZCMBProgressHUD.startMBProgressHUD(self.navigationController?.view)
+        ZCMBProgressHUD.startMBProgressHUD()
+//        ZCMBProgressHUD.startMBProgressHUD(self.navigationController?.view)
     }
     
     func stopMBProgressHUD() {
-        ZCMBProgressHUD.stopMBProgressHUD(self.navigationController?.view)
+        ZCMBProgressHUD.stopMBProgressHUD()
+//        ZCMBProgressHUD.stopMBProgressHUD(self.navigationController?.view)
     }
     
     //显示提示框
@@ -69,10 +71,10 @@ class BaseViewController: UIViewController {
     
     func showFailHUDWithText(text:String)
     {
-        ZCMBProgressHUD.showResultHUDWithResult(false, andText: text, toView: self.navigationController?.view)
+        ZCMBProgressHUD.showResultHUDWithResult(false, andText: text, toView: self.view)
     }
     
     func showResultHUDWithResult(result:Bool,text:String) {
-        ZCMBProgressHUD.showResultHUDWithResult(result, andText: text, toView: self.navigationController?.view)
+        ZCMBProgressHUD.showResultHUDWithResult(result, andText: text, toView: self.view)
     }
 }

@@ -92,6 +92,8 @@ class FindPasswordViewController: BaseViewController {
         let codeField = UITextField()
         codeField.placeholder = "请输入短信验证码"
         codeField.backgroundColor = UIColor.whiteColor()
+        codeField.leftView = UIView.init(frame: CGRectMake(0, 0, 8, 0))
+        codeField.leftViewMode = .Always
         //        codeField.borderStyle = .RoundedRect
         codeField.font = UIFont.systemFontOfSize(14)
         codeField.layer.masksToBounds = true
@@ -103,7 +105,7 @@ class FindPasswordViewController: BaseViewController {
         codeField.snp_makeConstraints { (make) in
             make.top.equalTo(usernameField.snp_bottom).offset(15)
             //            make.centerX.equalTo(self.view)
-            make.width.equalTo(SCREEN_WIDTH-190)
+            make.width.equalTo(SCREEN_WIDTH-240)
             make.left.equalTo(40)
             make.height.equalTo(35)
         }
@@ -122,7 +124,7 @@ class FindPasswordViewController: BaseViewController {
         self.view.addSubview(sendButton)
         sendButton.snp_makeConstraints { (make) in
             make.top.equalTo(codeField)
-            make.width.equalTo(100)
+            make.width.equalTo(150)
             make.right.equalTo(-40)
             make.height.equalTo(35)
         }

@@ -77,24 +77,28 @@ class MyTopViewController: BaseViewController,UITableViewDataSource,UITableViewD
         NetWorkingManager.sharedManager.getMytopList { (retObject, error) in
             self.tableView.mj_header.endRefreshing()
             if error == nil {
-                if !(retObject?.objectForKey("data")!.objectForKey("historytopfive")! is NSNull)
+                if !(retObject?.objectForKey("data")! is NSNull)
                 {
-                    self.historytopfive = retObject?.objectForKey("data")!.objectForKey("historytopfive")! as! Int
-                    self.headLabel.text = "历史记录:" + String(self.historytopfive)
-                }
-                
-
-                if retObject?.objectForKey("data")!.objectForKey("MyTopBeans")! is NSArray
-                {
-                    let arr = retObject?.objectForKey("data")!.objectForKey("MyTopBeans")! as! NSArray
-                    self.dataArr.removeAllObjects()
-                    for item in arr {
-                        let model = JSONDeserializer<MyTopModel>.deserializeFrom(item as! NSDictionary)
-                        self.dataArr.addObject(model!)
+                    if !(retObject?.objectForKey("data")!.objectForKey("historytopfive")! is NSNull)
+                    {
+                        self.historytopfive = retObject?.objectForKey("data")!.objectForKey("historytopfive")! as! Int
+                        self.headLabel.text = "历史记录:" + String(self.historytopfive)
                     }
-                    self.tableView.reloadData()
+                    
+                    
+                    if retObject?.objectForKey("data")!.objectForKey("MyTopBeans")! is NSArray
+                    {
+                        let arr = retObject?.objectForKey("data")!.objectForKey("MyTopBeans")! as! NSArray
+                        self.dataArr.removeAllObjects()
+                        for item in arr {
+                            let model = JSONDeserializer<MyTopModel>.deserializeFrom(item as! NSDictionary)
+                            self.dataArr.addObject(model!)
+                        }
+                        self.tableView.reloadData()
+                        
+                    }
                 }
-                
+                self.tableView.tableViewDisplayWitMsg("暂时没有TOP5记录，赶紧去PK吧~~~", rowCount: self.dataArr.count)
             }
             else {
                 self.showFailHUDWithText(error!.localizedDescription)
@@ -130,7 +134,14 @@ class MyTopViewController: BaseViewController,UITableViewDataSource,UITableViewD
         let model = dataArr.objectAtIndex(indexPath.row) as! MyTopModel
         let vc = ListenDetailViewController()
         vc.pid = model.pid
-        vc.pname = model.pname
+        
+        if UserModel.sharedUserModel.selectLanguage == 1 {
+            vc.pname = model.pname
+        }
+        else {
+            vc.pname = model.penglishname
+        }
+//        vc.pname = model.pname
         vc.ppicture = model.ppicture
         self.pushToNextController(vc)
     }

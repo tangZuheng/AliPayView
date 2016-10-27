@@ -10,6 +10,8 @@
 import Foundation
 
 let baseUrl = "http://112.74.27.239:8080/TravelApp/"
+//let baseUrl = "http://192.168.1.4:8080/TravelApp/"
+
 
 //分类列表接口
 let ification_List_url = baseUrl + "classification/list"
@@ -51,11 +53,15 @@ let pk_fiverecord_List_url = baseUrl + "pk/fiverecord"
 //我的top5
 let pk_mytop_List_url = baseUrl + "pk/mytop"
 
+//发送验证码
+let register_send_url = baseUrl + "login/send"
 
+//注册
+let register_url = baseUrl + "login/register"
 
+//上传头像
+let login_upheader_url = baseUrl + "login/upheader"
 
-
-
-
-
+//修改密码
+let login_modify_url = baseUrl + "login/modify"
 

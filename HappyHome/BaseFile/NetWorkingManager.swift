@@ -70,6 +70,7 @@ class NetWorkingManager: NSObject {
     
     //上传文件
     func UploadWithUrl(url:URLStringConvertible,parameters:[String: AnyObject]?,fileURL:NSURL,background:Bool,completion:(retObject: NSDictionary?, error: NSError?)->()) {
+        print("--------------------------------------------------\n发送参数%@\n%@\n--------------------------------------------------",url,parameters)
         Alamofire.upload(
             .POST,
             url,
@@ -103,7 +104,7 @@ class NetWorkingManager: NSObject {
                             } catch {
                                 let error = NSError.init(domain: NSURLErrorDomain, code: NSURLErrorNetworkConnectionLost, userInfo: [NSLocalizedDescriptionKey:"加载失败"])
                                 completion(retObject: nil ,error: error)
-                                print("--------------------------------------------------\n返回结果%@\n%@\n--------------------------------------------------",pk_upload_List_url,error)
+                                print("--------------------------------------------------\n出现错误%@\n%@\n--------------------------------------------------",pk_upload_List_url,error)
                             }
                         }
                     }
@@ -130,6 +131,7 @@ class NetWorkingManager: NSObject {
     func getScenceList(id:Int,completion:(retObject: NSDictionary?, error: NSError?)->()) {
         let parameters:[String: AnyObject] = [
             "id": id,
+            "language":UserModel.sharedUserModel.selectLanguage,
             "row":120
         ]
         self.HTTPWithUrl(HTTP_METHOD_GET, url: scence_List_url, parameters: parameters, background: false) { (retObject, error) in
@@ -305,6 +307,51 @@ class NetWorkingManager: NSObject {
         }
     }
     
+    //发送验证码
+    func registerSendCode(phonenumber:String,completion:(retObject: NSDictionary?, error: NSError?)->()) {
+        let parameters:[String: AnyObject] = [
+            "phonenumber": phonenumber
+        ]
+        self.HTTPWithUrl(HTTP_METHOD_GET, url: register_send_url, parameters: parameters, background: false) { (retObject, error) in
+            completion(retObject: retObject,error: error)
+        }
+    }
+    
+    //注册
+    func register(phonenumber:String,code:String,username:String,password:String,nickname:String,completion:(retObject: NSDictionary?, error: NSError?)->()) {
+        let parameters:[String: AnyObject] = [
+            "phonenumber": phonenumber,
+            "code": code,
+            "username": username,
+            "password": password,
+            "nickname": nickname
+        ]
+        self.HTTPWithUrl(HTTP_METHOD_GET, url: register_url, parameters: parameters, background: false) { (retObject, error) in
+            completion(retObject: retObject,error: error)
+        }
+    }
+    
+    //上传头像
+    func uploadHead(fileURL:NSURL,completion:(retObject: NSDictionary?, error: NSError?)->()) {
+        let parameters:[String: AnyObject] = [
+            "uid":String(UserModel.sharedUserModel.uid)
+        ]
+        self .UploadWithUrl(login_upheader_url, parameters: parameters, fileURL:  fileURL, background: false) { (retObject, error) in
+            completion(retObject: retObject,error: error)
+        }
+    }
+    
+    //修改密码
+    func updetePassword(oldpwd:String,newpwd:String,completion:(retObject: NSDictionary?, error: NSError?)->()) {
+        let parameters:[String: AnyObject] = [
+            "username":String(UserModel.sharedUserModel.username!),
+            "oldpwd":oldpwd,
+            "newpwd":newpwd
+        ]
+        self.HTTPWithUrl(HTTP_METHOD_GET, url: login_modify_url, parameters: parameters, background: false) { (retObject, error) in
+            completion(retObject: retObject,error: error)
+        }
+    }
 }
 
 

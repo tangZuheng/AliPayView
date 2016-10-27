@@ -76,11 +76,6 @@ func createImageWithColor(color: UIColor) -> UIImage
 }
 
 
-//func getPlaceholderImage() -> UIImage
-//{
-//    return UIImage.init(named: "defaultImg")!
-//}
-
 extension UIColor {
     convenience init(rgb: UInt) {
         self.init(
@@ -93,15 +88,22 @@ extension UIColor {
 }
 
 
-//// 扩展String
-//extension String {
-//    subscript (r: Range<Int>) -> String {
-//        get {
-//            let startIndex = self.startIndex.advancedBy(r.startIndex)
-//            let endIndex = self.startIndex.advancedBy(r.endIndex)
-//            
-//            return self[Range(start: startIndex, end: endIndex)]
-//        }
-//    }
-//}
+extension UITableView {
+    func tableViewDisplayWitMsg(message:String,rowCount:Int)  {
+        if rowCount == 0 {
+            let messageLabel = UILabel()
+            messageLabel.text = message
+            messageLabel.font = UIFont.preferredFontForTextStyle(UIFontTextStyleBody)
+            messageLabel.textColor = UIColor.lightGrayColor()
+            messageLabel.textAlignment = .Center
+            messageLabel.sizeToFit()
+            self.backgroundView = messageLabel
+            self.separatorStyle = .None
+        }
+        else {
+            self.backgroundView = nil
+            self.separatorStyle = .SingleLine
+        }
+    }
+}
 

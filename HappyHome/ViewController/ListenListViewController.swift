@@ -33,7 +33,12 @@ class ListenListViewController: BaseViewController,UICollectionViewDelegate,UICo
     
     
     func initfaceView(){
-        self.title = model.sname
+        if UserModel.sharedUserModel.selectLanguage == 1 {
+            self.title = model.sname
+        }
+        else {
+            self.title = model.senglishname
+        }
         
         let flowLayout = UICollectionViewFlowLayout()
         
@@ -95,7 +100,14 @@ class ListenListViewController: BaseViewController,UICollectionViewDelegate,UICo
         let vc = ListenDetailViewController()
         let pointModel = dataArr.objectAtIndex(indexPath.row) as! ScencePointModel
         vc.pid = pointModel.pid
-        vc.pname = pointModel.pname
+        
+        if UserModel.sharedUserModel.selectLanguage == 1 {
+            vc.pname = pointModel.pname
+        }
+        else {
+            vc.pname = pointModel.penglishname
+        }
+        
         vc.ppicture = pointModel.ppicture
         self.pushToNextController(vc)
     }

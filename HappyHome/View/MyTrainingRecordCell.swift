@@ -101,13 +101,6 @@ class MyTrainingRecordCell: UITableViewCell {
         nameLabel.font = UIFont.systemFontOfSize(12)
         nameLabel.textColor = UIColor.init(rgb: 0x666666)
         self.contentView.addSubview(nameLabel)
-        nameLabel.snp_makeConstraints { (make) in
-            make.top.equalTo(10)
-            make.left.equalTo(iconView.snp_right).offset(10)
-            make.width.equalTo(200)
-            make.height.equalTo(15)
-        }
-        
 
         updateTimeLabel.font = UIFont.systemFontOfSize(10)
         updateTimeLabel.textColor = UIColor.init(rgb: 0x999999)
@@ -146,6 +139,14 @@ class MyTrainingRecordCell: UITableViewCell {
             make.height.width.equalTo(30)
         }
         
+        nameLabel.snp_makeConstraints { (make) in
+            make.top.equalTo(10)
+            make.left.equalTo(iconView.snp_right).offset(10)
+//            make.width.equalTo(200)
+            make.height.equalTo(15)
+            make.right.equalTo(playButton.snp_left).offset(-10)
+        }
+        
     }
     
     func initControlEvent() {
@@ -157,12 +158,16 @@ class MyTrainingRecordCell: UITableViewCell {
         
         NSNotificationCenter.defaultCenter().rac_addObserverForName(PausePlayingNotification, object: nil).subscribeNext { notificationCenter in
 //            print(notificationCenter)
-            let not_object = notificationCenter.object as! MyTrainingRecordCell
-            if not_object != self{
-                if self.playing {
-                    self.playing = false
+            if notificationCenter.object is MyTrainingRecordCell
+            {
+                let not_object = notificationCenter.object as! MyTrainingRecordCell
+                if not_object != self{
+                    if self.playing {
+                        self.playing = false
+                    }
                 }
             }
+            
         }
         
         
@@ -179,7 +184,7 @@ class MyTrainingRecordCell: UITableViewCell {
         nameLabel.attributedText = nameText;
 
         let dfmatter = NSDateFormatter()
-        dfmatter.dateFormat="yyyy.MM.dd hh:mm:ss"
+        dfmatter.dateFormat="yyyy.MM.dd HH:mm:ss"
         updateTimeLabel.text = dfmatter.stringFromDate(model.updateTime!)
         
         let recordLengthDate = NSDate(timeIntervalSince1970: model.recordLength!)

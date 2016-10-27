@@ -171,6 +171,9 @@ extension MusicPlayerManager {
     public func goOn() {
         player?.rate = 1
         configNowPlayingCenter()
+//        if status == ManagerStatus.Pause {
+//            status = ManagerStatus.Play
+//        }
     }
     /**
      暂停 - 可继续
@@ -178,6 +181,9 @@ extension MusicPlayerManager {
     public func pause() {
         player?.rate = 0
         configNowPlayingCenter()
+//        if status == ManagerStatus.Play {
+//            status = ManagerStatus.Pause
+//        }
     }
     /**
      停止 - 无法继续
@@ -226,7 +232,7 @@ extension MusicPlayerManager {
         var size: Float = 0
         guard let fileArray = try? fileManager.contentsOfDirectoryAtPath(StreamAudioConfig.audioDicPath) else {return 0}
         for component in fileArray {
-            if !component.containsString("temp.mp4") {
+            if !component.containsString("temp.caf") {
                 let fullPath = StreamAudioConfig.audioDicPath + "/" + component
                 if fileManager.fileExistsAtPath(fullPath) {
                     guard let fileAttributeDic = try? fileManager.attributesOfItemAtPath(fullPath) else {break}
@@ -244,7 +250,7 @@ extension MusicPlayerManager {
         let fileManager = NSFileManager.defaultManager()
         guard let fileArray = try? fileManager.contentsOfDirectoryAtPath(StreamAudioConfig.audioDicPath) else {return}
         for component in fileArray {
-            if !component.containsString("temp.mp4") {
+            if !component.containsString("temp.caf") {
                 let fullPath = StreamAudioConfig.audioDicPath + "/" + component
                 if fileManager.fileExistsAtPath(fullPath) {
                     do { try fileManager.removeItemAtPath(fullPath) } catch {print("music data remove failure -- path -- \(fullPath)")}
@@ -309,6 +315,9 @@ extension MusicPlayerManager {
         guard let currentURL = currentURL else {return}
         //  结束上一首
         endPlay()
+//        if !(status == ManagerStatus.Stop || status == ManagerStatus.Non){
+//            endPlay()
+//        }
         player = AVPlayer(playerItem: getPlayerItem(withURL: currentURL))
         observePlayingItem()
     }
@@ -410,6 +419,7 @@ extension MusicPlayerManager {
                 playerPlay()
             } else if item.status == AVPlayerItemStatus.Failed {
                 stop()
+                NSNotificationCenter.defaultCenter().postNotificationName(AVPlayerItemDidFieldTimeNotification, object: nil)
             }
         } else if keyPath == "loadedTimeRanges" {
             let array = item.loadedTimeRanges
@@ -448,6 +458,7 @@ extension MusicPlayerManager {
             self.progressCallBack?(tmpProgress: tmpProgress, playProgress: Float(self.progress))
             if totalTime - currentTime < 0.1 {
                 dealForEnded()
+                NSNotificationCenter.defaultCenter().postNotificationName(AVPlayerItemDidPlayToEndTimeNotification, object: nil)
             }
             }) as? NSObject
         //  监听缓存情况

@@ -58,7 +58,7 @@ class MainViewController: UIViewController {
             })
         }
         englishBtn.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
-            UserModel.sharedUserModel.selectLanguage = 2
+            UserModel.sharedUserModel.selectLanguage = 0
             self.presentViewController(ControllerManager.sharedManager().rootViewController!, animated: true, completion: {
                 
             })

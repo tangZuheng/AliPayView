@@ -22,3 +22,8 @@ let MusicTimeIntervalNotification = "MusicTimeIntervalNotification"
 
 //登录状态改变
 let LoginStateUpdateNotification = "LoginStateUpdateNotification"
+
+//播放完成
+let AVPlayerItemDidFieldTimeNotification = "AVPlayerItemDidFieldTimeNotification"
+
+

@@ -25,8 +25,11 @@ static MBProgressHUD *mbProgressHUD;
 //结束加载MBProgressHUD
 + (void)stopMBProgressHUD
 {
-    [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].delegate.window animated:YES];
-    mbProgressHUD = nil;
+    if (mbProgressHUD != nil) {
+        [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].delegate.window animated:YES];
+        mbProgressHUD = nil;
+    }
+    
 }
 
 //开始加载MBProgressHUD
@@ -43,8 +46,10 @@ static MBProgressHUD *mbProgressHUD;
 //结束加载MBProgressHUD
 + (void)stopMBProgressHUD:(UIView *)view
 {
-    [MBProgressHUD hideHUDForView:view animated:YES];
-    mbProgressHUD = nil;
+    if (mbProgressHUD != nil) {
+        [MBProgressHUD hideHUDForView:view animated:YES];
+        mbProgressHUD = nil;
+    }
 }
 
 + (void)showResultHUDWithResult:(BOOL)result andText:(NSString *)text toView:(UIView *)view;

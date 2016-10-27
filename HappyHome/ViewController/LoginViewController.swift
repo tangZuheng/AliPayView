@@ -58,7 +58,7 @@ class LoginViewController: BaseViewController {
         usernameField.placeholder = "请输入注册手机号"
         usernameField.backgroundColor = UIColor.whiteColor()
 //        usernameField.borderStyle = .RoundedRect
-//        usernameField.keyboardType = .NamePhonePad
+        usernameField.keyboardType = .NumberPad
         usernameField.font = UIFont.systemFontOfSize(14)
         usernameField.layer.masksToBounds = true
         usernameField.layer.cornerRadius = 2
@@ -171,21 +171,34 @@ class LoginViewController: BaseViewController {
         }
         
         loginButton!.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
+            if !ConfirmMobileNumber.isPhoneNumber(self.usernameField.text!){
+                self.showFailHUDWithText("请输入正确的手机号码!")
+                return
+            }
+            if !(self.passwordField.text?.characters.count >= 6 && self.passwordField.text?.characters.count <= 16) {
+                self.showFailHUDWithText("请输入6-16位密码")
+                return
+            }
+            self.startMBProgressHUD()
             NetWorkingManager.sharedManager.Login(self.usernameField.text!, password: self.passwordField.text!, completion: { (retObject, error) in
+                self.stopMBProgressHUD()
                 if error == nil {
                     let dic = retObject?.valueForKey("data") as! NSDictionary
                     UserModel.sharedUserModel.setUserModel(dic)
                     UserModel.sharedUserModel.savaUserModel()
                     NSNotificationCenter.defaultCenter().postNotificationName(LoginStateUpdateNotification, object: nil)
-                    self.navigationController?.popViewControllerAnimated(true);
+                    self.navigationController?.popToRootViewControllerAnimated(true)
                 }
                 else {
                     self.showFailHUDWithText(error!.localizedDescription)
                 }
-
             })
         }
-
+        
+        registerButton!.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
+            let vc = RegisterViewController()
+            self.navigationController?.popToViewController(vc, animated: true)
+        }
 
     }
     

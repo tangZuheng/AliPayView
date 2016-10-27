@@ -72,12 +72,14 @@
 		6DD6F48B1DAAA09A006B652E /* FiveStarCellCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6F48A1DAAA09A006B652E /* FiveStarCellCell.swift */; };
 		6DD6F48D1DAB8F77006B652E /* MyTopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6F48C1DAB8F77006B652E /* MyTopViewController.swift */; };
 		6DD6F48F1DAB9090006B652E /* MyTopCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6F48E1DAB9090006B652E /* MyTopCell.swift */; };
+		6DDAC7901DC0A49B00EF5C86 /* UpdatePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDAC78F1DC0A49B00EF5C86 /* UpdatePasswordViewController.swift */; };
 		6DF07F2C1DA6994200238FB7 /* UserHeardeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF07F2B1DA6994200238FB7 /* UserHeardeView.swift */; };
 		6DF07F2E1DA69C4500238FB7 /* MyTrainingRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF07F2D1DA69C4500238FB7 /* MyTrainingRecordViewController.swift */; };
 		6DF07F311DA69FAA00238FB7 /* MyTrainingRecordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF07F301DA69FAA00238FB7 /* MyTrainingRecordCell.swift */; };
 		6DF07F331DA6A70F00238FB7 /* RecordObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF07F321DA6A70F00238FB7 /* RecordObject.swift */; };
 		6DF9A8071DA5286B006936E6 /* AudioRecorderManage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF9A8061DA5286B006936E6 /* AudioRecorderManage.swift */; };
 		6DF9A8091DA551B1006936E6 /* SQLiteManage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF9A8081DA551B1006936E6 /* SQLiteManage.swift */; };
+		6DFD8C3A1DBF0CB800748082 /* ConfirmMobileNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFD8C391DBF0CB800748082 /* ConfirmMobileNumber.swift */; };
 		BB90FFEEF26EEF9F17D87C9B /* Pods_HappyHome.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D08CDD78AB85E08201520E4 /* Pods_HappyHome.framework */; };
 /* End PBXBuildFile section */
 
@@ -177,12 +179,14 @@
 		6DD6F48A1DAAA09A006B652E /* FiveStarCellCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiveStarCellCell.swift; sourceTree = "<group>"; };
 		6DD6F48C1DAB8F77006B652E /* MyTopViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTopViewController.swift; sourceTree = "<group>"; };
 		6DD6F48E1DAB9090006B652E /* MyTopCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTopCell.swift; sourceTree = "<group>"; };
+		6DDAC78F1DC0A49B00EF5C86 /* UpdatePasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdatePasswordViewController.swift; sourceTree = "<group>"; };
 		6DF07F2B1DA6994200238FB7 /* UserHeardeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserHeardeView.swift; sourceTree = "<group>"; };
 		6DF07F2D1DA69C4500238FB7 /* MyTrainingRecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTrainingRecordViewController.swift; sourceTree = "<group>"; };
 		6DF07F301DA69FAA00238FB7 /* MyTrainingRecordCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTrainingRecordCell.swift; sourceTree = "<group>"; };
 		6DF07F321DA6A70F00238FB7 /* RecordObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordObject.swift; sourceTree = "<group>"; };
 		6DF9A8061DA5286B006936E6 /* AudioRecorderManage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AudioRecorderManage.swift; path = ../BaseFile/swift/AudioRecorderManage.swift; sourceTree = "<group>"; };
 		6DF9A8081DA551B1006936E6 /* SQLiteManage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SQLiteManage.swift; path = ../BaseFile/swift/SQLiteManage.swift; sourceTree = "<group>"; };
+		6DFD8C391DBF0CB800748082 /* ConfirmMobileNumber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmMobileNumber.swift; sourceTree = "<group>"; };
 		8D08CDD78AB85E08201520E4 /* Pods_HappyHome.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HappyHome.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -344,6 +348,7 @@
 				6D0A7B351D9D4EDF00ACC29E /* Public.swift */,
 				6D0A7B361D9D4EDF00ACC29E /* RAC_Public.swift */,
 				6D1E77651DADD41E002703A9 /* BeanUtils.swift */,
+				6DFD8C391DBF0CB800748082 /* ConfirmMobileNumber.swift */,
 			);
 			path = swift;
 			sourceTree = "<group>";
@@ -436,6 +441,7 @@
 				6D9D03C01DA8A02900E3DA52 /* LoginViewController.swift */,
 				6D9D03C21DA8CC8700E3DA52 /* RegisterViewController.swift */,
 				6D9D03C41DA8E5AE00E3DA52 /* FindPasswordViewController.swift */,
+				6DDAC78F1DC0A49B00EF5C86 /* UpdatePasswordViewController.swift */,
 				6DF07F2D1DA69C4500238FB7 /* MyTrainingRecordViewController.swift */,
 				6D671AA91DAA2DEB0070BDC9 /* PKHistoryViewController.swift */,
 				6DD6F4821DAA8C55006B652E /* YesterdayPKViewController.swift */,
@@ -674,6 +680,7 @@
 				6D671AA81DA9F39A0070BDC9 /* JudgeDetailViewController.swift in Sources */,
 				6D8EBD691DA3A18D00F0AD07 /* SpotsCollectionViewCell.swift in Sources */,
 				6D0A7B381D9D4EDF00ACC29E /* NetWorkingManager.swift in Sources */,
+				6DDAC7901DC0A49B00EF5C86 /* UpdatePasswordViewController.swift in Sources */,
 				6DD6F48B1DAAA09A006B652E /* FiveStarCellCell.swift in Sources */,
 				6DD6F48F1DAB9090006B652E /* MyTopCell.swift in Sources */,
 				6D9D03C51DA8E5AE00E3DA52 /* FindPasswordViewController.swift in Sources */,
@@ -682,6 +689,7 @@
 				6D0F037F1DB4727B009A34D7 /* AccountManageViewController.swift in Sources */,
 				6D0A7B671D9FA56D00ACC29E /* BaseViewController.swift in Sources */,
 				6D9D03BF1DA7A84C00E3DA52 /* AudioPlayerManage.swift in Sources */,
+				6DFD8C3A1DBF0CB800748082 /* ConfirmMobileNumber.swift in Sources */,
 				6D8EBD6F1DA3B69E00F0AD07 /* TrainingRecordViewController.swift in Sources */,
 				6D86FC071DABCEE900A48F69 /* DistrictManageModel.swift in Sources */,
 				6D92D6A21DB8C14100F2557C /* UserTextDetailViewController.swift in Sources */,

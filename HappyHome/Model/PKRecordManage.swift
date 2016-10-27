@@ -54,10 +54,11 @@ class PKRecordManage: NSObject {
     }
     
     func uplode() {
-        if isUplode != true && pk_record_arr.count > 0{
+        if self.isUplode != true && pk_record_arr.count > 0{
+            self.isUplode = true
             let model = pk_record_arr.firstObject as! PKRecordModel
             dispatch_async(globalQueue, {
-                self.isUplode = true
+                print(model)
                 NetWorkingManager.sharedManager.uploadPK(model, completion: { (retObject, error) in
                     if error == nil {
                         SQLiteManage.sharedManager.deletePKRecord(model.id!)

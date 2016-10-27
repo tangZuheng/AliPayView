@@ -65,7 +65,12 @@ class TrainingRecordViewController: BaseViewController {
     }
     
     func initfaceView(){
-        self.title = self.model.sname
+        if UserModel.sharedUserModel.selectLanguage == 1 {
+            self.title = self.model.sname
+        }
+        else {
+            self.title = self.model.senglishname
+        }
         
         self.navigationController!.navigationBar.tintColor = UIColor.whiteColor()
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
@@ -127,7 +132,7 @@ class TrainingRecordViewController: BaseViewController {
         }
         
         endTime.textColor = UIColor.whiteColor()
-        endTime.text = "10:00"
+//        endTime.text = "10:00"
         bottomView.addSubview(endTime)
         endTime.snp_makeConstraints { (make) in
             make.top.equalTo(startTime)
@@ -156,7 +161,7 @@ class TrainingRecordViewController: BaseViewController {
         startButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
             if 1 == self.state {
                 let view = CountdownView()
-                view.show(2, andBlock: { (UIView) in
+                view.show(5, andBlock: { (UIView) in
                     print("倒计时到了")
                     self.state = 2
                     self.updateView()
@@ -209,7 +214,13 @@ class TrainingRecordViewController: BaseViewController {
             let view = UIAlertView.init(title: "提示", message: "保存或者删除？", delegate: nil, cancelButtonTitle: "保存",otherButtonTitles:"删除")
             view.rac_buttonClickedSignal().subscribeNext({ (indexNumber) in
                 if indexNumber as! Int == 0 {
-                    SQLiteManage.sharedManager.insertRecord(String(self.audioRecorderManage.recordingName), imgVal: self.pointModel.ppicture! ,  spotsNameVal: self.model.sname!, explainNameVal: self.pointModel.pname! ,recordLengthVal: self.maxTime)
+                    var sname = self.model.sname
+                    var pname = self.pointModel.pname
+                    if UserModel.sharedUserModel.selectLanguage == 0 {
+                        sname = self.model.senglishname
+                        pname = self.pointModel.penglishname
+                    }
+                    SQLiteManage.sharedManager.insertRecord(String(self.audioRecorderManage.recordingName), imgVal: self.pointModel.ppicture! ,  spotsNameVal: sname!, explainNameVal: pname! ,recordLengthVal: self.maxTime)
                 }
                 else {
                     self.audioRecorderManage.audioRecorder.deleteRecording()
@@ -227,8 +238,8 @@ class TrainingRecordViewController: BaseViewController {
     func updateView() -> Void {
         if 1 == self.state {
             //开始录制前
-            maxTime = 180
-            endTime.text = "03:00"
+            maxTime = 600
+            endTime.text = "10:00"
             
             startButton.enabled = true
             playButton.enabled = false
@@ -285,14 +296,6 @@ class TrainingRecordViewController: BaseViewController {
             startButton.setImage(UIImage.init(named: "开始按钮-灰"), forState: .Normal)
             playButton.setImage(UIImage.init(named: "播放按钮"), forState: .Normal)
             completeButton.setImage(UIImage.init(named: "保存按钮"), forState: .Normal)
-            
-//            let dateEnd = NSDate(timeIntervalSince1970: maxTime)
-//            let dformatter = NSDateFormatter()
-//            dformatter.dateFormat = "mm:ss"
-//            
-//            startTime.text = "00:00"
-//            endTime.text = dformatter.stringFromDate(dateEnd)
-//            self.slider.value = 0
         }
     }
     
@@ -311,7 +314,7 @@ class TrainingRecordViewController: BaseViewController {
             endTime.text = dformatter.stringFromDate(dateEnd)
             slider.value = Float(nowTime/maxTime)
             
-            if  nowTime >= 180{
+            if  nowTime >= maxTime{
                 self.state = 3
                 self.updateView()
                 self.audioRecorderManage.stopRecord()

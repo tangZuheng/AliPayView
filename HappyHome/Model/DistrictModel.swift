@@ -88,6 +88,8 @@ class YesterdayPKModel: HandyJSON {
     var pkresult:Int?                    //PK结果(1是评委打分胜，2是无pk对手胜，3是对手被举报胜，4为无评委双方胜，10为平手，11为输)',
     var header:String?=""               //头像
     var pkheader:String?=""             //对手头像
+    var nickname:String?=""             //昵称
+    var pknickname:String?=""           //对手昵称
     var soundname:String?=""            //录音地址
     var pksoundname:String?=""          //对手录音地址
     var soundtime:NSTimeInterval?       //录音时长
