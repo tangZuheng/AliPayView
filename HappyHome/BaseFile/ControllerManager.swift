@@ -15,6 +15,7 @@ class ControllerManager: NSObject {
         get{
             if self._rootViewController == nil {
                 self._rootViewController = MainTabBarController()
+//                self._rootViewController?.popoverPresentationController
             }
             return self._rootViewController
         }
@@ -27,18 +28,11 @@ class ControllerManager: NSObject {
         
         struct Static {
             static var onceToken : dispatch_once_t = 0
-            static var instance : ControllerManager? = nil
+            static var instance : ControllerManager?
         }
         dispatch_once(&Static.onceToken) {
             Static.instance = ControllerManager()
         }
         return Static.instance!
-        
-//        dispatch_once(&self.onceToken!) {
-////            self.manage
-//            self.manage = ControllerManager.init()
-//        }
-//        return self.manage!
     }
-    
 }

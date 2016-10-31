@@ -129,7 +129,7 @@ class JudgeDetailViewController: BaseViewController {
     
     override func viewWillDisappear(animated: Bool) {
         
-        self.navigationController!.navigationBar.tintColor = colorForNavigationBarTitle()
+        self.navigationController!.navigationBar.tintColor = colorForNavigationTint()
         self.navigationController!.navigationBar.barTintColor = UIColor.whiteColor()
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: colorForNavigationBarTitle()]
         self.navigationController!.navigationBar.alpha = 1
@@ -418,18 +418,72 @@ class JudgeDetailViewController: BaseViewController {
         }
         
         leftTipButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
+            self.leftPlay = false
+            self.rightPlay = false
             let alertView = TipAlertView.init(title: "请选择举报内容", contentView: nil, cancelButtonTitle: "取消")
             alertView.addButtonWithTitle("确定", type: .Default, handler: { (CXAlertVie, AlertButtonItem) in
-                alertView.dismiss()
+                if alertView.selectTitle.characters.count == 0 {
+                    self.showFailHUDWithText("请选择举报内容!")
+                    return
+                }
+                self.startMBProgressHUD()
+                NetWorkingManager.sharedManager.JudgeReport(self.leftSoundModel.soundid!, pksoundid: self.rightSoundModel.soundid!, content: alertView.selectTitle, completion: { (retObject, error) in
+                    self.stopMBProgressHUD()
+                    alertView.dismiss()
+                    if error == nil {
+                        let view = UIAlertView.init(title: "", message: "亲，谢谢你对我们评委工作的支持，评论下一条？", delegate: nil, cancelButtonTitle: "确定", otherButtonTitles: "取消")
+                        view.rac_buttonClickedSignal().subscribeNext({ (indexNumber) in
+                            if indexNumber as! Int == 0 {
+                                self.initDataSouce()
+                            }
+                            else {
+                                self.navigationController?.popViewControllerAnimated(true)
+                            }
+                        })
+                        view.show()
+                    }
+                    else {
+                        self.showFailHUDWithText(error!.localizedDescription)
+                    }
+                })
+                
             })
             alertView.show()
         }
         
         
         rightTipButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
+            self.leftPlay = false
+            self.rightPlay = false
             let alertView = TipAlertView.init(title: "请选择举报内容", contentView: nil, cancelButtonTitle: "取消")
             alertView.addButtonWithTitle("确定", type: .Default, handler: { (CXAlertVie, AlertButtonItem) in
-                alertView.dismiss()
+                if alertView.selectTitle.characters.count == 0 {
+                    self.showFailHUDWithText("请选择举报内容!")
+                    return
+                }
+                self.startMBProgressHUD()
+                NetWorkingManager.sharedManager.JudgeReport(self.rightSoundModel.soundid!, pksoundid: self.leftSoundModel.soundid!, content: alertView.selectTitle, completion: { (retObject, error) in
+                   
+                    self.stopMBProgressHUD()
+                    alertView.dismiss()
+                    if error == nil {
+                        let view = UIAlertView.init(title: "", message: "亲，谢谢你对我们评委工作的支持，评论下一条？", delegate: nil, cancelButtonTitle: "确定", otherButtonTitles: "取消")
+                        view.rac_buttonClickedSignal().subscribeNext({ (indexNumber) in
+                            if indexNumber as! Int == 0 {
+                                self.initDataSouce()
+                            }
+                            else {
+                                self.navigationController?.popViewControllerAnimated(true)
+                            }
+                        })
+                        view.show()
+                    }
+                    else {
+                        self.showFailHUDWithText(error!.localizedDescription)
+                    }
+                })
+                
+                
             })
             alertView.show()
         }
@@ -489,6 +543,18 @@ class JudgeDetailViewController: BaseViewController {
                 if self.rightPlay {
                     self.rightPlay = false
                     self.rightProgressView.progress = 0
+                }
+            }
+        }
+        
+        NSNotificationCenter.defaultCenter().rac_addObserverForName(PauseAllPlayingNotification, object: nil).subscribeNext {
+            notificationCenter in
+            NSOperationQueue.mainQueue().addOperationWithBlock {
+                if self.leftPlay {
+                    self.leftPlay = false
+                }
+                if self.rightPlay {
+                    self.rightPlay = false
                 }
             }
         }

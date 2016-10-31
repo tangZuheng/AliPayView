@@ -11,6 +11,7 @@ import UIKit
 class UserHeardeView: UIView {
     
     var userHeadButton:UIButton?
+    var homeButton:UIButton?
     var loginButton:UIButton?
     var registerButton:UIButton?
     
@@ -46,6 +47,14 @@ class UserHeardeView: UIView {
             make.centerX.equalToSuperview()
             make.top.equalTo(40*SCREEN_SCALE)
             make.width.height.equalTo(70*SCREEN_SCALE)
+        }
+        
+        homeButton = UIButton()
+        homeButton!.setImage(UIImage.init(named: "home"), forState: .Normal)
+        self.addSubview(homeButton!)
+        homeButton!.snp_makeConstraints { (make) -> Void in
+            make.top.equalTo((userHeadButton?.snp_top)!)
+            make.right.equalTo((userHeadButton?.snp_right)!).offset(20)
         }
         
         loginButton = UIButton()

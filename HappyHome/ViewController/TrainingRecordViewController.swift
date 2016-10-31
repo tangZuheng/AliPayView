@@ -41,7 +41,7 @@ class TrainingRecordViewController: BaseViewController {
     
     override func viewWillDisappear(animated: Bool) {
         
-        self.navigationController!.navigationBar.tintColor = colorForNavigationBarTitle()
+        self.navigationController!.navigationBar.tintColor = colorForNavigationTint()
         self.navigationController!.navigationBar.barTintColor = UIColor.whiteColor()
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: colorForNavigationBarTitle()]
         self.navigationController!.navigationBar.alpha = 1
@@ -233,6 +233,16 @@ class TrainingRecordViewController: BaseViewController {
         }
         
         self.updateView()
+        
+        
+        NSNotificationCenter.defaultCenter().rac_addObserverForName(PauseAllPlayingNotification, object: nil).subscribeNext {
+            notificationCenter in
+            NSOperationQueue.mainQueue().addOperationWithBlock {
+                self.audioRecorderManage.pausePlaying()
+                self.state = 5
+                self.updateView()
+            }
+        }
     }
     
     func updateView() -> Void {
@@ -309,7 +319,7 @@ class TrainingRecordViewController: BaseViewController {
             
             let dformatter = NSDateFormatter()
             dformatter.dateFormat = "mm:ss"
-            //        print("当前日期时间：\(dformatter.stringFromDate(date))")
+//            print(dformatter.stringFromDate(dateEnd))
             startTime.text = dformatter.stringFromDate(dateStart)
             endTime.text = dformatter.stringFromDate(dateEnd)
             slider.value = Float(nowTime/maxTime)

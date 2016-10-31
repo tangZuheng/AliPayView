@@ -21,7 +21,7 @@ class AudioRecorderManage: NSObject {
     let recordSettings = [AVSampleRateKey : NSNumber(float: Float(44100.0)),//声音采样率
         AVFormatIDKey : NSNumber(int: Int32(kAudioFormatMPEG4AAC)),//编码格式
         AVNumberOfChannelsKey : NSNumber(int: 1),//采集音轨
-        AVEncoderAudioQualityKey : NSNumber(int: Int32(AVAudioQuality.Medium.rawValue))]//音频质量
+        AVEncoderAudioQualityKey : NSNumber(int: Int32(AVAudioQuality.Low.rawValue))]//音频质量
     
     func directoryURL() -> NSURL? {
         //定义并构建一个url来保存音频，音频文件名为ddMMyyyyHHmmss.caf
@@ -60,7 +60,7 @@ class AudioRecorderManage: NSObject {
             let audioSession = AVAudioSession.sharedInstance()
             do {
                 try audioSession.setActive(true)
-                audioRecorder.recordForDuration(180)
+                audioRecorder.recordForDuration(610)
                 print("record!")
             } catch {
             }
@@ -89,6 +89,7 @@ class AudioRecorderManage: NSObject {
                     try audioPlayer = AVAudioPlayer(contentsOfURL: audioRecorder.url)
                 }
                 audioPlayer.play()
+                configBreakObserver()
                 print("play!!")
             } catch {
             }
@@ -108,6 +109,60 @@ class AudioRecorderManage: NSObject {
             }
         }
     }
+    
+    
+    //  监听打断
+    private func configBreakObserver() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleInterruption), name: AVAudioSessionInterruptionNotification, object: AVAudioSession.sharedInstance())
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleRouteChange), name: AVAudioSessionRouteChangeNotification, object: AVAudioSession.sharedInstance())
+    }
+    
+    //  来电打断
+    @objc private func handleInterruption(noti: NSNotification) {
+        guard noti.name == AVAudioSessionInterruptionNotification else { return }
+        guard let info = noti.userInfo, typenumber = info[AVAudioSessionInterruptionTypeKey]?.unsignedIntegerValue, type = AVAudioSessionInterruptionType(rawValue: typenumber) else { return }
+        switch type {
+        case .Began:
+            pause()
+        case .Ended:
+            startPlaying()
+        }
+    }
+    
+    //拔出耳机等设备变更操作
+    @objc private func handleRouteChange(noti: NSNotification) {
+        
+        func analysisInputAndOutputPorts(noti: NSNotification) {
+            guard let info = noti.userInfo, previousRoute = info[AVAudioSessionRouteChangePreviousRouteKey] as? AVAudioSessionRouteDescription else { return }
+            let inputs = previousRoute.inputs
+            let outputs = previousRoute.outputs
+            print(inputs)
+            print(outputs)
+        }
+        
+        guard noti.name == AVAudioSessionRouteChangeNotification else { return }
+        guard let info = noti.userInfo, typenumber = info[AVAudioSessionRouteChangeReasonKey]?.unsignedIntegerValue, type = AVAudioSessionRouteChangeReason(rawValue: typenumber) else { return }
+        switch type {
+        case .Unknown:
+            break
+        case .NewDeviceAvailable:
+            break
+        case .OldDeviceUnavailable:
+            NSNotificationCenter.defaultCenter().postNotificationName(PauseAllPlayingNotification, object: nil)
+            break
+        case .CategoryChange:
+            break
+        case .Override:
+            break
+        case .WakeFromSleep:
+            break
+        case .NoSuitableRouteForCategory:
+            break
+        case .RouteConfigurationChange:
+            break
+        }
+    }
+    
 }
 
 // MARK: - for AVAudioSession

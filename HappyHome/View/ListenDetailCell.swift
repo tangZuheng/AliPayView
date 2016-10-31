@@ -158,6 +158,15 @@ class ListenDetailCell: UITableViewCell {
                 MusicPlayerManager.sharedInstance.stop()
             }
         }
+        
+        NSNotificationCenter.defaultCenter().rac_addObserverForName(PauseAllPlayingNotification, object: nil).subscribeNext {
+            notificationCenter in
+            NSOperationQueue.mainQueue().addOperationWithBlock {
+                if self.playing {
+                    self.playing = false
+                }
+            }
+        }
     }
     
     func setModel(model:ScencePointTopModel) -> Void {

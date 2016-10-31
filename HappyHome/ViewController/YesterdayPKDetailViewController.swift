@@ -114,7 +114,7 @@ class YesterdayPKDetailViewController: BaseViewController {
     
     override func viewWillDisappear(animated: Bool) {
         
-        self.navigationController!.navigationBar.tintColor = colorForNavigationBarTitle()
+        self.navigationController!.navigationBar.tintColor = colorForNavigationTint()
         self.navigationController!.navigationBar.barTintColor = UIColor.whiteColor()
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: colorForNavigationBarTitle()]
         self.navigationController!.navigationBar.alpha = 1
@@ -337,8 +337,22 @@ class YesterdayPKDetailViewController: BaseViewController {
         }
         
         commitButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
-            //
-            
+            let view = UIAlertView.init(title: "", message: "亲，您确定要上述？一次上述不成功，当月失去其他上述机会!", delegate: nil, cancelButtonTitle: "确定", otherButtonTitles: "取消")
+            view.rac_buttonClickedSignal().subscribeNext({ (indexNumber) in
+                if indexNumber as! Int == 0 {
+                    self.startMBProgressHUD()
+                    NetWorkingManager.sharedManager.JudgeReportAppeal(self.model.soundid!, completion: { (retObject, error) in
+                        self.stopMBProgressHUD()
+                        if error == nil {
+                            self.showSuccessHUDWithText(retObject?.valueForKey("message") as! String)
+                        }
+                        else {
+                            self.showFailHUDWithText(error!.localizedDescription)
+                        }
+                    })
+                }
+            })
+            view.show()
         }
         
         NSNotificationCenter.defaultCenter().rac_addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: nil).subscribeNext {
@@ -368,6 +382,18 @@ class YesterdayPKDetailViewController: BaseViewController {
                 if self.rightPlay {
                     self.rightPlay = false
                     self.rightProgressView.progress = 0
+                }
+            }
+        }
+        
+        NSNotificationCenter.defaultCenter().rac_addObserverForName(PauseAllPlayingNotification, object: nil).subscribeNext {
+            notificationCenter in
+            NSOperationQueue.mainQueue().addOperationWithBlock {
+                if self.leftPlay {
+                    self.leftPlay = false
+                }
+                if self.rightPlay {
+                    self.rightPlay = false
                 }
             }
         }

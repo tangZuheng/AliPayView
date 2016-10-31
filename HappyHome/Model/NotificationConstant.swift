@@ -11,8 +11,14 @@ import UIKit
 //地区修改
 let UpdateDistrictNotification = "UpdateDistrictNotification"
 
+//语言修改
+let UpdateLanguageNotification = "UpdateLanguageNotification"
+
 //暂停播放录音
 let PausePlayingNotification = "PausePlayingNotification"
+
+//暂停播放所有录音
+let PauseAllPlayingNotification = "PauseAllPlayingNotification"
 
 //停止所有播放
 let StopAllPlayingNotification = "StopAllPlayingNotification"

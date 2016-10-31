@@ -30,7 +30,11 @@ public class RequestTask: NSObject {
     
     override init() {
         super.init()
+        //  初始化已下载文件长度
+        downLoadingOffset = 0
         _initialTmpFile()
+        //  初始化文件传输句柄
+        fileHandle = NSFileHandle.init(forWritingAtPath: StreamAudioConfig.tempPath)
     }
     
     private func _initialTmpFile() {
@@ -54,26 +58,11 @@ extension RequestTask {
      
      - parameter offset: 请求位置
      */
-    public func set(URL url: NSURL, offset: Int) {
-        
-        func initialTmpFile() {
-            try! NSFileManager.defaultManager().removeItemAtPath(StreamAudioConfig.tempPath)
-            NSFileManager.defaultManager().createFileAtPath(StreamAudioConfig.tempPath, contents: nil, attributes: nil)
-        }
-        _updateFilePath(url)
-        self.url = url
+    public func set(offset: Int) {
         self.offset = offset
         
-        //  如果建立第二次请求，则需初始化缓冲文件
-        if taskArr.count >= 1 {
-            initialTmpFile()
-        }
-        
-        //  初始化已下载文件长度
-        downLoadingOffset = 0
-        
         //  把stream://xxx的头换成http://的头
-        let actualURLComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)
+        let actualURLComponents = NSURLComponents(URL: self.url!, resolvingAgainstBaseURL: false)
         actualURLComponents?.scheme = "http"
         guard let URL = actualURLComponents?.URL else {return}
         let request = NSMutableURLRequest(URL: URL, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringCacheData, timeoutInterval: 20.0)
@@ -83,16 +72,53 @@ extension RequestTask {
             request.addValue("bytes=\(offset)-\(videoLength - 1)", forHTTPHeaderField: "Range")
         }
         
-        connection?.cancel()
+//        connection?.cancel()
         connection = NSURLConnection(request: request, delegate: self, startImmediately: false)
         connection?.setDelegateQueue(NSOperationQueue.mainQueue())
         connection?.start()
     }
+    
+    
+//    public func set(URL url: NSURL, offset: Int) {
+//        
+////        func initialTmpFile() {
+////            try! NSFileManager.defaultManager().removeItemAtPath(StreamAudioConfig.tempPath)
+////            NSFileManager.defaultManager().createFileAtPath(StreamAudioConfig.tempPath, contents: nil, attributes: nil)
+////        }
+////        _updateFilePath(url)
+//        self.url = url
+//        self.offset = offset
+//        
+//        //  如果建立第二次请求，则需初始化缓冲文件
+////        if taskArr.count >= 1 {
+////            initialTmpFile()
+////        }
+//        
+//        
+//        
+//        //  把stream://xxx的头换成http://的头
+//        let actualURLComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)
+//        actualURLComponents?.scheme = "http"
+//        guard let URL = actualURLComponents?.URL else {return}
+//        let request = NSMutableURLRequest(URL: URL, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringCacheData, timeoutInterval: 20.0)
+//        
+//        //  若非从头下载，且视频长度已知且大于零，则下载offset到videoLength的范围（拼request参数）
+//        if offset > 0 && videoLength > 0 {
+//            request.addValue("bytes=\(offset)-\(videoLength - 1)", forHTTPHeaderField: "Range")
+//        }
+//        
+//        connection?.cancel()
+//        connection = NSURLConnection(request: request, delegate: self, startImmediately: false)
+//        connection?.setDelegateQueue(NSOperationQueue.mainQueue())
+//        connection?.start()
+//    }
 }
 
 // MARK: - NSURLConnectionDataDelegate
 extension RequestTask: NSURLConnectionDataDelegate {
     public func connection(connection: NSURLConnection, didReceiveResponse response: NSURLResponse) {
+//        _updateFilePath()
+        guard !isFinishLoad else {return}
         isFinishLoad = false
         guard response is NSHTTPURLResponse else {return}
         //  解析头部数据
@@ -111,18 +137,17 @@ extension RequestTask: NSURLConnectionDataDelegate {
         
         self.videoLength = videoLength
         //TODO: 此处需要修改为真实数据格式 - 从字典中取
-        self.mimeType = "video/mp4"
+        self.mimeType = "video/caf"
         //  回调
         recieveVideoInfoHandler?(task: self, videoLength: videoLength, mimeType: mimeType!)
         //  连接加入到任务数组中
         taskArr.append(connection)
-        //  初始化文件传输句柄
-        fileHandle = NSFileHandle.init(forWritingAtPath: StreamAudioConfig.tempPath)
+        
     }
     
     public func connection(connection: NSURLConnection, didReceiveData data: NSData) {
-        
         //  寻址到文件末尾
+//        self.fileHandle?.seekToFileOffset(UInt64(self.offset))
         self.fileHandle?.seekToEndOfFile()
         self.fileHandle?.writeData(data)
         self.downLoadingOffset += data.length
@@ -131,8 +156,8 @@ extension RequestTask: NSURLConnectionDataDelegate {
 //        print("线程 - \(NSThread.currentThread())")
         
         //  这里用子线程有问题...
-        let queue = dispatch_queue_create("com.azen.taskConnect", DISPATCH_QUEUE_SERIAL)
-        dispatch_async(queue) {
+//        let queue = dispatch_queue_create("com.azen.taskConnect", DISPATCH_QUEUE_SERIAL)
+//        dispatch_async(queue) {
 //            //  寻址到文件末尾
 //            self.fileHandle?.seekToEndOfFile()
 //            self.fileHandle?.writeData(data)
@@ -140,7 +165,7 @@ extension RequestTask: NSURLConnectionDataDelegate {
 //            self.receiveVideoDataHandler?(task: self)
 //            let thread = NSThread.currentThread()
 //            print("线程 - \(thread)")
-        }
+//        }
     }
     
     public func connectionDidFinishLoading(connection: NSURLConnection) {
@@ -148,7 +173,7 @@ extension RequestTask: NSURLConnectionDataDelegate {
             isFinishLoad = true
             let fileName = url?.lastPathComponent
 //            let movePath = audioDicPath.stringByAppendingPathComponent(fileName ?? "undefine.mp4")
-            let movePath = StreamAudioConfig.audioDicPath + "/\(fileName ?? "undefine.mp4")"
+            let movePath = StreamAudioConfig.audioDicPath + "/\(fileName ?? "undefine.caf")"
             _ = try? NSFileManager.defaultManager().removeItemAtPath(movePath)
             
             var isSuccessful = true
@@ -161,17 +186,17 @@ extension RequestTask: NSURLConnectionDataDelegate {
             }
         }
         
-        if taskArr.count < 2 {
+        if self.downLoadingOffset == self.videoLength {
             tmpPersistence()
+            receiveVideoFinishHanlder?(task: self)
+            connection.cancel()
         }
-        
-        receiveVideoFinishHanlder?(task: self)
     }
     
     public func connection(connection: NSURLConnection, didFailWithError error: NSError) {
         if error.code == -1001 && !once {   //  超时，1秒后重连一次
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * Int64(NSEC_PER_SEC)), dispatch_get_main_queue(), {
-                self.continueLoading()
+//                self.continueLoading()
             })
         }
         if error.code == -1009 {
@@ -194,7 +219,7 @@ extension RequestTask {
         guard let URL = actualURLComponents?.URL else {return}
         let request = NSMutableURLRequest(URL: URL, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringCacheData, timeoutInterval: 20.0)
         request.addValue("bytes=\(downLoadingOffset)-\(videoLength - 1)", forHTTPHeaderField: "Range")
-        connection?.cancel()
+//        connection?.cancel()
         connection = NSURLConnection(request: request, delegate: self, startImmediately: false)
         connection?.setDelegateQueue(NSOperationQueue.mainQueue())
         connection?.start()
@@ -205,10 +230,10 @@ extension RequestTask {
     
     public func cancel() {
         //  1. 断开连接
-        connection?.cancel()
+//        connection?.cancel()
         //  2. 关闭文件写入句柄
-        fileHandle?.closeFile()
+//        fileHandle?.closeFile()
         //  3. 移除缓存
-        _ = try? NSFileManager.defaultManager().removeItemAtPath(StreamAudioConfig.tempPath)
+//        _ = try? NSFileManager.defaultManager().removeItemAtPath(StreamAudioConfig.tempPath)
     }
 }

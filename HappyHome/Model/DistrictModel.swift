@@ -79,6 +79,8 @@ class PKHistoryModel: HandyJSON {
 
 class YesterdayPKModel: HandyJSON {
     //昨日PK
+    var soundid:Int?
+    var pksoundid:Int?
     var sname:String?                   //景点名称
     var senglishname:String?            //景点英文名称
     var pname:String?                   //讲解点名称

@@ -42,6 +42,13 @@ class UserViewController: BaseViewController,UITableViewDataSource,UITableViewDe
             let vc = RegisterViewController()
             self.pushToNextController(vc)
         }
+        
+        heardeView.homeButton!.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
+            self.dismissViewControllerAnimated(true, completion: {
+                
+            })
+        }
+
 
         heardeView.userHeadButton!.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
             //上传头像
@@ -162,12 +169,12 @@ class UserViewController: BaseViewController,UITableViewDataSource,UITableViewDe
             else if indexPath.row == 3 {
                 let vc = UserTextDetailViewController()
                 vc.textImageName = "评论规则_detail"
-                self.pushToNextController(vc, withVCTitle: "评论规则")
+                self.pushToNextController(vc, withVCTitle: "评委规则")
             }
             else if indexPath.row == 4 {
                 let vc = UserTextDetailViewController()
                 vc.textImageName = "FQA_detail"
-                self.pushToNextController(vc, withVCTitle: "FQA")
+                self.pushToNextController(vc, withVCTitle: "FAQ")
             }
         }
         else if indexPath.section == 2 {

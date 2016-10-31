@@ -10,5 +10,6 @@
 #import "ZCMBProgressHUD.h"
 #import "myUILabel.h"
 #import <CXAlertView/CXAlertView.h>
-
-
+#import "UMMobClick/MobClick.h"
+#import "JPDownloadManager.h"
+#import "JPVideoURLAssetResourceLoader.h"

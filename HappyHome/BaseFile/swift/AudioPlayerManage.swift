@@ -37,7 +37,16 @@ class AudioPlayerManage: NSObject, AVAudioPlayerDelegate{
     func startPlaying() {
         //开始播放
         if audioPlayer != nil {
+            do {
+                try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+                try AVAudioSession.sharedInstance().setActive(true)
+                
+            } catch {
+                
+            }
+
             audioPlayer.play()
+            configBreakObserver()
             print("play!!")
         }
     }
@@ -55,6 +64,58 @@ class AudioPlayerManage: NSObject, AVAudioPlayerDelegate{
         if audioPlayer != nil {
             audioPlayer.stop()
             print("stop!!")
+        }
+    }
+    
+    //  监听打断
+    private func configBreakObserver() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleInterruption), name: AVAudioSessionInterruptionNotification, object: AVAudioSession.sharedInstance())
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleRouteChange), name: AVAudioSessionRouteChangeNotification, object: AVAudioSession.sharedInstance())
+    }
+    
+    //  来电打断
+    @objc private func handleInterruption(noti: NSNotification) {
+        guard noti.name == AVAudioSessionInterruptionNotification else { return }
+        guard let info = noti.userInfo, typenumber = info[AVAudioSessionInterruptionTypeKey]?.unsignedIntegerValue, type = AVAudioSessionInterruptionType(rawValue: typenumber) else { return }
+        switch type {
+        case .Began:
+            pause()
+        case .Ended:
+            startPlaying()
+        }
+    }
+    
+    //拔出耳机等设备变更操作
+    @objc private func handleRouteChange(noti: NSNotification) {
+        
+        func analysisInputAndOutputPorts(noti: NSNotification) {
+            guard let info = noti.userInfo, previousRoute = info[AVAudioSessionRouteChangePreviousRouteKey] as? AVAudioSessionRouteDescription else { return }
+            let inputs = previousRoute.inputs
+            let outputs = previousRoute.outputs
+            print(inputs)
+            print(outputs)
+        }
+        
+        guard noti.name == AVAudioSessionRouteChangeNotification else { return }
+        guard let info = noti.userInfo, typenumber = info[AVAudioSessionRouteChangeReasonKey]?.unsignedIntegerValue, type = AVAudioSessionRouteChangeReason(rawValue: typenumber) else { return }
+        switch type {
+        case .Unknown:
+            break
+        case .NewDeviceAvailable:
+            break
+        case .OldDeviceUnavailable:
+            NSNotificationCenter.defaultCenter().postNotificationName(PauseAllPlayingNotification, object: nil)
+            break
+        case .CategoryChange:
+            break
+        case .Override:
+            break
+        case .WakeFromSleep:
+            break
+        case .NoSuitableRouteForCategory:
+            break
+        case .RouteConfigurationChange:
+            break
         }
     }
 }

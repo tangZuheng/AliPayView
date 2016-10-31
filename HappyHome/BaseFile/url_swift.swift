@@ -11,7 +11,8 @@ import Foundation
 
 let baseUrl = "http://112.74.27.239:8080/TravelApp/"
 //let baseUrl = "http://192.168.1.4:8080/TravelApp/"
-
+//com.happyHome.goodGuide
+//com.sanquan.sfa
 
 //分类列表接口
 let ification_List_url = baseUrl + "classification/list"
@@ -64,4 +65,13 @@ let login_upheader_url = baseUrl + "login/upheader"
 
 //修改密码
 let login_modify_url = baseUrl + "login/modify"
+
+//举报
+let report_url = baseUrl + "report/index"
+
+//上诉
+let report_appeal_url = baseUrl + "report/appeal"
+
+//忘记密码
+let login_forget_url = baseUrl + "login/forget"
 

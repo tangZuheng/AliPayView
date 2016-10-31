@@ -167,9 +167,16 @@ class MyTrainingRecordCell: UITableViewCell {
                     }
                 }
             }
-            
         }
         
+        NSNotificationCenter.defaultCenter().rac_addObserverForName(PauseAllPlayingNotification, object: nil).subscribeNext {
+            notificationCenter in
+            NSOperationQueue.mainQueue().addOperationWithBlock {
+                if self.playing {
+                    self.playing = false
+                }
+            }
+        }
         
     }
     

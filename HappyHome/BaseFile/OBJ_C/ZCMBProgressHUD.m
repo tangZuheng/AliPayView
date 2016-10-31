@@ -52,6 +52,25 @@ static MBProgressHUD *mbProgressHUD;
     }
 }
 
++ (void)showResultHUDWithResult:(BOOL)result andText:(NSString *)text
+{
+    MBProgressHUD *HUD = [[MBProgressHUD alloc] initWithView:[UIApplication sharedApplication].delegate.window];
+    [[UIApplication sharedApplication].delegate.window addSubview:HUD];
+    if (result) {
+        HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"success_icon.png"]];
+        HUD.detailsLabel.text = text;
+    }
+    else {
+        HUD.customView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"failed_icon.png"]];
+        HUD.detailsLabel.text = text;
+    }
+    
+    HUD.mode = MBProgressHUDModeCustomView;
+    
+    [HUD showAnimated:YES];
+    [HUD hideAnimated:YES afterDelay:1];
+}
+
 + (void)showResultHUDWithResult:(BOOL)result andText:(NSString *)text toView:(UIView *)view;
 {
     MBProgressHUD *HUD = [[MBProgressHUD alloc] initWithView:view];

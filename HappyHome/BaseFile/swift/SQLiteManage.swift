@@ -26,7 +26,7 @@ class SQLiteManage: NSObject {
         ).first!
     
     // 数据库文件
-    var db: Connection? ;
+    var db: Connection?
     
     // 获取链接（不存在文件，则自动创建）
     private func getConnection() ->Int
@@ -36,6 +36,7 @@ class SQLiteManage: NSObject {
             
         }catch _{
             return 0;
+//            ZCMBProgressHUD.showResultHUDWithResult(true, andText: "数据库建立错误!")
         }
         return 1;
     }
@@ -44,11 +45,8 @@ class SQLiteManage: NSObject {
     private func createTable()
     {
         print("\(path)")
-        
         createTable_Record()
-        
         createTable_PKRecord()
-        
         createTable_User()
     }
     
@@ -63,7 +61,6 @@ class SQLiteManage: NSObject {
         let nickname = Expression<String?>("nickname")
         let picture = Expression<String?>("picture")
         let englishTestNumber = Expression<Int?>("englishTestNumber")
-
         do
         {
             try db!.run(user.create(ifNotExists: true) { t in     // CREATE TABLE "record" (
@@ -77,7 +74,7 @@ class SQLiteManage: NSObject {
                 })
             
         }catch _{
-            
+//            ZCMBProgressHUD.showResultHUDWithResult(true, andText: "数据库建立错误!")
         }
     }
     

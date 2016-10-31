@@ -30,10 +30,7 @@ class TrainingViewController: BaseViewController,UICollectionViewDelegate {
     
     func initfaceView(){
         self.title = "练习"
-        
-        
-        
-        
+
         let kingButton = UIButton()
         kingButton.frame = CGRectMake(0, 0, 100, 44)
         kingButton.setTitle(DistrictManageModel.sharedManager.selectDistrict?.name, forState: .Normal)

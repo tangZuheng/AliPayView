@@ -7,6 +7,7 @@
 //
 
 import UIKit
+//import UMMobClick
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,11 +19,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidFinishLaunching(application: UIApplication) {
         
         self.window = UIWindow()
-//        self.window?.frame = UIScreen.mainScreen().bounds
+        self.window?.frame = UIScreen.mainScreen().bounds
         self.window?.backgroundColor = UIColor.whiteColor()
-//        self._loadViewCoontroller()
         self.window?.rootViewController = MainViewController()
-//        self.window?.makeKeyAndVisible()
+        self.window?.makeKeyAndVisible()
+        
+        UMAnalyticsConfig.sharedInstance().appKey = "58160d924544cb7fc4002497"
+        UMAnalyticsConfig.sharedInstance().channelId = "test"
+        
+        MobClick.startWithConfigure(UMAnalyticsConfig.sharedInstance())
+        MobClick.setLogEnabled(true)
     }
 
     func applicationWillResignActive( application: UIApplication) {

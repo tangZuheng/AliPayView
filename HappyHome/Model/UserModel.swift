@@ -31,7 +31,13 @@ class UserModel: HandyJSON {
     }
     
     var selectLanguage:Int!                     //1为中文,2为英语
-    
+    {
+        didSet {
+            if oldValue != nil && oldValue != selectLanguage {
+                NSNotificationCenter.defaultCenter().postNotificationName(UpdateLanguageNotification, object: nil)
+            }
+        }
+    }
     var englishTestNumber:Int! = 0              //英语测试次数
     
     var isLogin:Bool = false                    //是否登录

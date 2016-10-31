@@ -240,7 +240,7 @@ class RegisterViewController: BaseViewController {
             if ConfirmMobileNumber.isPhoneNumber(usernameField.text!)
             {
                 self.startMBProgressHUD()
-                NetWorkingManager.sharedManager.registerSendCode(usernameField.text!, completion: { (retObject, error) in
+                NetWorkingManager.sharedManager.registerSendCode(usernameField.text!,type: 1, completion: { (retObject, error) in
                     self.stopMBProgressHUD()
                     if error == nil {
                         self.isCounting = true

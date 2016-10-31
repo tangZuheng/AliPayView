@@ -39,20 +39,20 @@ class MainViewController: UIViewController {
         englishBtn.setImage(UIImage.init(named: "homepage_eng"), forState: .Normal)
         self.view .addSubview(englishBtn)
         englishBtn.snp_makeConstraints { (make) -> Void in
-            make.bottom.equalTo(self.view).offset(-65)
+            make.bottom.equalTo(self.view).offset(-65*SCREEN_SCALE)
             make.centerX.equalToSuperview()
         }
         
         let chinaBtn = UIButton()
         chinaBtn.setImage(UIImage.init(named: "homepage_china"), forState: .Normal)
-
         self.view .addSubview(chinaBtn)
         chinaBtn.snp_makeConstraints { (make) -> Void in
-            make.bottom.equalTo(englishBtn.snp_top).offset(-15)
+            make.bottom.equalTo(englishBtn.snp_top).offset(-15*SCREEN_SCALE)
             make.centerX.equalToSuperview()
         }
         chinaBtn.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
             UserModel.sharedUserModel.selectLanguage = 1
+            
             self.presentViewController(ControllerManager.sharedManager().rootViewController!, animated: true, completion: {
                 
             })

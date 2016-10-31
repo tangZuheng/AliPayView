@@ -22,17 +22,6 @@ class MainTabBarController: UITabBarController,UIGestureRecognizerDelegate {
         self.initializeDataSource()
         self.initializeAppearance()
         
-//        for item in self.tabBar.items! {
-//            item.imageInsets = UIEdgeInsetsMake(-2, 0, 2, 0)
-//        }
-//        UITabBarItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName : RGB(108, G: 108, B: 108)], forState: .Normal)
-//        UITabBarItem.appearance().setTitleTextAttributes([NSFontAttributeName : UIFont.systemFontOfSize(9)], forState: .Normal)
-//        UITabBarItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName : RGB(237, G: 46, B: 46)], forState: .Selected)
-//        UITabBarItem.appearance().setTitleTextAttributes([NSFontAttributeName : UIFont.systemFontOfSize(9)], forState: .Selected)
-//     
-//        let vcImages = NSArray.init(array:["听听.png", "练习.png", "PK.png", "评委.png","我的.png"]);
-//        let vcSelectedImages = NSArray.init(array:["听听-亮.png", "练习-亮.png", "PK-亮.png", "评委-亮.png","我的-亮.png"]);
-        
         var count:Int = 0;
         let items = self.tabBar.items
         for item in items! as [UITabBarItem] {
@@ -83,6 +72,7 @@ class MainTabBarController: UITabBarController,UIGestureRecognizerDelegate {
         rootVC.tabBarItem.title = title
         rootVC.tabBarItem.image = UIImage.init(named: img)
         rootVC.tabBarItem.selectedImage = UIImage.init(named: selImg)
+//        rootVC.popoverPresentationController?.sourceView = 
         let navvc = UINavigationController.init(rootViewController: rootVC)
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         navvc.interactivePopGestureRecognizer!.enabled = true

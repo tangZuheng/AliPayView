@@ -24,6 +24,8 @@ typedef void (^completionBlock)(void);
 //结束加载MBProgressHUD
 + (void)stopMBProgressHUD:(UIView *)view;
 
++ (void)showResultHUDWithResult:(BOOL)result andText:(NSString *)text;
+
 + (void)showResultHUDWithResult:(BOOL)result andText:(NSString *)text toView:(UIView *)view;
 
 + (void)showResultHUDWithResult:(BOOL)result andText:(NSString *)text toView:(UIView *)view andSecond:(int)second completionBlock:(completionBlock)completion;

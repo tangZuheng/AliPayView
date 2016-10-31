@@ -178,6 +178,54 @@ class FindPasswordViewController: BaseViewController {
             make.height.equalTo(35)
             make.centerX.equalTo(self.view)
         }
+        
+        
+        sendButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
+            if ConfirmMobileNumber.isPhoneNumber(usernameField.text!)
+            {
+                self.startMBProgressHUD()
+                NetWorkingManager.sharedManager.registerSendCode(usernameField.text!,type: 2, completion: { (retObject, error) in
+                    self.stopMBProgressHUD()
+                    if error == nil {
+                        self.isCounting = true
+                    }
+                    else {
+                        self.showFailHUDWithText(error!.localizedDescription)
+                    }
+                })
+            }
+            else {
+                self.showFailHUDWithText("请输入正确的手机号码!")
+            }
+        }
+        
+        commitButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
+            if !ConfirmMobileNumber.isPhoneNumber(usernameField.text!){
+                self.showFailHUDWithText("请输入正确的手机号码!")
+                return
+            }
+            if codeField.text?.characters.count == 0 {
+                self.showFailHUDWithText("请输入正确的验证码!")
+                return
+            }
+            if !(passwordField.text?.characters.count >= 6 && passwordField.text?.characters.count <= 16) {
+                self.showFailHUDWithText("请输入6-16位密码")
+                return
+            }
+            
+            self.startMBProgressHUD()
+            NetWorkingManager.sharedManager.LoginForgetPass(usernameField.text!, code: codeField.text!, newpwd: passwordField.text!, completion: { (retObject, error) in
+                self.stopMBProgressHUD()
+                if error == nil {
+                    ZCMBProgressHUD.showResultHUDWithResult(true, andText: retObject?.valueForKey("message") as! String, toView: self.view, andSecond: 2, completionBlock: {
+                        self.navigationController?.popViewControllerAnimated(true)
+                    })
+                }
+                else {
+                    self.showFailHUDWithText(error!.localizedDescription)
+                }
+            })
+        }
     }
     
     func updateTime(timer: NSTimer) {

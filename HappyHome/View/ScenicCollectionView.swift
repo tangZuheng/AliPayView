@@ -9,6 +9,7 @@
 import UIKit
 import MJRefresh
 import HandyJSON
+import ReactiveCocoa
 
 class ScenicCollectionView: UIView,UICollectionViewDataSource {
     
@@ -48,6 +49,11 @@ class ScenicCollectionView: UIView,UICollectionViewDataSource {
         collectionView.mj_header.beginRefreshing()
         
         NSNotificationCenter.defaultCenter().rac_addObserverForName(UpdateDistrictNotification, object: nil).subscribeNext { _ in
+            self.dataArr.removeAllObjects()
+            self.collectionView.mj_header.beginRefreshing()
+        }
+        
+        NSNotificationCenter.defaultCenter().rac_addObserverForName(UpdateLanguageNotification, object: nil).subscribeNext { _ in
             self.dataArr.removeAllObjects()
             self.collectionView.mj_header.beginRefreshing()
         }

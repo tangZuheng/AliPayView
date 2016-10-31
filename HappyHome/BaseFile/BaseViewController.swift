@@ -14,9 +14,9 @@ class BaseViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.LightContent, animated: true)
+        UIApplication.sharedApplication().setStatusBarStyle(UIStatusBarStyle.Default, animated: true)
         
-        self.navigationController!.navigationBar.tintColor = colorForNavigationBarTitle()
+        self.navigationController!.navigationBar.tintColor = colorForNavigationTint()
         self.navigationController!.navigationBar.barTintColor = UIColor.whiteColor()
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: colorForNavigationBarTitle()]
         self.navigationController!.navigationBar.alpha = 1
@@ -32,6 +32,7 @@ class BaseViewController: UIViewController {
     //跳转到UIViewController
     func pushToNextController(nextVC:UIViewController) -> Void {
         let goback_item = UIBarButtonItem.init(title: "", style: .Plain, target: nil, action: nil)
+        goback_item.width = 3
         self.navigationItem.backBarButtonItem = goback_item
         nextVC.hidesBottomBarWhenPushed = true
         self.view.endEditing(true)

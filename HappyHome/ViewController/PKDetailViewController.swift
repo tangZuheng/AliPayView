@@ -42,7 +42,7 @@ class PKDetailViewController: BaseViewController {
     
     override func viewWillDisappear(animated: Bool) {
         
-        self.navigationController!.navigationBar.tintColor = colorForNavigationBarTitle()
+        self.navigationController!.navigationBar.tintColor = colorForNavigationTint()
         self.navigationController!.navigationBar.barTintColor = UIColor.whiteColor()
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: colorForNavigationBarTitle()]
         self.navigationController!.navigationBar.alpha = 1

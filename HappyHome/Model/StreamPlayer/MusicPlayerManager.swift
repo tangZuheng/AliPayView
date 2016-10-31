@@ -267,6 +267,7 @@ extension MusicPlayerManager {
         if musicURLList == nil {
             musicURLList = [URL]
         } else {
+            musicURLList!.removeAll()
             musicURLList!.insert(URL, atIndex: 0)
         }
     }
@@ -358,7 +359,24 @@ extension MusicPlayerManager {
             let asset = AVURLAsset(URL: playURL)
             isLocationMusic = false
             currentAsset = asset
-            asset.resourceLoader.setDelegate(resourceLoader, queue: dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0))
+            resourceLoader.finishLoadingHandler = {
+                (task,error) in
+                guard error == nil else {return}
+                if self.status != .Play{
+//                    self.endPlay()
+                    self.play(self.currentURL,callBack: self.self.progressCallBack)
+                }
+            }
+//            resourceLoader.finishLoadingHandler = {
+//                (task,error) in
+//                guard error != nil else {return}
+//                self.endPlay()
+//                let path = StreamAudioConfig.audioDicPath + "/tmp.caf"
+//                let url = NSURL.init(fileURLWithPath: path)
+//                self.play(self.getLocationFilePath(url))
+//            }
+//            asset.resourceLoader.setDelegate(resourceLoader, queue: dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0))
+            asset.resourceLoader.setDelegate(resourceLoader, queue: dispatch_get_main_queue())
             let item = AVPlayerItem(asset: asset)
             return item
         }
@@ -426,6 +444,9 @@ extension MusicPlayerManager {
             guard let timeRange = array.first?.CMTimeRangeValue else {return}  //  缓冲时间范围
             let totalBuffer = CMTimeGetSeconds(timeRange.start) + CMTimeGetSeconds(timeRange.duration)    //  当前缓冲长度
             tmpTime = CGFloat(totalBuffer)
+//            if totalBuffer > 0 {
+//                playerPlay()
+//            }
             let tmpProgress = tmpTime / playDuration
             progressCallBack?(tmpProgress: Float(tmpProgress), playProgress: nil)
         }
@@ -446,7 +467,7 @@ extension MusicPlayerManager {
         //  KVO监听正在播放的对象状态变化
         currentItem.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions.New, context: nil)
         //  监听player播放情况
-        playerStatusObserver = player?.addPeriodicTimeObserverForInterval(CMTimeMake(1, 1), queue: dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), usingBlock: { [weak self] (time) in
+        playerStatusObserver = player?.addPeriodicTimeObserverForInterval(CMTimeMake(1, 1), queue: dispatch_get_main_queue(), usingBlock: { [weak self] (time) in
             guard let `self` = self else {return}
             //  获取当前播放时间
             self.status = .Play
@@ -525,6 +546,7 @@ extension MusicPlayerManager {
         case .NewDeviceAvailable:
             break
         case .OldDeviceUnavailable:
+            NSNotificationCenter.defaultCenter().postNotificationName(PauseAllPlayingNotification, object: nil)
             break
         case .CategoryChange:
             break

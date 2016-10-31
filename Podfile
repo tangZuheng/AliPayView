@@ -13,8 +13,8 @@ pod 'LTMorphingLabel'
 pod 'SQLite.swift', '~> 0.10.1'
 pod 'HandyJSON', '0.4.0'
 pod 'SDWebImage', '~>3.8'
-#pod 'CNPPopupController'
 pod 'CXAlertView'
+pod 'UMengAnalytics'
 
 end
 

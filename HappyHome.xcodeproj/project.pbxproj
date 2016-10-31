@@ -72,6 +72,8 @@
 		6DD6F48B1DAAA09A006B652E /* FiveStarCellCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6F48A1DAAA09A006B652E /* FiveStarCellCell.swift */; };
 		6DD6F48D1DAB8F77006B652E /* MyTopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6F48C1DAB8F77006B652E /* MyTopViewController.swift */; };
 		6DD6F48F1DAB9090006B652E /* MyTopCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6F48E1DAB9090006B652E /* MyTopCell.swift */; };
+		6DD7D5D41DC79C87001FB0E0 /* JPDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD7D5D11DC79C87001FB0E0 /* JPDownloadManager.m */; };
+		6DD7D5D51DC79C87001FB0E0 /* JPVideoURLAssetResourceLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD7D5D31DC79C87001FB0E0 /* JPVideoURLAssetResourceLoader.m */; };
 		6DDAC7901DC0A49B00EF5C86 /* UpdatePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDAC78F1DC0A49B00EF5C86 /* UpdatePasswordViewController.swift */; };
 		6DF07F2C1DA6994200238FB7 /* UserHeardeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF07F2B1DA6994200238FB7 /* UserHeardeView.swift */; };
 		6DF07F2E1DA69C4500238FB7 /* MyTrainingRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF07F2D1DA69C4500238FB7 /* MyTrainingRecordViewController.swift */; };
@@ -179,6 +181,10 @@
 		6DD6F48A1DAAA09A006B652E /* FiveStarCellCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiveStarCellCell.swift; sourceTree = "<group>"; };
 		6DD6F48C1DAB8F77006B652E /* MyTopViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTopViewController.swift; sourceTree = "<group>"; };
 		6DD6F48E1DAB9090006B652E /* MyTopCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTopCell.swift; sourceTree = "<group>"; };
+		6DD7D5D01DC79C87001FB0E0 /* JPDownloadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPDownloadManager.h; sourceTree = "<group>"; };
+		6DD7D5D11DC79C87001FB0E0 /* JPDownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPDownloadManager.m; sourceTree = "<group>"; };
+		6DD7D5D21DC79C87001FB0E0 /* JPVideoURLAssetResourceLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPVideoURLAssetResourceLoader.h; sourceTree = "<group>"; };
+		6DD7D5D31DC79C87001FB0E0 /* JPVideoURLAssetResourceLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPVideoURLAssetResourceLoader.m; sourceTree = "<group>"; };
 		6DDAC78F1DC0A49B00EF5C86 /* UpdatePasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdatePasswordViewController.swift; sourceTree = "<group>"; };
 		6DF07F2B1DA6994200238FB7 /* UserHeardeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserHeardeView.swift; sourceTree = "<group>"; };
 		6DF07F2D1DA69C4500238FB7 /* MyTrainingRecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTrainingRecordViewController.swift; sourceTree = "<group>"; };
@@ -286,6 +292,10 @@
 			isa = PBXGroup;
 			children = (
 				6D0A7B6C1D9FA80000ACC29E /* HappyHome-Bridging-Header.h */,
+				6DD7D5D01DC79C87001FB0E0 /* JPDownloadManager.h */,
+				6DD7D5D11DC79C87001FB0E0 /* JPDownloadManager.m */,
+				6DD7D5D21DC79C87001FB0E0 /* JPVideoURLAssetResourceLoader.h */,
+				6DD7D5D31DC79C87001FB0E0 /* JPVideoURLAssetResourceLoader.m */,
 				6D0A7B701D9FA82400ACC29E /* NSData+Send.h */,
 				6D0A7B711D9FA82400ACC29E /* NSData+Send.m */,
 				6D0A7B721D9FA82400ACC29E /* NSString+Send.h */,
@@ -540,9 +550,9 @@
 				TargetAttributes = {
 					6D0A7B011D9D492200ACC29E = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = W489MY376R;
+						DevelopmentTeam = 5SQ3T49ZW4;
 						LastSwiftMigration = 0800;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					6D0A7B151D9D492200ACC29E = {
 						CreatedOnToolsVersion = 8.0;
@@ -662,6 +672,7 @@
 				6D27DCFD1DA5174600815E0B /* CountdownView.swift in Sources */,
 				6D2EF5461DB67C310032932C /* RequestTask.swift in Sources */,
 				6DF07F311DA69FAA00238FB7 /* MyTrainingRecordCell.swift in Sources */,
+				6DD7D5D41DC79C87001FB0E0 /* JPDownloadManager.m in Sources */,
 				6D0A7B581D9F809F00ACC29E /* ControllerManager.swift in Sources */,
 				6DD6F48D1DAB8F77006B652E /* MyTopViewController.swift in Sources */,
 				6D0A7B7B1D9FA82400ACC29E /* NSString+Send.m in Sources */,
@@ -679,6 +690,7 @@
 				6DF9A8071DA5286B006936E6 /* AudioRecorderManage.swift in Sources */,
 				6D671AA81DA9F39A0070BDC9 /* JudgeDetailViewController.swift in Sources */,
 				6D8EBD691DA3A18D00F0AD07 /* SpotsCollectionViewCell.swift in Sources */,
+				6DD7D5D51DC79C87001FB0E0 /* JPVideoURLAssetResourceLoader.m in Sources */,
 				6D0A7B381D9D4EDF00ACC29E /* NetWorkingManager.swift in Sources */,
 				6DDAC7901DC0A49B00EF5C86 /* UpdatePasswordViewController.swift in Sources */,
 				6DD6F48B1DAAA09A006B652E /* FiveStarCellCell.swift in Sources */,
@@ -875,15 +887,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = W489MY376R;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = 5SQ3T49ZW4;
 				INFOPLIST_FILE = HappyHome/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.happyHome.goodGuide;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sanquan.sfa;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "2b786331-3792-4a35-a366-9491054307d4";
+				PROVISIONING_PROFILE_SPECIFIER = SanquanSFA_IN_HOUSE;
 				SWIFT_OBJC_BRIDGING_HEADER = "HappyHome/BaseFile/OBJ_C/HappyHome-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 2.3;
@@ -896,15 +908,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = W489MY376R;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = 5SQ3T49ZW4;
 				INFOPLIST_FILE = HappyHome/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.happyHome.goodGuide;
+				PRODUCT_BUNDLE_IDENTIFIER = com.sanquan.sfa;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "2b786331-3792-4a35-a366-9491054307d4";
+				PROVISIONING_PROFILE_SPECIFIER = SanquanSFA_IN_HOUSE;
 				SWIFT_OBJC_BRIDGING_HEADER = "HappyHome/BaseFile/OBJ_C/HappyHome-Bridging-Header.h";
 				SWIFT_VERSION = 2.3;
 			};

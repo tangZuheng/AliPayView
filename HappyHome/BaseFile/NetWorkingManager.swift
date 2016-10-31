@@ -308,9 +308,10 @@ class NetWorkingManager: NSObject {
     }
     
     //发送验证码
-    func registerSendCode(phonenumber:String,completion:(retObject: NSDictionary?, error: NSError?)->()) {
+    func registerSendCode(phonenumber:String,type:Int,completion:(retObject: NSDictionary?, error: NSError?)->()) {
         let parameters:[String: AnyObject] = [
-            "phonenumber": phonenumber
+            "phonenumber": phonenumber,
+            "type":type
         ]
         self.HTTPWithUrl(HTTP_METHOD_GET, url: register_send_url, parameters: parameters, background: false) { (retObject, error) in
             completion(retObject: retObject,error: error)
@@ -352,6 +353,43 @@ class NetWorkingManager: NSObject {
             completion(retObject: retObject,error: error)
         }
     }
+    
+    //举报
+    func JudgeReport(soundid:Int,pksoundid:Int, content:String,completion:(retObject: NSDictionary?, error: NSError?)->()) {
+        let parameters:[String: AnyObject]  = [
+            "content": content,
+            "soundid":soundid,
+            "pksoundid":pksoundid,
+            "uid":UserModel.sharedUserModel.uid
+        ]
+        self.HTTPWithUrl(HTTP_METHOD_GET, url: report_url, parameters: parameters, background: false) { (retObject, error) in
+            completion(retObject: retObject,error: error)
+        }
+    }
+    
+    //上述
+    func JudgeReportAppeal(soundid:Int,completion:(retObject: NSDictionary?, error: NSError?)->()) {
+        let parameters:[String: AnyObject]  = [
+            "soundid": soundid
+        ]
+        self.HTTPWithUrl(HTTP_METHOD_GET, url: report_appeal_url, parameters: parameters, background: false) { (retObject, error) in
+            completion(retObject: retObject,error: error)
+        }
+    }
+    
+    //忘记密码
+    func LoginForgetPass(phonenumber:String,code:String,newpwd:String,completion:(retObject: NSDictionary?, error: NSError?)->()) {
+        let parameters:[String: AnyObject]  = [
+            "phonenumber": phonenumber,
+            "code": code,
+            "newpwd": newpwd
+        ]
+        self.HTTPWithUrl(HTTP_METHOD_GET, url: login_forget_url, parameters: parameters, background: false) { (retObject, error) in
+            completion(retObject: retObject,error: error)
+        }
+    }
+    
+    
 }
 
 

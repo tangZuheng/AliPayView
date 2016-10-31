@@ -54,6 +54,10 @@ func colorForNavigationBarTitle() -> UIColor {
     return RGB(0x282828)
 }
 
+func colorForNavigationTint() -> UIColor {
+    return RGB(0x666666)
+}
+
 func colorForBackground() -> UIColor {
     return RGB(0xf5f5f5)
 }
