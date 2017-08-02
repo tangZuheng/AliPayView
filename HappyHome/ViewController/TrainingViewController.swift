@@ -63,8 +63,4 @@ class TrainingViewController: BaseViewController,UICollectionViewDelegate {
         self.pushToNextController(vc)
     }
     
-    
-    
-    
-    
 }

@@ -120,7 +120,7 @@ class UserHeardeView: UIView {
             loginButton?.hidden = false
             registerButton?.hidden = false
             nicknameLabel.hidden = true
-            userHeadButton?.setBackgroundImage(placeholderHead, forState: .Normal)
+            userHeadButton?.setImage(placeholderHead, forState: .Normal)
         }
     }
 }

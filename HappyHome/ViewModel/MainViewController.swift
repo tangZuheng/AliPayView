@@ -58,11 +58,28 @@ class MainViewController: UIViewController {
             })
         }
         englishBtn.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
-            UserModel.sharedUserModel.selectLanguage = 0
-            self.presentViewController(ControllerManager.sharedManager().rootViewController!, animated: true, completion: {
-                
-            })
+            if EnglishTestManage.shareSingle().isPass {
+                UserModel.sharedUserModel.selectLanguage = 0
+                self.presentViewController(ControllerManager.sharedManager().rootViewController!, animated: true, completion: {
+                    
+                })
+            }
+            else {
+                if EnglishTestManage.shareSingle().englishTestNumber > 0 {
+                    let vc = EnglishTestViewController()
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+                else {
+                    let view = UIAlertView.init(title: "", message: "Sorry,you got only three chances a day", delegate: nil, cancelButtonTitle: "OK")
+                    view.show()
+                }
+            }
         }
+    }
+    func navigationControllerWithRootVC(rootVC:UIViewController) -> UINavigationController {
+        let navvc = UINavigationController.init(rootViewController: rootVC)
+        navvc.interactivePopGestureRecognizer!.enabled = true
+        return navvc
     }
 
 }

@@ -9,10 +9,23 @@
 import UIKit
 import AVFoundation
 
-class AudioRecorderManage: NSObject {
+//@objc public protocol AudioRecorderManageDelegate: NSObjectProtocol {
+//    /**
+//     *  播放完成
+//     *
+//     *  @param audioPlayer 音频播放器
+//     */
+//    optional func didAudioPlayerFinishPlay(audioPlayer :AVAudioPlayer)
+//}
+
+class AudioRecorderManage: NSObject,AVAudioRecorderDelegate,AVAudioPlayerDelegate {
+    
+    var delegate:ZHAudioPlayerDelegate?
     
     var audioRecorder:AVAudioRecorder!
     var audioPlayer:AVAudioPlayer!
+    
+    var state:Int = 0  //0=开始前 1=开始录音 2=暂停录音 3=结束录音
     
     //录音名
     var recordingName:String!
@@ -40,16 +53,13 @@ class AudioRecorderManage: NSObject {
     }
     
     override init() {
-        
         super.init()
-        
         let audioSession = AVAudioSession.sharedInstance()
         do {
             try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
             try audioRecorder = AVAudioRecorder(URL: self.directoryURL()!,
                                                 settings: recordSettings)//初始化实例
-//            audioRecorder.deviceCurrentTime = 180
-//            audioRecorder.prepareToRecord()//准备录音
+//            audioRecorder.delegate = self
         } catch {
         }
     }
@@ -60,22 +70,34 @@ class AudioRecorderManage: NSObject {
             let audioSession = AVAudioSession.sharedInstance()
             do {
                 try audioSession.setActive(true)
-                audioRecorder.recordForDuration(610)
+                audioRecorder.record()
+                self.state = 1
+                configBreakObserver()
                 print("record!")
             } catch {
+                
             }
         }
+    }
+    
+    func pauseRecord() {
+        //暂停录音
+        if audioRecorder.recording {
+            audioRecorder.pause()
+        }
+        self.state = 2
     }
     
     func stopRecord() {
         //停止录音
         audioRecorder.stop()
+        self.state = 3
         let audioSession = AVAudioSession.sharedInstance()
-        
         do {
             try audioSession.setActive(false)
             print("stop!!")
-        } catch {
+            
+            } catch {
         }
     }
     
@@ -89,9 +111,11 @@ class AudioRecorderManage: NSObject {
                     try audioPlayer = AVAudioPlayer(contentsOfURL: audioRecorder.url)
                 }
                 audioPlayer.play()
+                audioPlayer.delegate = self
                 configBreakObserver()
                 print("play!!")
             } catch {
+                
             }
         }
     }
@@ -110,11 +134,54 @@ class AudioRecorderManage: NSObject {
         }
     }
     
+    func deleteRecording() {
+        //删除录音
+        
+        if self.audioRecorder.recording {
+            self.stopRecord()
+        }
+        if self.audioPlayer != nil {
+            if self.audioPlayer.playing {
+                self.pausePlaying()
+            }
+        }
+        
+        let fileManager = NSFileManager.defaultManager()
+        do {
+            try fileManager.removeItemAtURL(audioRecorder.url)
+        }
+        catch _{
+            
+        }
+
+        
+    }
     
+//    func audioRecorderBeginInterruption(recorder: AVAudioRecorder) {
+//        audioRecorder.pause()
+//    }
+//    
+//    func audioPlayerEndInterruption(player: AVAudioPlayer, withOptions flags: Int) {
+//        audioRecorder.record()
+//    }
+    
+    func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
+        if self.delegate != nil {
+            self.delegate?.didAudioPlayerFinishPlay?(player)
+        }
+    }
+    
+    
+}
+
+extension AudioRecorderManage {
     //  监听打断
-    private func configBreakObserver() {
+    func configBreakObserver() {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleInterruption), name: AVAudioSessionInterruptionNotification, object: AVAudioSession.sharedInstance())
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(handleRouteChange), name: AVAudioSessionRouteChangeNotification, object: AVAudioSession.sharedInstance())
+    }
+    func removeNotification()  {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     //  来电打断
@@ -123,9 +190,21 @@ class AudioRecorderManage: NSObject {
         guard let info = noti.userInfo, typenumber = info[AVAudioSessionInterruptionTypeKey]?.unsignedIntegerValue, type = AVAudioSessionInterruptionType(rawValue: typenumber) else { return }
         switch type {
         case .Began:
-            pause()
+            if self.state == 1{
+                self.pauseRecord()
+            }
+            else {
+                NSNotificationCenter.defaultCenter().postNotificationName(PauseAllPlayingNotification, object: nil)
+            }
+            break
         case .Ended:
-            startPlaying()
+            if self.state == 2 {
+                let view = CountdownView()
+                view.show(3, andBlock: { (UIView) in
+                    self.startRecord()
+                })
+            }
+            break
         }
     }
     
@@ -162,19 +241,19 @@ class AudioRecorderManage: NSObject {
             break
         }
     }
-    
+
 }
 
 // MARK: - for AVAudioSession
-extension AudioRecorderManage {
-    
-    private func configAudioSession() {
-        do {
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
-            try AVAudioSession.sharedInstance().setActive(true)
-        } catch {
-            print("启动后台模式失败，error -- \(error)")
-        }
-    }
-
-}
+//extension AudioRecorderManage {
+//    
+//    private func configAudioSession() {
+//        do {
+//            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+//            try AVAudioSession.sharedInstance().setActive(true)
+//        } catch {
+//            print("启动后台模式失败，error -- \(error)")
+//        }
+//    }
+//
+//}

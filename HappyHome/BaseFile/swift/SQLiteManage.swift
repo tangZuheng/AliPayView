@@ -48,6 +48,7 @@ class SQLiteManage: NSObject {
         createTable_Record()
         createTable_PKRecord()
         createTable_User()
+        createTable_EnglishTest()
     }
     
     // 创建 用户表
@@ -75,6 +76,31 @@ class SQLiteManage: NSObject {
             
         }catch _{
 //            ZCMBProgressHUD.showResultHUDWithResult(true, andText: "数据库建立错误!")
+        }
+    }
+    
+    
+    // 创建 英语测试
+    private func createTable_EnglishTest(){
+        getConnection();
+        let englishTest = Table("englishTest")
+        let id = Expression<Int64>("id")
+        let lastPassTime = Expression<NSDate?>("lastPassTime")
+        let lastTime = Expression<NSDate?>("lastTime")
+        let englishTestNumber = Expression<Int?>("englishTestNumber")
+        let lastTestid = Expression<Int?>("lastTestid")
+        
+        do
+        {
+            try db!.run(englishTest.create(ifNotExists: true) { t in     // CREATE TABLE "record" (
+                t.column(id, primaryKey: true) //     "id" INTEGER PRIMARY KEY NOT NULL,
+                t.column(lastPassTime, unique: false)
+                t.column(lastTime, unique: false)
+                t.column(englishTestNumber, unique: false)
+                t.column(lastTestid, unique: false)
+                })
+            
+        }catch _{
         }
     }
     
@@ -347,5 +373,61 @@ class SQLiteManage: NSObject {
             return nil
         }
     }
+    
+    
+    //更新英语测试的信息
+    func updateEnglishTest(englishTestManage:EnglishTestManage) {
+        let englishTest = Table("englishTest")
+        let id = Expression<Int64>("id")
+        let lastPassTime = Expression<NSDate?>("lastPassTime")
+        let lastTime = Expression<NSDate?>("lastTime")
+        let englishTestNumber = Expression<Int?>("englishTestNumber")
+        let lastTestid = Expression<Int?>("lastTestid")
+        
+        do {
+            var rowid:Int64?
+            
+            for recordValue in try db!.prepare(englishTest) {
+                rowid = recordValue.get(id)
+                break
+            }
+            if rowid == nil {
+                let insert = englishTest.insert( lastPassTime <- englishTestManage.lastPassTime,lastTime <- englishTestManage.lastTime, englishTestNumber <- englishTestManage.englishTestNumber ,lastTestid <- englishTestManage.lastTestid)
+                try rowid = db!.run(insert)
+            }
+            else {
+                let alice = englishTest.filter(id == rowid!)
+                try db!.run(alice.update(lastPassTime <- englishTestManage.lastPassTime,lastTime <- englishTestManage.lastTime,  englishTestNumber <- englishTestManage.englishTestNumber ,lastTestid <- englishTestManage.lastTestid))
+            }
+        }
+        catch _{
+        }
+    }
+    
+    //获取英语测试的信息
+    func getEnglishTest() -> EnglishTestManage?{
+        let englishTest = Table("englishTest")
+        let lastPassTime = Expression<NSDate?>("lastPassTime")
+        let lastTime = Expression<NSDate?>("lastTime")
+        let englishTestNumber = Expression<Int?>("englishTestNumber")
+        let lastTestid = Expression<Int?>("lastTestid")
+        
+        do {
+            for recordValue in try db!.prepare(englishTest) {
+                let model = EnglishTestManage.init()
+                model.lastPassTime = recordValue.get(lastPassTime)
+                model.lastTime = recordValue.get(lastTime)!
+                model.englishTestNumber = recordValue.get(englishTestNumber)!
+                model.lastTestid = recordValue.get(lastTestid)!
+                return model
+            }
+            return nil
+        }
+        catch _{
+            return nil
+        }
+    }
+    
+    
 }
 

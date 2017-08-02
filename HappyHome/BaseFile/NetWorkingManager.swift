@@ -15,6 +15,14 @@ import Result
 let HTTP_METHOD_GET   = "GET"
 let HTTP_METHOD_POST  = "POST"
 
+
+//定义一个结构体，存储认证相关信息
+//struct IdentityAndTrust {
+//    var identityRef:SecIdentity
+//    var trust:SecTrust
+//    var certArray:AnyObject
+//}
+
 class NetWorkingManager: NSObject {
     
     static let sharedManager = NetWorkingManager()
@@ -22,6 +30,89 @@ class NetWorkingManager: NSObject {
     private override init() {
         
     }
+    
+//    //获取客户端证书相关信息
+//    func extractIdentity() -> IdentityAndTrust {
+//        var identityAndTrust:IdentityAndTrust!
+//        var securityError:OSStatus = errSecSuccess
+//        
+//        let path: String = NSBundle.mainBundle().pathForResource("mykey", ofType: "p12")!
+//        let PKCS12Data = NSData(contentsOfFile:path)!
+//        let key : NSString = kSecImportExportPassphrase as NSString
+//        let options : NSDictionary = [key : "123456"] //客户端证书密码
+//        //create variable for holding security information
+//        //var privateKeyRef: SecKeyRef? = nil
+//        
+//        var items : CFArray?
+//        
+//        securityError = SecPKCS12Import(PKCS12Data, options, &items)
+//        
+//        if securityError == errSecSuccess {
+//            let certItems:CFArray = items as CFArray!;
+//            let certItemsArray:Array = certItems as Array
+//            let dict:AnyObject? = certItemsArray.first;
+//            if let certEntry:Dictionary = dict as? Dictionary<String, AnyObject> {
+//                // grab the identity
+//                let identityPointer:AnyObject? = certEntry["identity"];
+//                let secIdentityRef:SecIdentity = identityPointer as! SecIdentity!
+//                print("\(identityPointer)  :::: \(secIdentityRef)")
+//                // grab the trust
+//                let trustPointer:AnyObject? = certEntry["trust"]
+//                let trustRef:SecTrust = trustPointer as! SecTrust
+//                print("\(trustPointer)  :::: \(trustRef)")
+//                // grab the cert
+//                let chainPointer:AnyObject? = certEntry["chain"]
+//                identityAndTrust = IdentityAndTrust(identityRef: secIdentityRef,
+//                                                    trust: trustRef, certArray:  chainPointer!)
+//            }
+//        }
+//        return identityAndTrust;
+//    }
+//    
+//    // AppDelegate.swift
+//    func configureAlamofireManager() {
+//        let manager = Manager.sharedInstance
+//        manager.delegate.sessionDidReceiveChallenge = { session, challenge in
+//            //认证服务器证书
+//            if challenge.protectionSpace.authenticationMethod
+//                == NSURLAuthenticationMethodServerTrust {
+//                print("服务端证书认证！")
+//                let serverTrust:SecTrust = challenge.protectionSpace.serverTrust!
+//                let certificate = SecTrustGetCertificateAtIndex(serverTrust, 0)!
+//                let remoteCertificateData
+//                    = CFBridgingRetain(SecCertificateCopyData(certificate))!
+//                let cerPath = NSBundle.mainBundle().pathForResource("tomcat", ofType: "cer")!
+//                let cerUrl = NSURL(fileURLWithPath:cerPath)
+//                let localCertificateData = try! NSData(contentsOfURL: cerUrl)
+//                
+//                if (remoteCertificateData.isEqual(localCertificateData) == true) {
+//                    
+//                    let credential = NSURLCredential(trust: serverTrust)
+//                    challenge.sender?.useCredential(credential, forAuthenticationChallenge: challenge)
+//                    return (NSURLSessionAuthChallengeDisposition.UseCredential,
+//                            NSURLCredential(trust: challenge.protectionSpace.serverTrust!))
+//                    
+//                } else {
+//                    return (NSURLSessionAuthChallengeDisposition.CancelAuthenticationChallenge, nil)
+//                }
+//            }
+//            //认证客户端证书
+//            else if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodClientCertificate {
+//                print("客户端证书认证！")
+//                //获取客户端证书相关信息
+//                let identityAndTrust:IdentityAndTrust = self.extractIdentity();
+//                let urlCredential:NSURLCredential = NSURLCredential.init(identity: identityAndTrust.identityRef, certificates: identityAndTrust.certArray as? [AnyObject], persistence: .ForSession)
+//                return (NSURLSessionAuthChallengeDisposition.UseCredential, urlCredential);
+//            }
+//            // 其它情况（不接受认证）
+//            else {
+//                print("其它情况（不接受认证）")
+//                return (NSURLSessionAuthChallengeDisposition.CancelAuthenticationChallenge, nil)
+//            }
+//            
+//        }
+//    }
+
     
     /*!
       @param method  请求方式
@@ -35,6 +126,7 @@ class NetWorkingManager: NSObject {
     func HTTPWithUrl(method: String,url:URLStringConvertible,parameters:[String: AnyObject]?,background:Bool,completion:(retObject: NSDictionary?, error: NSError?)->()) {
         
         print("--------------------------------------------------\n发送参数%@\n%@\n--------------------------------------------------",url,parameters)
+        
         if method == HTTP_METHOD_GET {
             Alamofire.request(.GET, url, parameters: parameters).responseData
                 {
@@ -370,7 +462,8 @@ class NetWorkingManager: NSObject {
     //上述
     func JudgeReportAppeal(soundid:Int,completion:(retObject: NSDictionary?, error: NSError?)->()) {
         let parameters:[String: AnyObject]  = [
-            "soundid": soundid
+            "soundid": soundid,
+            "uid": UserModel.sharedUserModel.uid
         ]
         self.HTTPWithUrl(HTTP_METHOD_GET, url: report_appeal_url, parameters: parameters, background: false) { (retObject, error) in
             completion(retObject: retObject,error: error)
@@ -389,7 +482,59 @@ class NetWorkingManager: NSObject {
         }
     }
     
+    //获取英语测试题
+    func GetEnglishTest(testid:Int,completion:(retObject: NSDictionary?, error: NSError?)->()) {
+        let parameters:[String: AnyObject]  = [
+            "testid": testid
+        ]
+        self.HTTPWithUrl(HTTP_METHOD_GET, url: englishtest_url, parameters: parameters, background: false) { (retObject, error) in
+            completion(retObject: retObject,error: error)
+        }
+    }
     
+    //获取消息列表
+    func GetMessageList(page:Int,completion:(retObject: NSDictionary?, error: NSError?)->()) {
+        let parameters:[String: AnyObject]  = [
+            "uid":UserModel.sharedUserModel.uid,
+//            "uid":8,
+            "page":page
+        ]
+        self.HTTPWithUrl(HTTP_METHOD_GET, url: smessage_url, parameters: parameters, background: false) { (retObject, error) in
+            completion(retObject: retObject,error: error)
+        }
+    }
+    
+    //清空消息列表
+    func CleanMessageList(completion:(retObject: NSDictionary?, error: NSError?)->()) {
+        let parameters:[String: AnyObject]  = [
+            "uid":UserModel.sharedUserModel.uid
+        ]
+        self.HTTPWithUrl(HTTP_METHOD_GET, url: smessage_clean_url, parameters: parameters, background: false) { (retObject, error) in
+            completion(retObject: retObject,error: error)
+        }
+    }
+    
+    //提交建议
+    func SubmitSuggest(content:String,completion:(retObject: NSDictionary?, error: NSError?)->()) {
+        let parameters:[String: AnyObject]  = [
+            "uid":UserModel.sharedUserModel.uid,
+            "content":content
+        ]
+        self.HTTPWithUrl(HTTP_METHOD_GET, url: submitSuggest_url, parameters: parameters, background: false) { (retObject, error) in
+            completion(retObject: retObject,error: error)
+        }
+    }
+ 
+    //修改昵称
+    func UpdateNickname(nickname:String,completion:(retObject: NSDictionary?, error: NSError?)->()) {
+        let parameters:[String: AnyObject]  = [
+            "uid":UserModel.sharedUserModel.uid,
+            "nickname":nickname
+        ]
+        self.HTTPWithUrl(HTTP_METHOD_GET, url: login_updateNickname_url, parameters: parameters, background: false) { (retObject, error) in
+            completion(retObject: retObject,error: error)
+        }
+    }
 }
 
 

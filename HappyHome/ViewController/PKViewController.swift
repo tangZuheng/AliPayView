@@ -32,7 +32,7 @@ class PKViewController: BaseViewController,UICollectionViewDelegate {
     func initfaceView(){
         self.title = "PK"
         
-        let editButton = UIBarButtonItem.init(title: "PK历史", style: .Plain, target: self, action: #selector(PKViewController.YesterdayPKButtonClick))
+        let editButton = UIBarButtonItem.init(title: "PK记录", style: .Plain, target: self, action: #selector(PKViewController.YesterdayPKButtonClick))
         editButton.setTitleTextAttributes([NSForegroundColorAttributeName: colorForNavigationBarTitle(),NSFontAttributeName:UIFont.systemFontOfSize(14)], forState: .Normal)
         self.navigationItem.leftBarButtonItem =  editButton
 

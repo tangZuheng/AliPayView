@@ -96,7 +96,7 @@ class PKHistoryViewController: BaseViewController,UITableViewDataSource,UITableV
             make.left.equalToSuperview()
         }
         
-        myTopButton.setTitle("我的TOP5", forState: .Normal)
+        myTopButton.setTitle("我的TOP10", forState: .Normal)
         myTopButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         myTopButton.titleLabel?.font = UIFont.systemFontOfSize(14)
         footerView.addSubview(myTopButton)
@@ -136,16 +136,17 @@ class PKHistoryViewController: BaseViewController,UITableViewDataSource,UITableV
         NetWorkingManager.sharedManager.getRecordList { (retObject, error) in
             self.tableView.mj_header.endRefreshing()
             if error == nil {
+                self.dataArr.removeAllObjects()
                 if retObject?.objectForKey("data")! is NSArray
                 {
                     let arr = retObject?.objectForKey("data")! as! NSArray
-                    self.dataArr.removeAllObjects()
                     for item in arr {
                         let model = JSONDeserializer<PKHistoryModel>.deserializeFrom(item as! NSDictionary)
                         self.dataArr.addObject(model!)
                     }
-                    self.tableView.reloadData()
+//                    self.tableView.reloadData()
                 }
+                self.tableView.reloadData()
                 self.tableView.tableViewDisplayWitMsg("暂时没有PK记录，赶紧去PK吧~~~", rowCount: self.dataArr.count)
             }
             else {

@@ -11,8 +11,6 @@ import AVFoundation
 import MediaPlayer
 
 public class MusicPlayerManager: NSObject {
-    
-    
     //  public var status
     
     public var currentURL: NSURL? {
@@ -363,8 +361,8 @@ extension MusicPlayerManager {
                 (task,error) in
                 guard error == nil else {return}
                 if self.status != .Play{
-//                    self.endPlay()
-                    self.play(self.currentURL,callBack: self.self.progressCallBack)
+                    let callback = self.progressCallBack
+                    self.play(self.currentURL,callBack: callback)
                 }
             }
 //            resourceLoader.finishLoadingHandler = {
@@ -399,7 +397,7 @@ extension MusicPlayerManager {
         resourceLoader.cancel()
         currentAsset?.resourceLoader.setDelegate(nil, queue: nil)
         
-        progressCallBack = nil
+//        progressCallBack = nil
         resourceLoader = RequestLoader()
         playDuration = 0
         playTime = 0

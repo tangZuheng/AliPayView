@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ReactiveCocoa
 
 class FindPasswordViewController: BaseViewController {
 
@@ -166,9 +167,7 @@ class FindPasswordViewController: BaseViewController {
         commitButton.setTitle("确定", forState: .Normal)
         commitButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         commitButton.titleLabel?.font = UIFont.systemFontOfSize(14)
-        commitButton.backgroundColor = UIColor.init(rgb: 0xcccccc)
-//        commitButton.layer.borderWidth = 1
-//        commitButton.layer.borderColor = UIColor.init(rgb: 0xff3838).CGColor
+        commitButton.setBackgroundImage(createImageWithColor(UIColor.init(rgb: 0xff3838)), forState: .Normal)
         commitButton.layer.masksToBounds = true
         commitButton.layer.cornerRadius = 2
         self.view.addSubview(commitButton)
@@ -180,6 +179,10 @@ class FindPasswordViewController: BaseViewController {
         }
         
         
+        RAC(commitButton,"enabled") <= RACSignal.combineLatest([usernameField.rac_textSignal(),passwordField.rac_textSignal()], reduce: { () -> AnyObject! in
+            return usernameField.text!.characters.count == 11 && passwordField.text!.characters.count >= 6
+        })
+
         sendButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
             if ConfirmMobileNumber.isPhoneNumber(usernameField.text!)
             {

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ReactiveCocoa
 
 class UpdatePasswordViewController: BaseViewController {
     
@@ -134,9 +135,7 @@ class UpdatePasswordViewController: BaseViewController {
         commitButton.setTitle("确定", forState: .Normal)
         commitButton.setTitleColor(UIColor.whiteColor(), forState: .Normal)
         commitButton.titleLabel?.font = UIFont.systemFontOfSize(14)
-        commitButton.backgroundColor = UIColor.init(rgb: 0xcccccc)
-        //        commitButton.layer.borderWidth = 1
-        //        commitButton.layer.borderColor = UIColor.init(rgb: 0xff3838).CGColor
+        commitButton.setBackgroundImage(createImageWithColor(UIColor.init(rgb: 0xff3838)), forState: .Normal)
         commitButton.layer.masksToBounds = true
         commitButton.layer.cornerRadius = 2
         self.view.addSubview(commitButton)
@@ -146,6 +145,11 @@ class UpdatePasswordViewController: BaseViewController {
             make.height.equalTo(35)
             make.centerX.equalTo(self.view)
         }
+        
+        RAC(commitButton,"enabled") <= RACSignal.combineLatest([passwordField.rac_textSignal(),new_passwordField.rac_textSignal(),newTwo_passwordField.rac_textSignal()], reduce: { () -> AnyObject! in
+            return passwordField.text!.characters.count >= 6 && new_passwordField.text!.characters.count >= 6 && newTwo_passwordField.text!.characters.count >= 6
+        })
+        
         
         commitButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
             if !(passwordField.text?.characters.count >= 6 && passwordField.text?.characters.count <= 16) {

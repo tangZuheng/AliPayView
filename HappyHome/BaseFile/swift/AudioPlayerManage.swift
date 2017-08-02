@@ -1,4 +1,4 @@
-//
+
 //  AudioPlayerManage.swift
 //  HappyHome
 //
@@ -13,6 +13,8 @@ class AudioPlayerManage: NSObject, AVAudioPlayerDelegate{
     
     static let sharedManager = AudioPlayerManage()
     
+    var delegate:ZHAudioPlayerDelegate?
+    
     private override init() {
         
     }
@@ -20,6 +22,7 @@ class AudioPlayerManage: NSObject, AVAudioPlayerDelegate{
     deinit {
 //        NSNotificationCenter.defaultCenter().removeObserver(self)
         BeanUtils.setPropertysToNil(self)
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     var audioPlayer:AVAudioPlayer!
@@ -44,8 +47,8 @@ class AudioPlayerManage: NSObject, AVAudioPlayerDelegate{
             } catch {
                 
             }
-
             audioPlayer.play()
+            audioPlayer.delegate = self
             configBreakObserver()
             print("play!!")
         }
@@ -55,6 +58,9 @@ class AudioPlayerManage: NSObject, AVAudioPlayerDelegate{
         //暂停播放
         if audioPlayer != nil {
             audioPlayer.pause()
+            if self.delegate != nil {
+                self.delegate?.didAudioPlayerPausePlay?(audioPlayer)
+            }
             print("pause!!")
         }
     }
@@ -63,7 +69,16 @@ class AudioPlayerManage: NSObject, AVAudioPlayerDelegate{
         //停止播放
         if audioPlayer != nil {
             audioPlayer.stop()
+            if self.delegate != nil {
+                self.delegate?.didAudioPlayerStopPlay?(audioPlayer)
+            }
             print("stop!!")
+        }
+    }
+    
+    func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
+        if self.delegate != nil {
+            self.delegate?.didAudioPlayerFinishPlay?(player)
         }
     }
     
@@ -77,11 +92,13 @@ class AudioPlayerManage: NSObject, AVAudioPlayerDelegate{
     @objc private func handleInterruption(noti: NSNotification) {
         guard noti.name == AVAudioSessionInterruptionNotification else { return }
         guard let info = noti.userInfo, typenumber = info[AVAudioSessionInterruptionTypeKey]?.unsignedIntegerValue, type = AVAudioSessionInterruptionType(rawValue: typenumber) else { return }
+        typenumber
         switch type {
         case .Began:
-            pause()
+            NSNotificationCenter.defaultCenter().postNotificationName(PauseAllPlayingNotification, object: nil)
+            break
         case .Ended:
-            startPlaying()
+            break
         }
     }
     

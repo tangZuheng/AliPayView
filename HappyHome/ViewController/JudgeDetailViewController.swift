@@ -11,7 +11,7 @@ import HandyJSON
 import SDWebImage
 import AVFoundation
 
-class JudgeDetailViewController: BaseViewController {
+class JudgeDetailViewController: BaseViewController,ZHAudioPlayerDelegate {
 
     var model:ScenceModel!
     var pointModel:ScencePointModel!
@@ -42,8 +42,8 @@ class JudgeDetailViewController: BaseViewController {
     var leftIsPlay:Bool = false     //左边是否已经播放
     var rightIsPlay:Bool = false    // 右边是否已经播放
     
-    var leftPlayTime : Int64 = 0
-    var rightPlayTime : Int64 = 0
+    var leftPlayTime : NSTimeInterval = 0
+    var rightPlayTime : NSTimeInterval = 0
     
     
     var leftPlay:Bool = false       // 左边是否正在播放
@@ -53,31 +53,14 @@ class JudgeDetailViewController: BaseViewController {
                 leftIsPlay = true
                 self.rightPlay = false
                 leftPlayButton.setBackgroundImage(UIImage.init(named: "Judge_pause"), forState: .Normal)
-                let musicURL = NSURL.init(string: self.leftSoundModel.soundname!)!
-                MusicPlayerManager.sharedInstance.play(musicURL, callBack: { (tmpProgress, playProgress) in
-                    if !NSThread.isMainThread() {
-                        dispatch_async(dispatch_get_main_queue(), {
-                            if MusicPlayerManager.sharedInstance.playTime >= 0.01
-                            {
-                                self.leftProgressView.progress = Double(MusicPlayerManager.sharedInstance.progress)
-                                self.leftPlayTime = Int64(MusicPlayerManager.sharedInstance.playTime)
-                            }
-                        })
-                    }
-                    else {
-                        if MusicPlayerManager.sharedInstance.playTime >= 0.01
-                        {
-                            self.leftProgressView.progress = Double(MusicPlayerManager.sharedInstance.progress)
-                            self.leftPlayTime = Int64(MusicPlayerManager.sharedInstance.playTime)
-                        }
-                    }
-                })
-                MusicPlayerManager.sharedInstance.player?.seekToTime(CMTimeMake(self.leftPlayTime,1))
+                ZHAudioPlayer.sharedInstance().delegate = self
+                ZCMBProgressHUD.startMBProgressHUD()
+                ZHAudioPlayer.sharedInstance().manageAudioWithUrlPath(self.leftSoundModel.soundname!, playOrPause: true)
                 self.updateCommitButton()
             }
             else {
                 leftPlayButton.setBackgroundImage(UIImage.init(named: "Judge_play"), forState: .Normal)
-                MusicPlayerManager.sharedInstance.pause()
+                ZHAudioPlayer.sharedInstance().pausePlayingAudio()
                 self.updateCommitButton()
             }
         }
@@ -89,31 +72,14 @@ class JudgeDetailViewController: BaseViewController {
                 rightIsPlay = true
                 self.leftPlay = false
                 rightPlayButton.setBackgroundImage(UIImage.init(named: "Judge_pause"), forState: .Normal)
-                let musicURL = NSURL.init(string: self.rightSoundModel.soundname!)!
-                MusicPlayerManager.sharedInstance.play(musicURL, callBack: { (tmpProgress, playProgress) in
-                    if !NSThread.isMainThread() {
-                        dispatch_async(dispatch_get_main_queue(), {
-                            if MusicPlayerManager.sharedInstance.playTime >= 0.01
-                            {
-                                self.rightProgressView.progress = Double(MusicPlayerManager.sharedInstance.progress)
-                                self.rightPlayTime = Int64(MusicPlayerManager.sharedInstance.playTime)
-                            }
-                        })
-                    }
-                    else {
-                        if MusicPlayerManager.sharedInstance.playTime >= 0.01
-                        {
-                            self.rightProgressView.progress = Double(MusicPlayerManager.sharedInstance.progress)
-                            self.rightPlayTime = Int64(MusicPlayerManager.sharedInstance.playTime)
-                        }
-                    }
-                })
-                MusicPlayerManager.sharedInstance.player?.seekToTime(CMTimeMake(self.rightPlayTime,1))
+                ZHAudioPlayer.sharedInstance().delegate = self
+                ZCMBProgressHUD.startMBProgressHUD()
+                ZHAudioPlayer.sharedInstance().manageAudioWithUrlPath(self.rightSoundModel.soundname!, playOrPause: true)
                 self.updateCommitButton()
             }
             else {
                 rightPlayButton.setBackgroundImage(UIImage.init(named: "Judge_play"), forState: .Normal)
-                MusicPlayerManager.sharedInstance.pause()
+                ZHAudioPlayer.sharedInstance().pausePlayingAudio()
                 self.updateCommitButton()
             }
         }
@@ -136,7 +102,7 @@ class JudgeDetailViewController: BaseViewController {
         
         self.leftPlay = false
         self.rightPlay = false
-        MusicPlayerManager.sharedInstance.stop()
+        ZHAudioPlayer.sharedInstance().stopAudio()
         super.viewWillDisappear(animated)
     }
     
@@ -516,36 +482,36 @@ class JudgeDetailViewController: BaseViewController {
             
         }
         
-        NSNotificationCenter.defaultCenter().rac_addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: nil).subscribeNext {
-                notificationCenter in
-            NSOperationQueue.mainQueue().addOperationWithBlock {
-                if self.leftPlay {
-                    self.leftPlay = false
-                    self.leftProgressView.progress = 0
-                    self.leftPlayTime = 0
-                }
-                if self.rightPlay {
-                    self.rightPlay = false
-                    self.rightProgressView.progress = 0
-                    self.rightPlayTime = 0
-                }
-            }
-        }
+//        NSNotificationCenter.defaultCenter().rac_addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: nil).subscribeNext {
+//                notificationCenter in
+//            NSOperationQueue.mainQueue().addOperationWithBlock {
+//                if self.leftPlay {
+//                    self.leftPlay = false
+//                    self.leftProgressView.progress = 0
+//                    self.leftPlayTime = 0
+//                }
+//                if self.rightPlay {
+//                    self.rightPlay = false
+//                    self.rightProgressView.progress = 0
+//                    self.rightPlayTime = 0
+//                }
+//            }
+//        }
         
-        NSNotificationCenter.defaultCenter().rac_addObserverForName(AVPlayerItemDidFieldTimeNotification, object: nil).subscribeNext {
-            notificationCenter in
-            NSOperationQueue.mainQueue().addOperationWithBlock {
-                self.showFailHUDWithText("录音加载失败...")
-                if self.leftPlay {
-                    self.leftPlay = false
-                    self.leftProgressView.progress = 0
-                }
-                if self.rightPlay {
-                    self.rightPlay = false
-                    self.rightProgressView.progress = 0
-                }
-            }
-        }
+//        NSNotificationCenter.defaultCenter().rac_addObserverForName(AVPlayerItemDidFieldTimeNotification, object: nil).subscribeNext {
+//            notificationCenter in
+//            NSOperationQueue.mainQueue().addOperationWithBlock {
+//                self.showFailHUDWithText("录音加载失败...")
+//                if self.leftPlay {
+//                    self.leftPlay = false
+//                    self.leftProgressView.progress = 0
+//                }
+//                if self.rightPlay {
+//                    self.rightPlay = false
+//                    self.rightProgressView.progress = 0
+//                }
+//            }
+//        }
         
         NSNotificationCenter.defaultCenter().rac_addObserverForName(PauseAllPlayingNotification, object: nil).subscribeNext {
             notificationCenter in
@@ -569,11 +535,6 @@ class JudgeDetailViewController: BaseViewController {
         leftWinButton.enabled = leftIsPlay&&rightIsPlay
         centerWinButton.enabled = leftIsPlay&&rightIsPlay
         rightWinButton.enabled = leftIsPlay&&rightIsPlay
-        
-//        leftWinButton.enabled = true
-//        centerWinButton.enabled = true
-//        rightWinButton.enabled = true
-//        commitButton.enabled = true
         
         if result == 0 {
             self.leftWinButton.selected = false
@@ -604,4 +565,61 @@ class JudgeDetailViewController: BaseViewController {
             commitButton.backgroundColor = UIColor.init(rgb: 0xe5e5e5)
         }
     }
+    
+    func didAudioPlayerBeginPlay(audioPlayer: AVAudioPlayer!) {
+        ZCMBProgressHUD.stopMBProgressHUD()
+        if self.leftPlay {
+            audioPlayer.currentTime = self.leftPlayTime
+        }
+        else if self.rightPlay {
+            audioPlayer.currentTime = self.rightPlayTime
+        }
+    }
+    
+    func didAudioPlayerStopPlay(audioPlayer: AVAudioPlayer!) {
+        if self.leftPlay {
+            self.leftPlay = false
+//            self.leftPlayTime = 0
+//            self.leftProgressView.progress = 0
+        }
+        else if self.rightPlay {
+            self.rightPlay = false
+//            self.rightPlayTime = 0
+//            self.rightProgressView.progress = 0
+        }
+    }
+    
+    func didAudioPlayerFinishPlay(audioPlayer: AVAudioPlayer!) {
+        if self.leftPlay {
+            self.leftPlay = false
+            self.leftPlayTime = 0
+            self.leftProgressView.progress = 0
+        }
+        else if self.rightPlay {
+            self.rightPlay = false
+            self.rightPlayTime = 0
+            self.rightProgressView.progress = 0
+        }
+    }
+    
+    func didAudioPlayerFailPlay(audioPlayer: AVAudioPlayer!) {
+        ZCMBProgressHUD.stopMBProgressHUD()
+        self.showFailHUDWithText("录音加载失败...")
+        self.leftPlay = false
+        self.rightPlay = false
+    }
+    
+    func didAudioPlayerUpdateProgess(audioPlayer: AVAudioPlayer!) {
+        if self.leftPlay {
+            self.leftProgressView.progress = audioPlayer.currentTime/self.leftSoundModel.soundtime!
+            self.leftPlayTime = audioPlayer.currentTime
+        }
+        else if self.rightPlay {
+            self.rightProgressView.progress = audioPlayer.currentTime/self.rightSoundModel.soundtime!
+            self.rightPlayTime = audioPlayer.currentTime
+        }
+    }
+    
+    
+    
 }

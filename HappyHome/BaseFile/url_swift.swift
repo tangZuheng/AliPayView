@@ -9,8 +9,12 @@
 
 import Foundation
 
-let baseUrl = "http://112.74.27.239:8080/TravelApp/"
-//let baseUrl = "http://192.168.1.4:8080/TravelApp/"
+//let baseUrl = "http://112.74.27.239:8055/TravelApp/"
+let baseUrl = "https://www.chinahaotravel.com:8446/TravelApp/"
+//let baseUrl = "http://10.1.7.135:8080/TravelApp/"
+//let baseUrl = "http://192.168.1.7:8080/TravelApp/"
+//let baseUrl =  "https://112.74.27.239:8443/TravelApp/"
+
 //com.happyHome.goodGuide
 //com.sanquan.sfa
 
@@ -74,4 +78,21 @@ let report_appeal_url = baseUrl + "report/appeal"
 
 //忘记密码
 let login_forget_url = baseUrl + "login/forget"
+
+//获取英语测试题
+let englishtest_url = baseUrl + "englishtest/index"
+
+//获取消息列表
+let smessage_url = baseUrl + "smessage/index"
+
+//清空消息列表
+let smessage_clean_url = baseUrl + "smessage/delete"
+
+//提交建议
+let submitSuggest_url = baseUrl + "suggest/index"
+
+//
+let login_updateNickname_url = baseUrl + "login/updatename"
+
+
 

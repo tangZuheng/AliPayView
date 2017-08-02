@@ -77,41 +77,6 @@ extension RequestTask {
         connection?.setDelegateQueue(NSOperationQueue.mainQueue())
         connection?.start()
     }
-    
-    
-//    public func set(URL url: NSURL, offset: Int) {
-//        
-////        func initialTmpFile() {
-////            try! NSFileManager.defaultManager().removeItemAtPath(StreamAudioConfig.tempPath)
-////            NSFileManager.defaultManager().createFileAtPath(StreamAudioConfig.tempPath, contents: nil, attributes: nil)
-////        }
-////        _updateFilePath(url)
-//        self.url = url
-//        self.offset = offset
-//        
-//        //  如果建立第二次请求，则需初始化缓冲文件
-////        if taskArr.count >= 1 {
-////            initialTmpFile()
-////        }
-//        
-//        
-//        
-//        //  把stream://xxx的头换成http://的头
-//        let actualURLComponents = NSURLComponents(URL: url, resolvingAgainstBaseURL: false)
-//        actualURLComponents?.scheme = "http"
-//        guard let URL = actualURLComponents?.URL else {return}
-//        let request = NSMutableURLRequest(URL: URL, cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringCacheData, timeoutInterval: 20.0)
-//        
-//        //  若非从头下载，且视频长度已知且大于零，则下载offset到videoLength的范围（拼request参数）
-//        if offset > 0 && videoLength > 0 {
-//            request.addValue("bytes=\(offset)-\(videoLength - 1)", forHTTPHeaderField: "Range")
-//        }
-//        
-//        connection?.cancel()
-//        connection = NSURLConnection(request: request, delegate: self, startImmediately: false)
-//        connection?.setDelegateQueue(NSOperationQueue.mainQueue())
-//        connection?.start()
-//    }
 }
 
 // MARK: - NSURLConnectionDataDelegate
@@ -196,7 +161,7 @@ extension RequestTask: NSURLConnectionDataDelegate {
     public func connection(connection: NSURLConnection, didFailWithError error: NSError) {
         if error.code == -1001 && !once {   //  超时，1秒后重连一次
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * Int64(NSEC_PER_SEC)), dispatch_get_main_queue(), {
-//                self.continueLoading()
+                self.continueLoading()
             })
         }
         if error.code == -1009 {
@@ -230,7 +195,7 @@ extension RequestTask {
     
     public func cancel() {
         //  1. 断开连接
-//        connection?.cancel()
+        connection?.cancel()
         //  2. 关闭文件写入句柄
 //        fileHandle?.closeFile()
         //  3. 移除缓存

@@ -35,6 +35,7 @@ class AccountManageViewController: BaseViewController,UITableViewDataSource,UITa
         let tableView = UITableView.init()
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.backgroundColor = UIColor.clearColor()
         self.view.addSubview(tableView)
 //        tableView.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGH-tabBar_height)
 //        tableView.tableHeaderView = heardeView
@@ -70,17 +71,22 @@ class AccountManageViewController: BaseViewController,UITableViewDataSource,UITa
             cell = UITableViewCell.init(style: .Value1, reuseIdentifier: identifir)
             
             cell?.selectionStyle = .None
+            
+            cell?.textLabel?.font = UIFont.systemFontOfSize(16)
+            cell?.detailTextLabel?.font = UIFont.systemFontOfSize(14)
+            
         }
         let titleArr_secton = titleArr.objectAtIndex(indexPath.section)
         cell?.textLabel?.text = titleArr_secton.objectAtIndex(indexPath.row) as? String
-        cell?.textLabel?.font = UIFont.systemFontOfSize(14)
+        
         if indexPath.section == 0 {
-            cell?.accessoryType = .None
             cell?.textLabel?.textColor = UIColor.init(rgb: 0x282828)
             if indexPath.row == 0 {
+                cell?.accessoryType = .None
                 cell?.detailTextLabel?.text = UserModel.sharedUserModel.username
             }
             else {
+                cell?.accessoryType = .DisclosureIndicator
                 cell?.detailTextLabel?.text = UserModel.sharedUserModel.nickname
             }
         }
@@ -104,7 +110,41 @@ class AccountManageViewController: BaseViewController,UITableViewDataSource,UITa
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 0 {
-            
+            if indexPath.row == 1 {
+                let view = UIAlertView.init(title: "修改昵称", message: "", delegate: nil, cancelButtonTitle: "确定", otherButtonTitles: "取消")
+                view.alertViewStyle = .PlainTextInput
+                let nameField = view.textFieldAtIndex(0)
+                nameField?.text = String(UserModel.sharedUserModel.nickname!)
+                
+                view.rac_buttonClickedSignal().subscribeNext({ (indexNumber) in
+                    if indexNumber as! Int == 0 {
+                        if nameField?.text?.characters.count == 0 {
+                            self.showFailHUDWithText("请输入昵称!")
+                            return
+                        }
+                        if nameField?.text != UserModel.sharedUserModel.nickname {
+                            self.startMBProgressHUD()
+                            NetWorkingManager.sharedManager.UpdateNickname((nameField?.text)!, completion: { (retObject, error) in
+                                self.stopMBProgressHUD()
+                                if error == nil {
+                                    UserModel.sharedUserModel.nickname = nameField?.text!
+                                    UserModel.sharedUserModel.savaUserModel()
+                                    NSNotificationCenter.defaultCenter().postNotificationName(LoginStateUpdateNotification, object: nil)
+                                    tableView.reloadData()
+                                }
+                                else {
+                                    self.showFailHUDWithText(error!.localizedDescription)
+                                }
+                            })
+                        }
+                    }
+                    else {
+                        
+                    }
+                })
+                
+                view.show()
+            }
         }
         else if indexPath.section == 1 {
             if indexPath.row == 0 {
@@ -120,7 +160,7 @@ class AccountManageViewController: BaseViewController,UITableViewDataSource,UITa
             let view = UIAlertView.init(title: "", message: "亲，你确定需要清理缓存数据？", delegate: nil, cancelButtonTitle: "确定", otherButtonTitles: "取消")
             view.rac_buttonClickedSignal().subscribeNext({ (indexNumber) in
                 if indexNumber as! Int == 0 {
-                    MusicPlayerManager.sharedInstance.clearMusicDir()
+                    ZHAudioPlayer.sharedInstance().clearAudioDir()
                 }
             })
             view.show()
@@ -134,6 +174,7 @@ class AccountManageViewController: BaseViewController,UITableViewDataSource,UITa
                     UserModel.sharedUserModel.savaUserModel()
                     NSNotificationCenter.defaultCenter().postNotificationName(LoginStateUpdateNotification, object: nil)
                     self.navigationController?.popViewControllerAnimated(true)
+                    JPUSHService.setAlias("", callbackSelector: nil, object: nil)
                 }
             })
             view.show()

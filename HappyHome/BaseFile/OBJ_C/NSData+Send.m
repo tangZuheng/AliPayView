@@ -14,8 +14,8 @@
 //加密函数
 - (NSData*)AES256EncryptWithKey:(NSString*)key {
     
-    char keyPtr[kCCKeySizeAES256 + 1]; // room for terminator (unused)
-    bzero(keyPtr, sizeof(keyPtr)); // fill with zeroes (for padding)
+    char keyPtr[kCCKeySizeAES256 + 1];  // room for terminator (unused)
+    bzero(keyPtr, sizeof(keyPtr));      // fill with zeroes (for padding)
     
     [key getCString:keyPtr maxLength:sizeof(keyPtr) encoding:NSUTF8StringEncoding];
     
@@ -43,8 +43,8 @@
 //解密函数
 - (NSData*)AES256DecryptWithKey:(NSString*)key {
     
-    char keyPtr[kCCKeySizeAES256 + 1]; // room for terminator (unused)
-    bzero(keyPtr, sizeof(keyPtr)); // fill with zeroes (for padding)
+    char keyPtr[kCCKeySizeAES256 + 1];  // room for terminator (unused)
+    bzero(keyPtr, sizeof(keyPtr));      // fill with zeroes (for padding)
     
     // fetch key data
     [key getCString:keyPtr maxLength:sizeof(keyPtr) encoding:NSUTF8StringEncoding];

@@ -39,6 +39,8 @@
 		6D1E77621DAD2DD3002703A9 /* NotificationConstant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1E77611DAD2DD3002703A9 /* NotificationConstant.swift */; };
 		6D1E77641DAD350B002703A9 /* ScenicCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1E77631DAD350B002703A9 /* ScenicCollectionView.swift */; };
 		6D1E77661DADD41E002703A9 /* BeanUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1E77651DADD41E002703A9 /* BeanUtils.swift */; };
+		6D1F38361DE02C7900DE1EFE /* ListenTopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1F38351DE02C7900DE1EFE /* ListenTopView.swift */; };
+		6D1F38381DE1837C00DE1EFE /* YWFPSLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1F38371DE1837C00DE1EFE /* YWFPSLabel.swift */; };
 		6D27DCFD1DA5174600815E0B /* CountdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D27DCFC1DA5174600815E0B /* CountdownView.swift */; };
 		6D2A9F511DAE73C900DCD08E /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2A9F501DAE73C900DCD08E /* UserModel.swift */; };
 		6D2EF5441DB67C310032932C /* MusicPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D2EF5401DB67C310032932C /* MusicPlayerManager.swift */; };
@@ -50,6 +52,11 @@
 		6D671AAA1DAA2DEB0070BDC9 /* PKHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D671AA91DAA2DEB0070BDC9 /* PKHistoryViewController.swift */; };
 		6D671AAC1DAA2F320070BDC9 /* PKHistoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D671AAB1DAA2F320070BDC9 /* PKHistoryCell.swift */; };
 		6D671AAE1DAA31480070BDC9 /* StarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D671AAD1DAA31480070BDC9 /* StarView.swift */; };
+		6D694B5D1DD717D1002D1347 /* EnglishTestManage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D694B5C1DD717D1002D1347 /* EnglishTestManage.swift */; };
+		6D694B5F1DD72265002D1347 /* EnglishTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D694B5E1DD72265002D1347 /* EnglishTestViewController.swift */; };
+		6D694B611DD72CE4002D1347 /* EnglishTestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D694B601DD72CE4002D1347 /* EnglishTestCell.swift */; };
+		6D694B631DD76292002D1347 /* MessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D694B621DD76292002D1347 /* MessageViewController.swift */; };
+		6D694B651DD766F7002D1347 /* MessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D694B641DD766F7002D1347 /* MessageCell.swift */; };
 		6D86FC071DABCEE900A48F69 /* DistrictManageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D86FC061DABCEE900A48F69 /* DistrictManageModel.swift */; };
 		6D86FC091DABCF1600A48F69 /* DistrictModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D86FC081DABCF1600A48F69 /* DistrictModel.swift */; };
 		6D8EBD691DA3A18D00F0AD07 /* SpotsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D8EBD681DA3A18D00F0AD07 /* SpotsCollectionViewCell.swift */; };
@@ -72,8 +79,6 @@
 		6DD6F48B1DAAA09A006B652E /* FiveStarCellCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6F48A1DAAA09A006B652E /* FiveStarCellCell.swift */; };
 		6DD6F48D1DAB8F77006B652E /* MyTopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6F48C1DAB8F77006B652E /* MyTopViewController.swift */; };
 		6DD6F48F1DAB9090006B652E /* MyTopCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DD6F48E1DAB9090006B652E /* MyTopCell.swift */; };
-		6DD7D5D41DC79C87001FB0E0 /* JPDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD7D5D11DC79C87001FB0E0 /* JPDownloadManager.m */; };
-		6DD7D5D51DC79C87001FB0E0 /* JPVideoURLAssetResourceLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD7D5D31DC79C87001FB0E0 /* JPVideoURLAssetResourceLoader.m */; };
 		6DDAC7901DC0A49B00EF5C86 /* UpdatePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDAC78F1DC0A49B00EF5C86 /* UpdatePasswordViewController.swift */; };
 		6DF07F2C1DA6994200238FB7 /* UserHeardeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF07F2B1DA6994200238FB7 /* UserHeardeView.swift */; };
 		6DF07F2E1DA69C4500238FB7 /* MyTrainingRecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF07F2D1DA69C4500238FB7 /* MyTrainingRecordViewController.swift */; };
@@ -82,6 +87,7 @@
 		6DF9A8071DA5286B006936E6 /* AudioRecorderManage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF9A8061DA5286B006936E6 /* AudioRecorderManage.swift */; };
 		6DF9A8091DA551B1006936E6 /* SQLiteManage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DF9A8081DA551B1006936E6 /* SQLiteManage.swift */; };
 		6DFD8C3A1DBF0CB800748082 /* ConfirmMobileNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DFD8C391DBF0CB800748082 /* ConfirmMobileNumber.swift */; };
+		6DFE4E881DC84BA80095F439 /* ZHAudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DFE4E871DC84BA80095F439 /* ZHAudioPlayer.m */; };
 		BB90FFEEF26EEF9F17D87C9B /* Pods_HappyHome.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D08CDD78AB85E08201520E4 /* Pods_HappyHome.framework */; };
 /* End PBXBuildFile section */
 
@@ -147,6 +153,8 @@
 		6D1E77611DAD2DD3002703A9 /* NotificationConstant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationConstant.swift; sourceTree = "<group>"; };
 		6D1E77631DAD350B002703A9 /* ScenicCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScenicCollectionView.swift; sourceTree = "<group>"; };
 		6D1E77651DADD41E002703A9 /* BeanUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeanUtils.swift; sourceTree = "<group>"; };
+		6D1F38351DE02C7900DE1EFE /* ListenTopView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListenTopView.swift; sourceTree = "<group>"; };
+		6D1F38371DE1837C00DE1EFE /* YWFPSLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YWFPSLabel.swift; sourceTree = "<group>"; };
 		6D27DCFC1DA5174600815E0B /* CountdownView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountdownView.swift; sourceTree = "<group>"; };
 		6D2A9F501DAE73C900DCD08E /* UserModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		6D2EF5401DB67C310032932C /* MusicPlayerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MusicPlayerManager.swift; sourceTree = "<group>"; };
@@ -158,6 +166,12 @@
 		6D671AA91DAA2DEB0070BDC9 /* PKHistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHistoryViewController.swift; sourceTree = "<group>"; };
 		6D671AAB1DAA2F320070BDC9 /* PKHistoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PKHistoryCell.swift; sourceTree = "<group>"; };
 		6D671AAD1DAA31480070BDC9 /* StarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StarView.swift; sourceTree = "<group>"; };
+		6D694B5C1DD717D1002D1347 /* EnglishTestManage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnglishTestManage.swift; sourceTree = "<group>"; };
+		6D694B5E1DD72265002D1347 /* EnglishTestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnglishTestViewController.swift; sourceTree = "<group>"; };
+		6D694B601DD72CE4002D1347 /* EnglishTestCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EnglishTestCell.swift; sourceTree = "<group>"; };
+		6D694B621DD76292002D1347 /* MessageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageViewController.swift; sourceTree = "<group>"; };
+		6D694B641DD766F7002D1347 /* MessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageCell.swift; sourceTree = "<group>"; };
+		6D6BC56A1DDCB48800978671 /* HappyHome.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HappyHome.entitlements; sourceTree = "<group>"; };
 		6D86FC061DABCEE900A48F69 /* DistrictManageModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictManageModel.swift; sourceTree = "<group>"; };
 		6D86FC081DABCF1600A48F69 /* DistrictModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DistrictModel.swift; sourceTree = "<group>"; };
 		6D8EBD681DA3A18D00F0AD07 /* SpotsCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotsCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -181,10 +195,6 @@
 		6DD6F48A1DAAA09A006B652E /* FiveStarCellCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FiveStarCellCell.swift; sourceTree = "<group>"; };
 		6DD6F48C1DAB8F77006B652E /* MyTopViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTopViewController.swift; sourceTree = "<group>"; };
 		6DD6F48E1DAB9090006B652E /* MyTopCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTopCell.swift; sourceTree = "<group>"; };
-		6DD7D5D01DC79C87001FB0E0 /* JPDownloadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPDownloadManager.h; sourceTree = "<group>"; };
-		6DD7D5D11DC79C87001FB0E0 /* JPDownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPDownloadManager.m; sourceTree = "<group>"; };
-		6DD7D5D21DC79C87001FB0E0 /* JPVideoURLAssetResourceLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPVideoURLAssetResourceLoader.h; sourceTree = "<group>"; };
-		6DD7D5D31DC79C87001FB0E0 /* JPVideoURLAssetResourceLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPVideoURLAssetResourceLoader.m; sourceTree = "<group>"; };
 		6DDAC78F1DC0A49B00EF5C86 /* UpdatePasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpdatePasswordViewController.swift; sourceTree = "<group>"; };
 		6DF07F2B1DA6994200238FB7 /* UserHeardeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserHeardeView.swift; sourceTree = "<group>"; };
 		6DF07F2D1DA69C4500238FB7 /* MyTrainingRecordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyTrainingRecordViewController.swift; sourceTree = "<group>"; };
@@ -193,6 +203,8 @@
 		6DF9A8061DA5286B006936E6 /* AudioRecorderManage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AudioRecorderManage.swift; path = ../BaseFile/swift/AudioRecorderManage.swift; sourceTree = "<group>"; };
 		6DF9A8081DA551B1006936E6 /* SQLiteManage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SQLiteManage.swift; path = ../BaseFile/swift/SQLiteManage.swift; sourceTree = "<group>"; };
 		6DFD8C391DBF0CB800748082 /* ConfirmMobileNumber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfirmMobileNumber.swift; sourceTree = "<group>"; };
+		6DFE4E861DC84BA80095F439 /* ZHAudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZHAudioPlayer.h; path = ../../Model/ZHAudioPlayer.h; sourceTree = "<group>"; };
+		6DFE4E871DC84BA80095F439 /* ZHAudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZHAudioPlayer.m; path = ../../Model/ZHAudioPlayer.m; sourceTree = "<group>"; };
 		8D08CDD78AB85E08201520E4 /* Pods_HappyHome.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_HappyHome.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -262,6 +274,7 @@
 		6D0A7B041D9D492200ACC29E /* HappyHome */ = {
 			isa = PBXGroup;
 			children = (
+				6D6BC56A1DDCB48800978671 /* HappyHome.entitlements */,
 				6D0A7B331D9D4EDF00ACC29E /* BaseFile */,
 				6D0A7B521D9F7CEF00ACC29E /* Model */,
 				6D0A7B531D9F7CEF00ACC29E /* ViewController */,
@@ -292,10 +305,6 @@
 			isa = PBXGroup;
 			children = (
 				6D0A7B6C1D9FA80000ACC29E /* HappyHome-Bridging-Header.h */,
-				6DD7D5D01DC79C87001FB0E0 /* JPDownloadManager.h */,
-				6DD7D5D11DC79C87001FB0E0 /* JPDownloadManager.m */,
-				6DD7D5D21DC79C87001FB0E0 /* JPVideoURLAssetResourceLoader.h */,
-				6DD7D5D31DC79C87001FB0E0 /* JPVideoURLAssetResourceLoader.m */,
 				6D0A7B701D9FA82400ACC29E /* NSData+Send.h */,
 				6D0A7B711D9FA82400ACC29E /* NSData+Send.m */,
 				6D0A7B721D9FA82400ACC29E /* NSString+Send.h */,
@@ -308,6 +317,8 @@
 				6D0A7B801D9FA83500ACC29E /* ZCMBProgressHUD.m */,
 				6D9D03BB1DA79A5D00E3DA52 /* myUILabel.h */,
 				6D9D03BC1DA79A5D00E3DA52 /* myUILabel.m */,
+				6DFE4E861DC84BA80095F439 /* ZHAudioPlayer.h */,
+				6DFE4E871DC84BA80095F439 /* ZHAudioPlayer.m */,
 			);
 			path = OBJ_C;
 			sourceTree = "<group>";
@@ -324,6 +335,7 @@
 				6D0F037C1DB278FB009A34D7 /* NetAudioPlayerManage.swift */,
 				6DF9A8081DA551B1006936E6 /* SQLiteManage.swift */,
 				6D2A9F501DAE73C900DCD08E /* UserModel.swift */,
+				6D694B5C1DD717D1002D1347 /* EnglishTestManage.swift */,
 				6DF07F321DA6A70F00238FB7 /* RecordObject.swift */,
 				6D86FC081DABCF1600A48F69 /* DistrictModel.swift */,
 				6D86FC061DABCEE900A48F69 /* DistrictManageModel.swift */,
@@ -336,6 +348,7 @@
 			isa = PBXGroup;
 			children = (
 				6D0A7B551D9F7D0A00ACC29E /* MainViewController.swift */,
+				6D694B5E1DD72265002D1347 /* EnglishTestViewController.swift */,
 				6D8EBD6B1DA3B1D500F0AD07 /* 练习 */,
 				6D9D03D01DA8F64300E3DA52 /* 评委 */,
 				6D9D03CD1DA8F4D000E3DA52 /* PK */,
@@ -372,6 +385,8 @@
 				6DF07F2B1DA6994200238FB7 /* UserHeardeView.swift */,
 				6D671AAD1DAA31480070BDC9 /* StarView.swift */,
 				6D1068C71DBA0C4000E7147D /* TipAlertView.swift */,
+				6D1F38351DE02C7900DE1EFE /* ListenTopView.swift */,
+				6D1F38371DE1837C00DE1EFE /* YWFPSLabel.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -462,6 +477,7 @@
 				6D0F03821DB4784C009A34D7 /* AboutUsViewController.swift */,
 				6D0F03841DB479C9009A34D7 /* FeedbackViewController.swift */,
 				6D92D6A11DB8C14100F2557C /* UserTextDetailViewController.swift */,
+				6D694B621DD76292002D1347 /* MessageViewController.swift */,
 			);
 			name = "个人中心";
 			sourceTree = "<group>";
@@ -475,6 +491,8 @@
 				6DD6F4841DAA8D4B006B652E /* YesterdayPKCell.swift */,
 				6DD6F48A1DAAA09A006B652E /* FiveStarCellCell.swift */,
 				6DD6F48E1DAB9090006B652E /* MyTopCell.swift */,
+				6D694B601DD72CE4002D1347 /* EnglishTestCell.swift */,
+				6D694B641DD766F7002D1347 /* MessageCell.swift */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -550,9 +568,14 @@
 				TargetAttributes = {
 					6D0A7B011D9D492200ACC29E = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 5SQ3T49ZW4;
+						DevelopmentTeam = W489MY376R;
 						LastSwiftMigration = 0800;
 						ProvisioningStyle = Manual;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					6D0A7B151D9D492200ACC29E = {
 						CreatedOnToolsVersion = 8.0;
@@ -672,13 +695,13 @@
 				6D27DCFD1DA5174600815E0B /* CountdownView.swift in Sources */,
 				6D2EF5461DB67C310032932C /* RequestTask.swift in Sources */,
 				6DF07F311DA69FAA00238FB7 /* MyTrainingRecordCell.swift in Sources */,
-				6DD7D5D41DC79C87001FB0E0 /* JPDownloadManager.m in Sources */,
 				6D0A7B581D9F809F00ACC29E /* ControllerManager.swift in Sources */,
 				6DD6F48D1DAB8F77006B652E /* MyTopViewController.swift in Sources */,
 				6D0A7B7B1D9FA82400ACC29E /* NSString+Send.m in Sources */,
 				6D0A7B811D9FA83500ACC29E /* ZCMBProgressHUD.m in Sources */,
 				6D9D03CA1DA8EAD800E3DA52 /* ListenDetailViewController.swift in Sources */,
 				6DF9A8091DA551B1006936E6 /* SQLiteManage.swift in Sources */,
+				6D694B651DD766F7002D1347 /* MessageCell.swift in Sources */,
 				6D0A7B7C1D9FA82400ACC29E /* SecurityHelper.m in Sources */,
 				6DF07F2E1DA69C4500238FB7 /* MyTrainingRecordViewController.swift in Sources */,
 				6D671AAC1DAA2F320070BDC9 /* PKHistoryCell.swift in Sources */,
@@ -690,7 +713,6 @@
 				6DF9A8071DA5286B006936E6 /* AudioRecorderManage.swift in Sources */,
 				6D671AA81DA9F39A0070BDC9 /* JudgeDetailViewController.swift in Sources */,
 				6D8EBD691DA3A18D00F0AD07 /* SpotsCollectionViewCell.swift in Sources */,
-				6DD7D5D51DC79C87001FB0E0 /* JPVideoURLAssetResourceLoader.m in Sources */,
 				6D0A7B381D9D4EDF00ACC29E /* NetWorkingManager.swift in Sources */,
 				6DDAC7901DC0A49B00EF5C86 /* UpdatePasswordViewController.swift in Sources */,
 				6DD6F48B1DAAA09A006B652E /* FiveStarCellCell.swift in Sources */,
@@ -706,6 +728,7 @@
 				6D86FC071DABCEE900A48F69 /* DistrictManageModel.swift in Sources */,
 				6D92D6A21DB8C14100F2557C /* UserTextDetailViewController.swift in Sources */,
 				6D0F037D1DB278FB009A34D7 /* NetAudioPlayerManage.swift in Sources */,
+				6D694B611DD72CE4002D1347 /* EnglishTestCell.swift in Sources */,
 				6D8EBD6D1DA3B20900F0AD07 /* TrainingDetailViewController.swift in Sources */,
 				6D0A7B651D9F97FD00ACC29E /* UserViewController.swift in Sources */,
 				6D0A7B7A1D9FA82400ACC29E /* NSData+Send.m in Sources */,
@@ -716,6 +739,7 @@
 				6D9D03CF1DA8F4EE00E3DA52 /* PKDetailViewController.swift in Sources */,
 				6D92D6A01DB86BD700F2557C /* YesterdayPKDetailViewController.swift in Sources */,
 				6DF07F331DA6A70F00238FB7 /* RecordObject.swift in Sources */,
+				6DFE4E881DC84BA80095F439 /* ZHAudioPlayer.m in Sources */,
 				6D2EF5441DB67C310032932C /* MusicPlayerManager.swift in Sources */,
 				6D0A7B561D9F7D0A00ACC29E /* MainViewController.swift in Sources */,
 				6DD6F4871DAA9EF7006B652E /* FiveStarViewController.swift in Sources */,
@@ -729,15 +753,20 @@
 				6D0A7B391D9D4EDF00ACC29E /* Public.swift in Sources */,
 				6D1068C81DBA0C4000E7147D /* TipAlertView.swift in Sources */,
 				6D86FC091DABCF1600A48F69 /* DistrictModel.swift in Sources */,
+				6D1F38361DE02C7900DE1EFE /* ListenTopView.swift in Sources */,
+				6D694B631DD76292002D1347 /* MessageViewController.swift in Sources */,
 				6D9D03CC1DA8EBAA00E3DA52 /* ListenDetailCell.swift in Sources */,
 				6D1E77601DAD1550002703A9 /* SelectKindViewController.swift in Sources */,
 				6D9D03C11DA8A02900E3DA52 /* LoginViewController.swift in Sources */,
 				6D1E77621DAD2DD3002703A9 /* NotificationConstant.swift in Sources */,
+				6D1F38381DE1837C00DE1EFE /* YWFPSLabel.swift in Sources */,
 				6D0A7B061D9D492200ACC29E /* AppDelegate.swift in Sources */,
 				6D02EA521DAF62E400D3FC70 /* PKRecordManage.swift in Sources */,
+				6D694B5F1DD72265002D1347 /* EnglishTestViewController.swift in Sources */,
 				6D671AA61DA9EFF10070BDC9 /* CircleProgressView.swift in Sources */,
 				6DF07F2C1DA6994200238FB7 /* UserHeardeView.swift in Sources */,
 				6D0A7B631D9F97EE00ACC29E /* JudgeViewController.swift in Sources */,
+				6D694B5D1DD717D1002D1347 /* EnglishTestManage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -887,15 +916,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = HappyHome/HappyHome.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				DEVELOPMENT_TEAM = 5SQ3T49ZW4;
+				DEVELOPMENT_TEAM = W489MY376R;
 				INFOPLIST_FILE = HappyHome/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sanquan.sfa;
+				PRODUCT_BUNDLE_IDENTIFIER = com.happyHome.goodGuide;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2b786331-3792-4a35-a366-9491054307d4";
-				PROVISIONING_PROFILE_SPECIFIER = SanquanSFA_IN_HOUSE;
+				PROVISIONING_PROFILE = "963efd8f-69cb-43ad-9079-8f3bf176d33f";
+				PROVISIONING_PROFILE_SPECIFIER = "XC iOS: com.happyHome.goodGuide";
 				SWIFT_OBJC_BRIDGING_HEADER = "HappyHome/BaseFile/OBJ_C/HappyHome-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 2.3;
@@ -908,15 +938,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = HappyHome/HappyHome.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
-				DEVELOPMENT_TEAM = 5SQ3T49ZW4;
+				DEVELOPMENT_TEAM = W489MY376R;
 				INFOPLIST_FILE = HappyHome/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.sanquan.sfa;
+				PRODUCT_BUNDLE_IDENTIFIER = com.happyHome.goodGuide;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "2b786331-3792-4a35-a366-9491054307d4";
-				PROVISIONING_PROFILE_SPECIFIER = SanquanSFA_IN_HOUSE;
+				PROVISIONING_PROFILE = "963efd8f-69cb-43ad-9079-8f3bf176d33f";
+				PROVISIONING_PROFILE_SPECIFIER = "XC iOS: com.happyHome.goodGuide";
 				SWIFT_OBJC_BRIDGING_HEADER = "HappyHome/BaseFile/OBJ_C/HappyHome-Bridging-Header.h";
 				SWIFT_VERSION = 2.3;
 			};

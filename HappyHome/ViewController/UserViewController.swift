@@ -49,7 +49,6 @@ class UserViewController: BaseViewController,UITableViewDataSource,UITableViewDe
             })
         }
 
-
         heardeView.userHeadButton!.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
             //上传头像
             let actionSheet = UIAlertController(title: "上传头像", message: nil, preferredStyle: .ActionSheet)
@@ -94,6 +93,7 @@ class UserViewController: BaseViewController,UITableViewDataSource,UITableViewDe
         let tableView = UITableView.init()
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.backgroundColor = UIColor.clearColor()
         self.view.addSubview(tableView)
         tableView.frame = CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGH-tabBar_height)
         tableView.tableHeaderView = heardeView
@@ -159,7 +159,8 @@ class UserViewController: BaseViewController,UITableViewDataSource,UITableViewDe
                 self.pushToNextController(vc)
             }
             else if indexPath.row == 1 {
-                
+                let vc = MessageViewController()
+                self.pushToNextController(vc)
             }
             else if indexPath.row == 2 {
                 let vc = UserTextDetailViewController()

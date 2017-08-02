@@ -191,7 +191,7 @@ extension RequestLoader {
             //  请求结束位置
             let endOffset = startOffset + dataRequest.requestedLength
             //  是否获取到完整数据
-            let didRespondFully = task.downLoadingOffset + task.offset >= task.videoLength
+            let didRespondFully = task.downLoadingOffset + task.offset >= Int(endOffset)
             
             return didRespondFully
         }

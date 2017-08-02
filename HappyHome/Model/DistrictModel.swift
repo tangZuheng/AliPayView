@@ -126,3 +126,23 @@ class FiverecordModel: HandyJSON {
     required init() {}
 }
 
+
+class MessageModel: HandyJSON {
+    //我的消息
+    var smid:Int?                       //id
+    var title:String?                   //标题
+    var smcontent:String?=""            //内容
+    var submittime:NSTimeInterval?      //时间
+    
+    required init() {}
+}
+
+class EnglishTestModel: HandyJSON {
+    //我的消息
+    var testid:Int?                     //id
+    var tureanswer:Int?                 //正确答案序号
+    var questionurl:String?             //听力地址
+    var answers:NSArray?                //答案列表
+    
+    required init() {}
+}

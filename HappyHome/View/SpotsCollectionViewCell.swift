@@ -57,6 +57,8 @@ class SpotsCollectionViewCell: UICollectionViewCell {
         name?.textAlignment = .Center
         name?.font = UIFont.systemFontOfSize(10)
         name?.textColor = UIColor.init(rgb: 0x282828)
+        name?.layer.masksToBounds = true
+        name?.backgroundColor = UIColor.whiteColor()
         self.contentView.addSubview(name!)
         name!.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(self)

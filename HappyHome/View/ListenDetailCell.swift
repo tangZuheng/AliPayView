@@ -9,7 +9,7 @@
 import UIKit
 import AVFoundation
 
-class ListenDetailCell: UITableViewCell {
+class ListenDetailCell: UITableViewCell,ZHAudioPlayerDelegate {
     
     let headView = UIImageView()
     let headName = UILabel()
@@ -21,41 +21,24 @@ class ListenDetailCell: UITableViewCell {
         {
         didSet {
             if !playing {
-                
                 self.playButton.setImage(UIImage.init(named: "user_play"), forState: .Normal)
                 let dfmatter = NSDateFormatter()
                 dfmatter.dateFormat = "mm:ss"
                 let recordLengthDate = NSDate(timeIntervalSince1970: self.topObject!.soundtime!)
                 self.recore_lengthLabel.text = dfmatter.stringFromDate(recordLengthDate)
                 self.recore_lengthLabel.textColor = UIColor.init(rgb: 0x999999)
-                MusicPlayerManager.sharedInstance.pause()
+                ZHAudioPlayer.sharedInstance().pausePlayingAudio()
+                
             }
             else {
                 self.playButton.setImage(UIImage.init(named: "user_pause"), forState: .Normal)
-                let musicURL = NSURL.init(string: self.topObject.soundname!)
                 let dfmatter = NSDateFormatter()
                 dfmatter.dateFormat = "mm:ss"
                 self.recore_lengthLabel.textColor = UIColor.init(rgb: 0xff3838)
                 NSNotificationCenter.defaultCenter().postNotificationName(PausePlayingNotification, object: self)
-                MusicPlayerManager.sharedInstance.play(musicURL, callBack: { (tmpProgress, playProgress) in
-                    if !NSThread.isMainThread() {
-                        dispatch_async(dispatch_get_main_queue(), {
-                            if MusicPlayerManager.sharedInstance.playTime >= 0.01
-                            {
-                                let recordLengthDate = NSDate(timeIntervalSince1970:Double(MusicPlayerManager.sharedInstance.playDuration) - Double(MusicPlayerManager.sharedInstance.playTime))
-                                self.recore_lengthLabel.text = dfmatter.stringFromDate(recordLengthDate)
-                                
-                            }
-                        })
-                    }
-                    else {
-                        if MusicPlayerManager.sharedInstance.playTime >= 0.01
-                        {
-                            let recordLengthDate = NSDate(timeIntervalSince1970: self.topObject!.soundtime! - Double(MusicPlayerManager.sharedInstance.playTime))
-                            self.recore_lengthLabel.text = dfmatter.stringFromDate(recordLengthDate)
-                        }
-                    }
-                })
+                ZHAudioPlayer.sharedInstance().delegate = self
+                ZCMBProgressHUD.startMBProgressHUD()
+                ZHAudioPlayer.sharedInstance().manageAudioWithUrlPath(self.topObject.soundname!, playOrPause: true)
             }
         }
     }
@@ -78,11 +61,10 @@ class ListenDetailCell: UITableViewCell {
     }
     
     func initfaceView() {
-        //
         headView.image = UIImage.init(named: "user_head")
         
         headView.layer.masksToBounds = true
-        headView.layer.cornerRadius = (47.6 * SCREEN_SCALE - 20)/2
+        headView.layer.cornerRadius = (44 - 20)/2
         self.contentView.addSubview(headView)
         headView.snp_makeConstraints { (make) -> Void in
             make.top.equalTo(10)
@@ -129,15 +111,7 @@ class ListenDetailCell: UITableViewCell {
     
     func initControlEvent() {
         playButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
-            
-//            NetAudioPlayerManage.sharedManager.soundURL = NSURL.init(string: self.topObject.soundname!)
-//            NetAudioPlayerManage.sharedManager.startPlaying()
-//            
-//            ZCMBProgressHUD.startMBProgressHUD()
-            
-            
             self.playing = !self.playing
-
         }
         
         NSNotificationCenter.defaultCenter().rac_addObserverForName(PausePlayingNotification, object: nil).subscribeNext { notificationCenter in
@@ -148,16 +122,15 @@ class ListenDetailCell: UITableViewCell {
                     self.playing = false
                 }
             }
-            
         }
         
-        NSNotificationCenter.defaultCenter().rac_addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: nil).subscribeNext {
-            notificationCenter in
-            NSOperationQueue.mainQueue().addOperationWithBlock {
-                self.playing = false
-                MusicPlayerManager.sharedInstance.stop()
-            }
-        }
+//        NSNotificationCenter.defaultCenter().rac_addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: nil).subscribeNext {
+//            notificationCenter in
+//            NSOperationQueue.mainQueue().addOperationWithBlock {
+//                self.playing = false
+//                MusicPlayerManager.sharedInstance.stop()
+//            }
+//        }
         
         NSNotificationCenter.defaultCenter().rac_addObserverForName(PauseAllPlayingNotification, object: nil).subscribeNext {
             notificationCenter in
@@ -174,11 +147,39 @@ class ListenDetailCell: UITableViewCell {
         
         self.headView.sd_setImageWithURL(NSURL.init(string: model.header!), placeholderImage: placeholderHead)
         self.headName.text = model.nickname
-        
-        let dfmatter = NSDateFormatter()
-        let recordLengthDate = NSDate(timeIntervalSince1970: model.soundtime!)
-        dfmatter.dateFormat = "mm:ss"
-        recore_lengthLabel.text = dfmatter.stringFromDate(recordLengthDate)
-
+        if !self.playing {
+            let dfmatter = NSDateFormatter()
+            let recordLengthDate = NSDate(timeIntervalSince1970: model.soundtime!)
+            dfmatter.dateFormat = "mm:ss"
+            recore_lengthLabel.text = dfmatter.stringFromDate(recordLengthDate)
+        }
     }
+    
+    func didAudioPlayerBeginPlay(audioPlayer: AVAudioPlayer!) {
+        ZCMBProgressHUD.stopMBProgressHUD()
+    }
+    
+    func didAudioPlayerStopPlay(audioPlayer: AVAudioPlayer!) {
+        self.playing = false
+    }
+    
+    func didAudioPlayerFinishPlay(audioPlayer: AVAudioPlayer!) {
+        self.playing = false
+    }
+    
+    func didAudioPlayerFailPlay(audioPlayer: AVAudioPlayer!) {
+        ZCMBProgressHUD.stopMBProgressHUD()
+    }
+    
+    func didAudioPlayerUpdateProgess(audioPlayer: AVAudioPlayer!) {
+        let dfmatter = NSDateFormatter()
+        dfmatter.dateFormat = "mm:ss"
+        var time = topObject.soundtime! - audioPlayer.currentTime
+        if time < 0 {
+            time = 0
+        }
+        let recordLengthDate = NSDate(timeIntervalSinceReferenceDate: time)
+        self.recore_lengthLabel.text = dfmatter.stringFromDate(recordLengthDate)
+    }
+    
 }

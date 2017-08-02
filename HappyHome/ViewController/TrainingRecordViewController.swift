@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TrainingRecordViewController: BaseViewController {
+class TrainingRecordViewController: BaseViewController,ZHAudioPlayerDelegate {
     
     var model:ScenceModel!
     var pointModel:ScencePointModel!
@@ -46,15 +46,15 @@ class TrainingRecordViewController: BaseViewController {
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: colorForNavigationBarTitle()]
         self.navigationController!.navigationBar.alpha = 1
         
-        if self.audioRecorderManage.audioRecorder.recording {
-            self.audioRecorderManage.stopRecord()
-        }
-        if self.audioRecorderManage.audioPlayer != nil {
-            if self.audioRecorderManage.audioPlayer.playing {
-                self.audioRecorderManage.pausePlaying()
-            }
-        }
-        self.audioRecorderManage.audioRecorder.deleteRecording()
+//        if self.audioRecorderManage.audioRecorder.recording {
+//            self.audioRecorderManage.stopRecord()
+//        }
+//        if self.audioRecorderManage.audioPlayer != nil {
+//            if self.audioRecorderManage.audioPlayer.playing {
+//                self.audioRecorderManage.pausePlaying()
+//            }
+//        }
+        self.audioRecorderManage.deleteRecording()
         
         super.viewWillDisappear(animated)
     }
@@ -166,6 +166,7 @@ class TrainingRecordViewController: BaseViewController {
                     self.state = 2
                     self.updateView()
                     self.audioRecorderManage.startRecord()
+                    self.audioRecorderManage.delegate = self
                     self.displayLink = CADisplayLink.init(target: self, selector: #selector(TrainingRecordViewController.updateTime))
                     self.displayLink!.frameInterval = 1
                     self.displayLink!.paused = false
@@ -238,9 +239,12 @@ class TrainingRecordViewController: BaseViewController {
         NSNotificationCenter.defaultCenter().rac_addObserverForName(PauseAllPlayingNotification, object: nil).subscribeNext {
             notificationCenter in
             NSOperationQueue.mainQueue().addOperationWithBlock {
-                self.audioRecorderManage.pausePlaying()
-                self.state = 5
-                self.updateView()
+                if self.state == 4
+                {
+                    self.audioRecorderManage.pausePlaying()
+                    self.state = 5
+                    self.updateView()
+                }
             }
         }
     }
@@ -355,4 +359,13 @@ class TrainingRecordViewController: BaseViewController {
             }
         }
     }
+    
+    func didAudioPlayerFinishPlay(audioPlayer :AVAudioPlayer)
+    {
+        self.state = 3
+        self.updateView()
+        self.audioRecorderManage.stopRecord()
+        self.displayLink!.paused = true
+    }
+    
 }

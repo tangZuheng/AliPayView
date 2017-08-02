@@ -10,7 +10,7 @@ import UIKit
 import SDWebImage
 import AVFoundation
 
-class YesterdayPKDetailViewController: BaseViewController {
+class YesterdayPKDetailViewController: BaseViewController,ZHAudioPlayerDelegate {
     
     var model:YesterdayPKModel!
     
@@ -34,8 +34,8 @@ class YesterdayPKDetailViewController: BaseViewController {
     
     let commitButton = UIButton()
     
-    var leftPlayTime : Int64 = 0
-    var rightPlayTime : Int64 = 0
+    var leftPlayTime : NSTimeInterval = 0
+    var rightPlayTime : NSTimeInterval = 0
     
     var leftPlay:Bool = false   // 左边是否正在播放播放
     {
@@ -44,30 +44,13 @@ class YesterdayPKDetailViewController: BaseViewController {
             if leftPlay {
                 self.rightPlay = false
                 leftPlayButton.setBackgroundImage(UIImage.init(named: "Judge_pause"), forState: .Normal)
-                let musicURL = NSURL.init(string: self.model.soundname!)!
-                MusicPlayerManager.sharedInstance.play(musicURL, callBack: { (tmpProgress, playProgress) in
-                    if !NSThread.isMainThread() {
-                        dispatch_async(dispatch_get_main_queue(), {
-                            if MusicPlayerManager.sharedInstance.playTime >= 0.01
-                            {
-                                self.leftProgressView.progress = Double(MusicPlayerManager.sharedInstance.progress)
-                                self.leftPlayTime = Int64(MusicPlayerManager.sharedInstance.playTime)
-                            }
-                        })
-                    }
-                    else {
-                        if MusicPlayerManager.sharedInstance.playTime >= 0.01
-                        {
-                            self.leftProgressView.progress = Double(MusicPlayerManager.sharedInstance.progress)
-                            self.leftPlayTime = Int64(MusicPlayerManager.sharedInstance.playTime)
-                        }
-                    }
-                })
-                MusicPlayerManager.sharedInstance.player?.seekToTime(CMTimeMake(self.leftPlayTime,1))
+                ZHAudioPlayer.sharedInstance().delegate = self
+                ZCMBProgressHUD.startMBProgressHUD()
+                ZHAudioPlayer.sharedInstance().manageAudioWithUrlPath(self.model.soundname!, playOrPause: true)
             }
             else {
                 leftPlayButton.setBackgroundImage(UIImage.init(named: "Judge_play"), forState: .Normal)
-                MusicPlayerManager.sharedInstance.pause()
+                ZHAudioPlayer.sharedInstance().pausePlayingAudio()
             }
         }
     }
@@ -78,30 +61,13 @@ class YesterdayPKDetailViewController: BaseViewController {
             if rightPlay {
                 self.leftPlay = false
                 rightPlayButton.setBackgroundImage(UIImage.init(named: "Judge_pause"), forState: .Normal)
-                let musicURL = NSURL.init(string: self.model.pksoundname!)!
-                MusicPlayerManager.sharedInstance.play(musicURL, callBack: { (tmpProgress, playProgress) in
-                    if !NSThread.isMainThread() {
-                        dispatch_async(dispatch_get_main_queue(), {
-                            if MusicPlayerManager.sharedInstance.playTime >= 0.01
-                            {
-                                self.rightProgressView.progress = Double(MusicPlayerManager.sharedInstance.progress)
-                                self.rightPlayTime = Int64(MusicPlayerManager.sharedInstance.playTime)
-                            }
-                        })
-                    }
-                    else {
-                        if MusicPlayerManager.sharedInstance.playTime >= 0.01
-                        {
-                            self.rightProgressView.progress = Double(MusicPlayerManager.sharedInstance.progress)
-                            self.rightPlayTime = Int64(MusicPlayerManager.sharedInstance.playTime)
-                        }
-                    }
-                })
-                MusicPlayerManager.sharedInstance.player?.seekToTime(CMTimeMake(self.rightPlayTime,1))
+                ZHAudioPlayer.sharedInstance().delegate = self
+                ZCMBProgressHUD.startMBProgressHUD()
+                ZHAudioPlayer.sharedInstance().manageAudioWithUrlPath(self.model.pksoundname!, playOrPause: true)
             }
             else {
                 rightPlayButton.setBackgroundImage(UIImage.init(named: "Judge_play"), forState: .Normal)
-                MusicPlayerManager.sharedInstance.pause()
+                ZHAudioPlayer.sharedInstance().pausePlayingAudio()
             }
         }
     }
@@ -119,7 +85,7 @@ class YesterdayPKDetailViewController: BaseViewController {
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: colorForNavigationBarTitle()]
         self.navigationController!.navigationBar.alpha = 1
         
-        MusicPlayerManager.sharedInstance.stop()
+        ZHAudioPlayer.sharedInstance().stopAudio()
         
         super.viewWillDisappear(animated)
     }
@@ -337,7 +303,7 @@ class YesterdayPKDetailViewController: BaseViewController {
         }
         
         commitButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
-            let view = UIAlertView.init(title: "", message: "亲，您确定要上述？一次上述不成功，当月失去其他上述机会!", delegate: nil, cancelButtonTitle: "确定", otherButtonTitles: "取消")
+            let view = UIAlertView.init(title: "", message: "亲，因评委口味各异，我们仅支持对于明显误判的上诉。同时，一次上诉不成功，您将失去当月其他上诉机会。", delegate: nil, cancelButtonTitle: "确定", otherButtonTitles: "取消")
             view.rac_buttonClickedSignal().subscribeNext({ (indexNumber) in
                 if indexNumber as! Int == 0 {
                     self.startMBProgressHUD()
@@ -355,36 +321,36 @@ class YesterdayPKDetailViewController: BaseViewController {
             view.show()
         }
         
-        NSNotificationCenter.defaultCenter().rac_addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: nil).subscribeNext {
-            notificationCenter in
-            NSOperationQueue.mainQueue().addOperationWithBlock {
-                if self.leftPlay {
-                    self.leftPlay = false
-                    self.leftPlayTime = 0
-                    self.leftProgressView.progress = 0
-                }
-                if self.rightPlay {
-                    self.rightPlay = false
-                    self.rightPlayTime = 0
-                    self.rightProgressView.progress = 0
-                }
-            }
-        }
+//        NSNotificationCenter.defaultCenter().rac_addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: nil).subscribeNext {
+//            notificationCenter in
+//            NSOperationQueue.mainQueue().addOperationWithBlock {
+//                if self.leftPlay {
+//                    self.leftPlay = false
+//                    self.leftPlayTime = 0
+//                    self.leftProgressView.progress = 0
+//                }
+//                if self.rightPlay {
+//                    self.rightPlay = false
+//                    self.rightPlayTime = 0
+//                    self.rightProgressView.progress = 0
+//                }
+//            }
+//        }
         
-        NSNotificationCenter.defaultCenter().rac_addObserverForName(AVPlayerItemDidFieldTimeNotification, object: nil).subscribeNext {
-            notificationCenter in
-            NSOperationQueue.mainQueue().addOperationWithBlock {
-                self.showFailHUDWithText("录音加载失败...")
-                if self.leftPlay {
-                    self.leftPlay = false
-                    self.leftProgressView.progress = 0
-                }
-                if self.rightPlay {
-                    self.rightPlay = false
-                    self.rightProgressView.progress = 0
-                }
-            }
-        }
+//        NSNotificationCenter.defaultCenter().rac_addObserverForName(AVPlayerItemDidFieldTimeNotification, object: nil).subscribeNext {
+//            notificationCenter in
+//            NSOperationQueue.mainQueue().addOperationWithBlock {
+//                self.showFailHUDWithText("录音加载失败...")
+//                if self.leftPlay {
+//                    self.leftPlay = false
+//                    self.leftProgressView.progress = 0
+//                }
+//                if self.rightPlay {
+//                    self.rightPlay = false
+//                    self.rightProgressView.progress = 0
+//                }
+//            }
+//        }
         
         NSNotificationCenter.defaultCenter().rac_addObserverForName(PauseAllPlayingNotification, object: nil).subscribeNext {
             notificationCenter in
@@ -396,6 +362,60 @@ class YesterdayPKDetailViewController: BaseViewController {
                     self.rightPlay = false
                 }
             }
+        }
+    }
+    
+    func didAudioPlayerBeginPlay(audioPlayer: AVAudioPlayer!) {
+        ZCMBProgressHUD.stopMBProgressHUD()
+        if self.leftPlay {
+            audioPlayer.currentTime = self.leftPlayTime
+        }
+        else if self.rightPlay {
+            audioPlayer.currentTime = self.rightPlayTime
+        }
+    }
+    
+    func didAudioPlayerStopPlay(audioPlayer: AVAudioPlayer!) {
+        if self.leftPlay {
+            self.leftPlay = false
+//            self.leftPlayTime = 0
+//            self.leftProgressView.progress = 0
+        }
+        else if self.rightPlay {
+            self.rightPlay = false
+//            self.rightPlayTime = 0
+//            self.rightProgressView.progress = 0
+        }
+    }
+    
+    func didAudioPlayerFinishPlay(audioPlayer: AVAudioPlayer!) {
+        if self.leftPlay {
+            self.leftPlay = false
+            self.leftPlayTime = 0
+            self.leftProgressView.progress = 0
+        }
+        else if self.rightPlay {
+            self.rightPlay = false
+            self.rightPlayTime = 0
+            self.rightProgressView.progress = 0
+        }
+    }
+    
+    func didAudioPlayerFailPlay(audioPlayer: AVAudioPlayer!) {
+        ZCMBProgressHUD.stopMBProgressHUD()
+        self.showFailHUDWithText("录音加载失败...")
+        self.leftPlay = false
+        self.rightPlay = false
+    }
+    
+    func didAudioPlayerUpdateProgess(audioPlayer: AVAudioPlayer!) {
+        if self.leftPlay {
+            self.leftProgressView.progress = audioPlayer.currentTime/self.model.soundtime!
+            self.leftPlayTime = audioPlayer.currentTime
+        }
+        else if self.rightPlay {
+            self.rightProgressView.progress = audioPlayer.currentTime/self.model.pksoundtime!
+            self.rightPlayTime = audioPlayer.currentTime
         }
     }
 }

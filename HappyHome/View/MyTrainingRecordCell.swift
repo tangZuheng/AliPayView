@@ -9,7 +9,7 @@
 import UIKit
 import SDWebImage
 
-class MyTrainingRecordCell: UITableViewCell {
+class MyTrainingRecordCell: UITableViewCell,ZHAudioPlayerDelegate {
     
     let iconView = UIImageView()
     let nameLabel = UILabel()
@@ -43,6 +43,7 @@ class MyTrainingRecordCell: UITableViewCell {
                 else {
                     if AudioPlayerManage.sharedManager.soundURL == recordObject!.recordUrl {
                         AudioPlayerManage.sharedManager.startPlaying()
+                        AudioPlayerManage.sharedManager.delegate = self
                     }
                     self.playButton.setImage(UIImage.init(named: "user_pause"), forState: .Normal)
                     
@@ -50,6 +51,8 @@ class MyTrainingRecordCell: UITableViewCell {
                     self.displayLink!.frameInterval = 1
                     self.displayLink!.paused = false
                     self.displayLink?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSRunLoopCommonModes)
+                    
+                    self.recore_lengthLabel.textColor = UIColor.init(rgb: 0xff3838)
                     
                     NSNotificationCenter.defaultCenter().postNotificationName(PausePlayingNotification, object: self)
                     
@@ -200,6 +203,7 @@ class MyTrainingRecordCell: UITableViewCell {
         
         if AudioPlayerManage.sharedManager.soundURL == model.recordUrl {
             self.playing = AudioPlayerManage.sharedManager.audioPlayer.playing
+            AudioPlayerManage.sharedManager.delegate = self
         }
         else {
             self.playing = false
@@ -208,18 +212,24 @@ class MyTrainingRecordCell: UITableViewCell {
     }
     
     func updateTime() -> Void {
+        if !self.playing {
+            return
+        }
         let dfmatter = NSDateFormatter()
         dfmatter.dateFormat = "mm:ss"
-        let time = self.recordObject!.recordLength! - AudioPlayerManage.sharedManager.audioPlayer.currentTime
+        let time = AudioPlayerManage.sharedManager.audioPlayer.duration - AudioPlayerManage.sharedManager.audioPlayer.currentTime
         if time > 0 {
             let recordLengthDate = NSDate(timeIntervalSince1970: time)
             self.recore_lengthLabel.text = dfmatter.stringFromDate(recordLengthDate)
-            self.recore_lengthLabel.textColor = UIColor.init(rgb: 0xff3838)
         }
         else {
             self.playing = false
-//            self.audioPlayerManage.soundURL = self.recordObject!.recordUrl
         }
+    }
+    
+    func didAudioPlayerFinishPlay(audioPlayer :AVAudioPlayer)
+    {
+        self.playing = false
     }
     
 }

@@ -38,6 +38,8 @@ let placeholderHead = UIImage.init(named: "user_head")
 
 let APP_VERSION = NSBundle.mainBundle().infoDictionary!["CFBundleVersion"] as! String
 
+let app_systemVersion = UIDevice.currentDevice().systemVersion
+
 func RGB(R:CGFloat, G:CGFloat, B:CGFloat) -> UIColor {
     return UIColor(red: R / 255.0, green: G / 255.0, blue: B / 255.0, alpha: 1)
 }
@@ -102,12 +104,16 @@ extension UITableView {
             messageLabel.textAlignment = .Center
             messageLabel.sizeToFit()
             self.backgroundView = messageLabel
-            self.separatorStyle = .None
+//            self.separatorStyle = .None
         }
         else {
             self.backgroundView = nil
-            self.separatorStyle = .SingleLine
+//            self.separatorStyle = .SingleLine
         }
     }
 }
+
+
+
+
 

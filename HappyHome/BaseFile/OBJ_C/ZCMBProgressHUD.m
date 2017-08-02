@@ -29,7 +29,6 @@ static MBProgressHUD *mbProgressHUD;
         [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].delegate.window animated:YES];
         mbProgressHUD = nil;
     }
-    
 }
 
 //开始加载MBProgressHUD
@@ -49,6 +48,18 @@ static MBProgressHUD *mbProgressHUD;
     if (mbProgressHUD != nil) {
         [MBProgressHUD hideHUDForView:view animated:YES];
         mbProgressHUD = nil;
+    }
+}
+
+//开始加载MBProgressHUD
++ (void)startMBProgressHUDUserInteraction
+{
+    if (mbProgressHUD == nil) {
+        mbProgressHUD = [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].delegate.window animated:YES];
+        mbProgressHUD.userInteractionEnabled = true;
+    }
+    else {
+        mbProgressHUD.hidden = NO;
     }
 }
 

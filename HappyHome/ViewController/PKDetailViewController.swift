@@ -8,8 +8,9 @@
 
 import UIKit
 import HandyJSON
+import CXAlertView
 
-class PKDetailViewController: BaseViewController {
+class PKDetailViewController: BaseViewController,UIAlertViewDelegate {
 
     var model:ScenceModel!
     var pointModel:ScencePointModel!
@@ -47,10 +48,10 @@ class PKDetailViewController: BaseViewController {
         self.navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: colorForNavigationBarTitle()]
         self.navigationController!.navigationBar.alpha = 1
         
-        if self.audioRecorderManage.audioRecorder.recording {
-            self.audioRecorderManage.stopRecord()
-        }
-        self.audioRecorderManage.audioRecorder.deleteRecording()
+//        if self.audioRecorderManage.audioRecorder.recording {
+//            self.audioRecorderManage.stopRecord()
+//        }
+        self.audioRecorderManage.deleteRecording()
         super.viewWillDisappear(animated)
     }
     
@@ -149,45 +150,110 @@ class PKDetailViewController: BaseViewController {
     func initControlEvent(){
         startButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
             if 1 == self.state {
-                self.startMBProgressHUD()
-                NetWorkingManager.sharedManager.checkPK(self.model.sid!, completion: { (retObject, error) in
-                    self.stopMBProgressHUD()
-                    if error == nil {
-                        let code = retObject?.objectForKey("code") as! Int
-                        if code == 103 {
-                            self.showFailHUDWithText((retObject?.objectForKey("message"))! as! String)
-                        }
-                        else {
-                            self.pointModel = JSONDeserializer<ScencePointModel>.deserializeFrom(retObject?.objectForKey("data")?.objectForKey("pointBean") as! NSDictionary)
-                            self.presentTime = retObject?.objectForKey("data")?.objectForKey("presentTime") as! NSTimeInterval
-                            self.img?.sd_setImageWithURL(NSURL.init(string: self.pointModel.ppicture!), placeholderImage: placeholderImage!)
-                            
-                            if UserModel.sharedUserModel.selectLanguage == 1 {
-                                self.name?.text = self.pointModel.pname
+                
+                
+                let viewLabel = UILabel.init()
+                viewLabel.frame = CGRectMake(0, 0, 250, 100)
+                viewLabel.numberOfLines = 0
+                viewLabel.font = UIFont.systemFontOfSize(14)
+                let viewLabelText = NSMutableAttributedString.init(string: "亲，请保证手机电量充足，录音结束前请勿退出，任何形式的退出都会浪费掉您今天唯一的PK机会。\n按结束完成PK，录音自动上传，PK结果请于明天在PK记录-昨日PK查询。")
+                viewLabelText.addAttributes([NSForegroundColorAttributeName : UIColor.redColor()], range: NSMakeRange(45, 37))
+                viewLabel.attributedText = viewLabelText
+                
+                let alertView = CXAlertView.init(title: nil, contentView: viewLabel, cancelButtonTitle: "取消")
+                alertView.addButtonWithTitle("确定", type: .Default, handler: { (CXAlertVie, AlertButtonItem) in
+                    alertView.dismiss()
+
+                    self.startMBProgressHUD()
+                    NetWorkingManager.sharedManager.checkPK(self.model.sid!, completion: { (retObject, error) in
+                        self.stopMBProgressHUD()
+                        if error == nil {
+                            let code = retObject?.objectForKey("code") as! Int
+                            if code == 103 {
+                                self.showFailHUDWithText((retObject?.objectForKey("message"))! as! String)
                             }
                             else {
-                                self.name?.text = self.pointModel.penglishname
+                                self.pointModel = JSONDeserializer<ScencePointModel>.deserializeFrom(retObject?.objectForKey("data")?.objectForKey("pointBean") as! NSDictionary)
+                                self.presentTime = retObject?.objectForKey("data")?.objectForKey("presentTime") as! NSTimeInterval
+                                self.img?.sd_setImageWithURL(NSURL.init(string: self.pointModel.ppicture!), placeholderImage: placeholderImage!)
+                                
+                                if UserModel.sharedUserModel.selectLanguage == 1 {
+                                    self.name?.text = self.pointModel.pname
+                                }
+                                else {
+                                    self.name?.text = self.pointModel.penglishname
+                                }
+                                
+                                let view = CountdownView()
+                                view.show(5, andBlock: { (UIView) in
+                                    print("倒计时到了")
+                                    self.state = 2
+                                    self.updateView()
+                                    self.audioRecorderManage.startRecord()
+                                    self.displayLink = CADisplayLink.init(target: self, selector: #selector(TrainingRecordViewController.updateTime))
+                                    self.displayLink!.frameInterval = 1
+                                    self.displayLink!.paused = false
+                                    self.displayLink?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSRunLoopCommonModes)
+                                })
+                                
                             }
-                            
-                            let view = CountdownView()
-                            view.show(5, andBlock: { (UIView) in
-                                print("倒计时到了")
-                                self.state = 2
-                                self.updateView()
-                                self.audioRecorderManage.startRecord()
-                                self.displayLink = CADisplayLink.init(target: self, selector: #selector(TrainingRecordViewController.updateTime))
-                                self.displayLink!.frameInterval = 1
-                                self.displayLink!.paused = false
-                                self.displayLink?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSRunLoopCommonModes)
-                            })
-
                         }
-                    }
-                    else {
-                        self.showFailHUDWithText(error!.localizedDescription)
-                    }
+                        else {
+                            self.showFailHUDWithText(error!.localizedDescription)
+                        }
+                    })
                 })
                 
+                alertView.show()
+                
+                
+//                let view = UIAlertView.init(title: "", message: "亲，请保证手机电量充足，录音结束前请勿退出，任何形式的退出都会浪费掉您今天唯一的PK机会。\n按结束完成PK，录音自动上传，PK结果请于明天在PK记录-昨日PK查询。", delegate: nil, cancelButtonTitle: "确定", otherButtonTitles: "取消")
+//                view.delegate = self
+//                
+//                
+//                view.rac_buttonClickedSignal().subscribeNext({ (indexNumber) in
+//                    if indexNumber as! Int == 0 {
+//                        self.startMBProgressHUD()
+//                        NetWorkingManager.sharedManager.checkPK(self.model.sid!, completion: { (retObject, error) in
+//                            self.stopMBProgressHUD()
+//                            if error == nil {
+//                                let code = retObject?.objectForKey("code") as! Int
+//                                if code == 103 {
+//                                    self.showFailHUDWithText((retObject?.objectForKey("message"))! as! String)
+//                                }
+//                                else {
+//                                    self.pointModel = JSONDeserializer<ScencePointModel>.deserializeFrom(retObject?.objectForKey("data")?.objectForKey("pointBean") as! NSDictionary)
+//                                    self.presentTime = retObject?.objectForKey("data")?.objectForKey("presentTime") as! NSTimeInterval
+//                                    self.img?.sd_setImageWithURL(NSURL.init(string: self.pointModel.ppicture!), placeholderImage: placeholderImage!)
+//                                    
+//                                    if UserModel.sharedUserModel.selectLanguage == 1 {
+//                                        self.name?.text = self.pointModel.pname
+//                                    }
+//                                    else {
+//                                        self.name?.text = self.pointModel.penglishname
+//                                    }
+//                                    
+//                                    let view = CountdownView()
+//                                    view.show(5, andBlock: { (UIView) in
+//                                        print("倒计时到了")
+//                                        self.state = 2
+//                                        self.updateView()
+//                                        self.audioRecorderManage.startRecord()
+//                                        self.displayLink = CADisplayLink.init(target: self, selector: #selector(TrainingRecordViewController.updateTime))
+//                                        self.displayLink!.frameInterval = 1
+//                                        self.displayLink!.paused = false
+//                                        self.displayLink?.addToRunLoop(NSRunLoop.currentRunLoop(), forMode: NSRunLoopCommonModes)
+//                                    })
+//                                    
+//                                }
+//                            }
+//                            else {
+//                                self.showFailHUDWithText(error!.localizedDescription)
+//                            }
+//                        })
+//                    }
+//                })
+//                view.show()
             }
             else {
                 self.savePKRecord()
@@ -260,5 +326,16 @@ class PKDetailViewController: BaseViewController {
         })
     }
 
-
+//    func willPresentAlertView(alertView: UIAlertView) {
+//        for viewSub in alertView.subviews {
+//            if viewSub .isKindOfClass(UILabel.classForCoder())
+//            {
+//                let viewLabel = viewSub as! UILabel
+//                let viewLabelText = NSMutableAttributedString.init(string: "亲，请保证手机电量充足，录音结束前请勿退出，任何形式的退出都会浪费掉您今天唯一的PK机会。\n按结束完成PK，录音自动上传，PK结果请于明天在PK记录-昨日PK查询。")
+//                viewLabelText.addAttributes([NSForegroundColorAttributeName : UIColor.redColor()], range: NSMakeRange(44, 36))
+//                viewLabel.attributedText = viewLabelText
+//            }
+//        }
+//    }
+    
 }

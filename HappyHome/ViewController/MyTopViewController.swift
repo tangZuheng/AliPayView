@@ -39,7 +39,7 @@ class MyTopViewController: BaseViewController,UITableViewDataSource,UITableViewD
     
     func initfaceView(){
         
-        self.title = "我的TOP5"
+        self.title = "我的TOP10"
         
         
         headLabel.text = "历史记录:0"
@@ -77,6 +77,7 @@ class MyTopViewController: BaseViewController,UITableViewDataSource,UITableViewD
         NetWorkingManager.sharedManager.getMytopList { (retObject, error) in
             self.tableView.mj_header.endRefreshing()
             if error == nil {
+                self.dataArr.removeAllObjects()
                 if !(retObject?.objectForKey("data")! is NSNull)
                 {
                     if !(retObject?.objectForKey("data")!.objectForKey("historytopfive")! is NSNull)
@@ -84,21 +85,18 @@ class MyTopViewController: BaseViewController,UITableViewDataSource,UITableViewD
                         self.historytopfive = retObject?.objectForKey("data")!.objectForKey("historytopfive")! as! Int
                         self.headLabel.text = "历史记录:" + String(self.historytopfive)
                     }
-                    
-                    
                     if retObject?.objectForKey("data")!.objectForKey("MyTopBeans")! is NSArray
                     {
                         let arr = retObject?.objectForKey("data")!.objectForKey("MyTopBeans")! as! NSArray
-                        self.dataArr.removeAllObjects()
+                        
                         for item in arr {
                             let model = JSONDeserializer<MyTopModel>.deserializeFrom(item as! NSDictionary)
                             self.dataArr.addObject(model!)
-                        }
-                        self.tableView.reloadData()
-                        
+                        }                        
                     }
                 }
-                self.tableView.tableViewDisplayWitMsg("暂时没有TOP5记录，赶紧去PK吧~~~", rowCount: self.dataArr.count)
+                self.tableView.reloadData()
+                self.tableView.tableViewDisplayWitMsg("暂时没有TOP10记录，赶紧去PK吧~~~", rowCount: self.dataArr.count)
             }
             else {
                 self.showFailHUDWithText(error!.localizedDescription)

@@ -188,6 +188,7 @@ class LoginViewController: BaseViewController {
                     UserModel.sharedUserModel.savaUserModel()
                     NSNotificationCenter.defaultCenter().postNotificationName(LoginStateUpdateNotification, object: nil)
                     self.navigationController?.popToRootViewControllerAnimated(true)
+                    JPUSHService.setAlias(String(UserModel.sharedUserModel.uid!), callbackSelector: nil, object: nil)
                 }
                 else {
                     self.showFailHUDWithText(error!.localizedDescription)

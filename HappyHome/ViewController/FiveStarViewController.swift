@@ -62,16 +62,18 @@ class FiveStarViewController: BaseViewController,UITableViewDataSource,UITableVi
         NetWorkingManager.sharedManager.getFiverecordList { (retObject, error) in
             self.tableView.mj_header.endRefreshing()
             if error == nil {
+                self.dataArr.removeAllObjects()
                 if retObject?.objectForKey("data")! is NSArray
                 {
                     let arr = retObject?.objectForKey("data")! as! NSArray
-                    self.dataArr.removeAllObjects()
+//                    self.dataArr.removeAllObjects()
                     for item in arr {
                         let model = JSONDeserializer<FiverecordModel>.deserializeFrom(item as! NSDictionary)
                         self.dataArr.addObject(model!)
                     }
-                    self.tableView.reloadData()
+                    
                 }
+                self.tableView.reloadData()
                 self.tableView.tableViewDisplayWitMsg("暂时没有五星记录，赶紧去PK吧~~~", rowCount: self.dataArr.count)
             }
             else {

@@ -8,13 +8,15 @@ pod 'MJRefresh', '~> 3.1.2’
 pod 'ReactiveCocoa' , '~> 4.2.2'
 pod 'MBProgressHUD', '~> 1.0.0'
 pod 'SnapKit', '~> 0.22.0'
-pod 'Alamofire'
-pod 'LTMorphingLabel'
+pod 'Alamofire', '3.5.1'
+pod 'LTMorphingLabel' , '0.3.0'
 pod 'SQLite.swift', '~> 0.10.1'
 pod 'HandyJSON', '0.4.0'
 pod 'SDWebImage', '~>3.8'
 pod 'CXAlertView'
 pod 'UMengAnalytics'
+pod 'JPush-iOS-SDK', '~> 2.1.9'
+pod 'mp3lame-for-ios'
 
 end
 

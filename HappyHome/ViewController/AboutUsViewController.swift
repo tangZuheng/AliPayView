@@ -89,19 +89,29 @@ class AboutUsViewController: BaseViewController,UITableViewDataSource,UITableVie
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let identifir = "UITableViewCellUserIdentifir"
+        let identifir = "UITableViewCellAboutUsIdentifir"
         var cell = tableView.dequeueReusableCellWithIdentifier(identifir)
         if cell == nil {
-            cell = UITableViewCell.init(style: .Default, reuseIdentifier: identifir)
+            cell = UITableViewCell.init(style: .Value1, reuseIdentifier: identifir)
             cell?.accessoryType = .DisclosureIndicator
             cell?.selectionStyle = .None
             cell?.textLabel?.font = UIFont.systemFontOfSize(16)
             cell?.textLabel?.textColor = UIColor.init(rgb: 0x282828)
+            cell?.detailTextLabel?.font = UIFont.systemFontOfSize(14)
         }
         let titleArr_secton = titleArr.objectAtIndex(indexPath.section)
         cell?.textLabel?.text = titleArr_secton.objectAtIndex(indexPath.row) as? String
         if indexPath.section == 1 {
             cell?.accessoryType = .None
+            if indexPath.row == 0 {
+                cell?.detailTextLabel?.text = "137100709@qq.com"
+            }
+            else {
+                cell?.detailTextLabel?.text = "18980002447"
+            }
+        }
+        else {
+            cell?.detailTextLabel?.text = ""
         }
         return cell!
     }
@@ -116,12 +126,12 @@ class AboutUsViewController: BaseViewController,UITableViewDataSource,UITableVie
             else if indexPath.row == 1 {
                 let vc = UserTextDetailViewController()
                 vc.textImageName = "评论规则_detail"
-                self.pushToNextController(vc, withVCTitle: "评论规则")
+                self.pushToNextController(vc, withVCTitle: "评委规则")
             }
             else if indexPath.row == 2 {
                 let vc = UserTextDetailViewController()
                 vc.textImageName = "FQA_detail"
-                self.pushToNextController(vc, withVCTitle: "FQA")
+                self.pushToNextController(vc, withVCTitle: "FAQ")
             }
         }
         else if indexPath.section == 1 {

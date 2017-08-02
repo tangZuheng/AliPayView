@@ -54,7 +54,7 @@ class ScenicCollectionView: UIView,UICollectionViewDataSource {
         }
         
         NSNotificationCenter.defaultCenter().rac_addObserverForName(UpdateLanguageNotification, object: nil).subscribeNext { _ in
-            self.dataArr.removeAllObjects()
+//            self.dataArr.removeAllObjects()
             self.collectionView.mj_header.beginRefreshing()
         }
     }
@@ -88,7 +88,9 @@ class ScenicCollectionView: UIView,UICollectionViewDataSource {
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let identifier = "SpotsCollectionViewCellIdentifier"
         let cell:SpotsCollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier(identifier, forIndexPath: indexPath) as! SpotsCollectionViewCell
-        cell.setModel(dataArr.objectAtIndex(indexPath.row))
+        if dataArr.count > indexPath.row {
+            cell.setModel(dataArr.objectAtIndex(indexPath.row))
+        }
         return cell
     }
 }

@@ -76,11 +76,33 @@ class FeedbackViewController: BaseViewController {
             let str = object as! String
             return str.characters.count
             }.subscribeNext { (object) in
+                let count = object as! Int
+                if count >= 100 {
+                    textView.editable = false
+                }
+                else {
+                    textView.editable = true
+                }
                 numberLabel.text = String(object) + "/100"
         }
         
         commitButton.rac_signalForControlEvents(UIControlEvents.TouchUpInside).subscribeNext { _ in
-        
+            if textView.text?.characters.count == 0{
+                self.showFailHUDWithText("亲，你还没有发表你的意见哦")
+            }
+            self.startMBProgressHUD()
+            
+            NetWorkingManager.sharedManager.SubmitSuggest(textView.text, completion: { (retObject, error) in
+                self.stopMBProgressHUD()
+                if error == nil {
+                    ZCMBProgressHUD.showResultHUDWithResult(true, andText: "亲，我们已经收到你的意见，非常感谢你的反馈", toView: self.view, andSecond: 2, completionBlock: {
+                        self.navigationController?.popViewControllerAnimated(true)
+                    })
+                }
+                else {
+                    self.showFailHUDWithText(error!.localizedDescription)
+                }
+            })
         }
 
     }
